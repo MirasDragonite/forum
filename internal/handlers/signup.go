@@ -28,6 +28,7 @@ func (h *Handler) signup(w http.ResponseWriter, r *http.Request) {
 		id, err := h.Service.Authorization.CreateUser(input)
 		if err != nil {
 			fmt.Println("Cannot create user")
+			errorHandler(w, 405)
 			return
 		}
 

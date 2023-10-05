@@ -19,6 +19,9 @@
                 </div>
                 <div class="column">
                     <div class="form-group">
+                        {{with .Errors.Get "name"}}
+<label class='error'>{{.}}</label>
+{{end}}
                         <label for="username">Username:</label>
                         <input type="text" name="username" class="form-control" id="username" maxlength="20" placeholder="Enter username" required>
                     </div>
