@@ -2,7 +2,6 @@ package repository
 
 import (
 	"database/sql"
-	"fmt"
 
 	"forum/structs"
 )
@@ -16,11 +15,7 @@ func NewAuth(db *sql.DB) *Auth {
 }
 
 func (r *Auth) CreateUser(user structs.User) (int64, error) {
-	fmt.Println("User in repo", user)
-
-	query := `INSERT INTO users(username,email,password) VALUES($1,$2,$3) RETURNING id`
-
-	fmt.Println(query)
+	query := `INSERT INTO users(username,email,hash_password) VALUES($1,$2,$3) RETURNING id`
 
 	result, err := r.db.Exec(query, user.Username, user.Email, user.HashedPassword)
 	if err != nil {

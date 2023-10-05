@@ -2,7 +2,7 @@ package handlers
 
 import "net/http"
 
-func (h *Handler) login(w http.ResponseWriter, r *http.Request) {
+func (h *Handler) signin(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPost {
 		return
 	}
@@ -13,6 +13,4 @@ func (h *Handler) login(w http.ResponseWriter, r *http.Request) {
 	}
 	// username := r.Form.Get("username")
 	// password := r.Form.Get("password")
-
-
 }

@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign up</title>
+</head>
+<body>
+    <nav class="navbar navbar-default">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="/">FORUM</a>
+        </div>
+    </nav>
+    <form method="POST" class="custom-form">
+            <div class="form-row">
+                <h2 style="text-align:center">Login</h2>
+                <div class="column">
+
+                </div>
+                <div class="column">
+                    <div class="form-group">
+                        <label for="username">Username:</label>
+                        <input type="text" name="username" class="form-control" id="username" maxlength="20" placeholder="Enter username" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email:</label>
+                        <input type="email" name="email" class="form-control" id="email" placeholder="Enter email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="password">Password:</label>
+                        <input type="password" name="password" class="form-control" id="password" placeholder="Enter password" required>
+                    </div>
+                    <input type="submit" value="Submit" class="submit-button">
+                </div>
+            </div>
+            <div class="bottom-container">
+                <div class="row">
+                    New to forum? <a href="/signin" class="signip-link" role="button">Sign in</a>
+                </div>
+            </div>
+    </form>
+</body>
+</html>

@@ -17,6 +17,6 @@ func NewHandler(service *service.Service) *Handler {
 
 func (h *Handler) Router() {
 	h.Mux.HandleFunc("/", h.home)
-	h.Mux.HandleFunc("/auth", h.login)
-	h.Mux.HandleFunc("/register", h.register)
+	h.Mux.HandleFunc("/auth", h.signin)
+	h.Mux.HandleFunc("/register", h.signup)
 }
