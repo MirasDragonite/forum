@@ -1,13 +1,20 @@
 package repository
 
-import "database/sql"
+import (
+	"database/sql"
 
-type Authorization interface{}
+	"forum/structs"
+)
+
+type Authorization interface {
+	CreateUser(user structs.User) (int64, error)
+	GetUser(name, password string) (int64, error)
+}
 
 type Repository struct {
 	Authorization
 }
 
 func NewRepository(db *sql.DB) *Repository {
-	return &Repository{}
+	return &Repository{Authorization: NewAuth(db)}
 }

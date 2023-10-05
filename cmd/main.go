@@ -17,6 +17,7 @@ func main() {
 	flag.StringVar(&port, "port", "8000", "to set port")
 	flag.Parse()
 	db, err := repository.NewDB()
+	defer db.Close()
 	if err != nil {
 		log.Fatal(err)
 	}

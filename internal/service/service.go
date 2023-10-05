@@ -1,13 +1,19 @@
 package service
 
-import "forum/internal/repository"
+import (
+	"forum/internal/repository"
+	"forum/structs"
+)
 
-type Authorization interface{}
+type Authorization interface {
+	CreateUser(user structs.User) (int64, error)
+	GetUser(name, password string) (int64, error)
+}
 
 type Service struct {
 	Authorization
 }
 
-func NewService(*repository.Repository) *Service {
-	return &Service{}
+func NewService(repo *repository.Repository) *Service {
+	return &Service{Authorization: NewAuth(repo.Authorization)}
 }

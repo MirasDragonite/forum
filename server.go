@@ -1,6 +1,9 @@
 package server
 
-import "net/http"
+import (
+	"fmt"
+	"net/http"
+)
 
 type Server struct {
 	httpServer *http.Server
@@ -11,5 +14,6 @@ func (s *Server) Run(port string, handler http.Handler) error {
 		Addr:    ":" + port,
 		Handler: handler,
 	}
+	fmt.Printf("Server running on localhost:%s\n", port)
 	return s.httpServer.ListenAndServe()
 }
