@@ -1,6 +1,8 @@
 package service
 
 import (
+	"errors"
+
 	"forum/internal/repository"
 	"forum/structs"
 
@@ -16,20 +18,32 @@ func NewAuth(repo repository.Authorization) *Auth {
 }
 
 func (s *Auth) CreateUser(user structs.User) (int64, error) {
-	hashPassword, err := HashPassword(user.HashedPassword)
+	hashPassword, err := hashPassword(user.HashedPassword)
 	if err != nil {
 		return 0, err
 	}
+
 	user.HashedPassword = hashPassword
 
 	return s.repo.CreateUser(user)
 }
 
-func (s *Auth) GetUser(name, password string) (int64, error) {
-	return s.repo.GetUser(name, password)
+func (s *Auth) GetUser(email, password string) (int64, error) {
+	id, hash_password, err := s.repo.GetUser(email)
+
+	if checkPasswordHash(password, hash_password) {
+		return id, err
+	} else {
+		return 0, errors.New("Passwords not compatible")
+	}
 }
 
-func HashPassword(password string) (string, error) {
+func hashPassword(password string) (string, error) {
 	bytes, err := bcrypt.GenerateFromPassword([]byte(password), 14)
 	return string(bytes), err
+}
+
+func checkPasswordHash(password, hash string) bool {
+	err := bcrypt.CompareHashAndPassword([]byte(hash), []byte(password))
+	return err == nil
 }

@@ -1,6 +1,9 @@
 package handlers
 
-import "net/http"
+import (
+	"fmt"
+	"net/http"
+)
 
 func (h *Handler) signin(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPost {
@@ -11,6 +14,10 @@ func (h *Handler) signin(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		return
 	}
-	// username := r.Form.Get("username")
-	// password := r.Form.Get("password")
+	email := r.Form.Get("email")
+	password := r.Form.Get("password")
+
+	id, err := h.Service.Authorization.GetUser(email, password)
+
+	fmt.Println(id)
 }

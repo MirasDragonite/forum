@@ -4,11 +4,13 @@ import (
 	"net/http"
 
 	"forum/internal/service"
+	"forum/structs"
 )
 
 type Handler struct {
 	Service *service.Service
 	Mux     *http.ServeMux
+	Cache   map[string]structs.User
 }
 
 func NewHandler(service *service.Service) *Handler {

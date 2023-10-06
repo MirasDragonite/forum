@@ -28,13 +28,15 @@ func (r *Auth) CreateUser(user structs.User) (int64, error) {
 	return id, nil
 }
 
-func (r *Auth) GetUser(name, password string) (int64, error) {
+func (r *Auth) GetUser(email string) (int64, string, error) {
 	var id int64
-	query := "SELECT id FROM users WHERE username=$1 AND password=$2"
-	row := r.db.QueryRow(query, name, password)
-	err := row.Scan(&id)
+	var hash_password string
+
+	query := "SELECT id, hash_password FROM users WHERE email=$1 "
+	row := r.db.QueryRow(query, email)
+	err := row.Scan(&id, &hash_password)
 	if err != nil {
-		return 0, err
+		return 0, "", err
 	}
-	return 0, nil
+	return id, hash_password, nil
 }
