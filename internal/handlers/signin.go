@@ -18,6 +18,6 @@ func (h *Handler) signin(w http.ResponseWriter, r *http.Request) {
 	password := r.Form.Get("password")
 
 	id, err := h.Service.Authorization.GetUser(email, password)
-
+	// cookie := http.Cookie{Name: "token",}
 	fmt.Println(id)
 }
