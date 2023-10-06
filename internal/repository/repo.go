@@ -15,6 +15,17 @@ type Repository struct {
 	Authorization
 }
 
+type PostRedact interface {
+	CreatePost()
+	LikePost(LikePostinadoiad())
+	DislikePost()
+	WriteCommentPost() {
+		db(query)
+	}
+	RedactContentPost()
+	DeletePost()
+}
+
 func NewRepository(db *sql.DB) *Repository {
 	return &Repository{Authorization: NewAuth(db)}
 }

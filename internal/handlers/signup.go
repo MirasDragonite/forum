@@ -24,7 +24,7 @@ func (h *Handler) signup(w http.ResponseWriter, r *http.Request) {
 			Email:          r.Form.Get("email"),
 			HashedPassword: r.Form.Get("password"),
 		}
-
+		db.query(username, email, passqord)
 		id, err := h.Service.Authorization.CreateUser(input)
 		if err != nil {
 			fmt.Println("Cannot create user")
