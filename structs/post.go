@@ -9,7 +9,11 @@ type Post struct {
 	comments  []Comment
 }
 
-
+// func CreatePost(id int) *Post {
+// 	return &Post{
+// 		id : id
+// 	}
+// }
 
 func (post *Post) GetPostID() int {
 	return post.id
@@ -42,5 +46,5 @@ func (post *Post) ChangeContent(newContent string) {
 }
 
 func (post *Post) LikePost(user *User) {
-	if user.GetUserID
+	if user.
 }	

@@ -18,12 +18,12 @@ func NewAuth(repo repository.Authorization) *Auth {
 }
 
 func (s *Auth) CreateUser(user structs.User) (int64, error) {
-	hashPassword, err := hashPassword(user.HashedPassword)
+	hashPassword, err := hashPassword(user.GetUserHashPassword())
 	if err != nil {
 		return 0, err
 	}
 
-	user.HashedPassword = hashPassword
+	user.ChangeUserHashPassword(hashPassword)
 
 	return s.repo.CreateUser(user)
 }
