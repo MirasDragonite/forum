@@ -17,16 +17,15 @@ type PostRedact interface {
 	DeletePost()
 }
 
-type Comment interface {
-	CreateComment()
-	ChangeContent()
-}
-
 type Service struct {
 	Authorization
 	PostRedact
 }
 
-func NewService(repo *repository.Repository) *Service {
+func NewServiceAuth(repo *repository.Repository) *Service {
 	return &Service{Authorization: NewAuth(repo.Authorization)}
+}
+
+func NewServicePostRedeact(repo *repository.PostRedact) *Service {
+	return &Service{PostRedact: NewAuth(repo.PostRedact)}
 }

@@ -6,14 +6,14 @@ import (
 	"forum/structs"
 )
 
+
+
 type Authorization interface {
 	CreateUser(user *structs.User) (int64, error)
 	GetUser(email string) (int64, string, error)
 }
 
-type Repository struct {
-	Authorization
-}
+
 
 type PostRedact interface {
 	CreatePost()
@@ -21,6 +21,12 @@ type PostRedact interface {
 	DislikePost()
 	RedactContentPost()
 	DeletePost()
+}
+
+type Repository struct {
+	Authorization
+	PostRedact
+	
 }
 
 func NewRepository(db *sql.DB) *Repository {
