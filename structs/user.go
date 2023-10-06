@@ -1,14 +1,26 @@
 package structs
 
 type User struct {
-	id             int
+	id             int64
 	username       string
 	email          string
 	hashedPassword string
 }
 
-func (u *User) GetUserID() int {
+func CreateUser(username, email, password string) *User {
+	return &User{
+		username:       username,
+		email:          email,
+		hashedPassword: password,
+	}
+}
+
+func (u *User) GetUserID() int64 {
 	return u.id
+}
+
+func (u *User) ChangeUserId(s int64) {
+	u.id = s
 }
 
 func (u *User) GetUserName() string {
