@@ -42,5 +42,5 @@ func (post *Post) ChangeContent(newContent string) {
 }
 
 func (post *Post) LikePost(user *User) {
-	if user.
+	if user.GetUserID
 }	
