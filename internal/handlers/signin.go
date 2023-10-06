@@ -3,6 +3,7 @@ package handlers
 import (
 	"crypto/md5"
 	"encoding/hex"
+	"fmt"
 	"net/http"
 	"net/url"
 	"text/template"
@@ -37,10 +38,12 @@ func (h *Handler) signin(w http.ResponseWriter, r *http.Request) {
 			expiration := time.Now().Add(livingTime)
 			cookie := http.Cookie{Name: "Token", Value: url.QueryEscape(hashedToken), Expires: expiration}
 			http.SetCookie(w, &cookie)
-			http.Redirect(w, r, "/", http.StatusSeeOther)
+			http.Redirect(w, r, "/", http.StatusOK)
 		}
 
 	} else if r.Method == http.MethodGet {
 		ts.Execute(w, "")
+	} else {
+		fmt.Println("rEDIcrect didnt work")
 	}
 }
