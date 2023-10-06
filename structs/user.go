@@ -46,4 +46,3 @@ func (u *User) ChangeUserEmail(s string) {
 func (u *User) ChangeUserHashPassword(s string) {
 	u.hashedPassword = s
 }
-

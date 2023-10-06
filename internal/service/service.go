@@ -11,7 +11,6 @@ type Authorization interface {
 }
 type PostRedact interface {
 	CreatePost()
-	LikePost(LikePostinadoiad())
 	DislikePost()
 	WriteCommentPost()
 	RedactContentPost()
@@ -25,6 +24,7 @@ type Comment interface {
 
 type Service struct {
 	Authorization
+	PostRedact
 }
 
 func NewService(repo *repository.Repository) *Service {

@@ -21,3 +21,4 @@ func (h *Handler) Router() {
 	h.Mux.HandleFunc("/signin", h.signin)
 	h.Mux.HandleFunc("/register", h.signup)
 }
+

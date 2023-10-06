@@ -17,11 +17,8 @@ type Repository struct {
 
 type PostRedact interface {
 	CreatePost()
-	LikePost(LikePostinadoiad())
+	// LikePost(LikePostinadoiad())
 	DislikePost()
-	WriteCommentPost() {
-		db(query)
-	}
 	RedactContentPost()
 	DeletePost()
 }

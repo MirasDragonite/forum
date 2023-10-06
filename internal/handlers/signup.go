@@ -1,7 +1,7 @@
 package handlers
 
 import (
-	"fmt"
+	"log"
 	"net/http"
 	"text/template"
 
@@ -23,7 +23,7 @@ func (h *Handler) signup(w http.ResponseWriter, r *http.Request) {
 		input := structs.CreateUser(r.Form.Get("username"), r.Form.Get("email"), r.Form.Get("password"))
 		id, err := h.Service.Authorization.CreateUser(input)
 		if err != nil {
-			fmt.Println("Cannot create user")
+			log.Println("Cannot create user")
 			errorHandler(w, 405)
 			return
 		}
