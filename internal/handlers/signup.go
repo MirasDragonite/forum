@@ -19,11 +19,8 @@ func (h *Handler) signup(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if r.Method == http.MethodPost {
-		var input structs.User
-		input.ChangeUserName(r.Form.Get("username"))
-		input.ChangeUserEmail(r.Form.Get("email"))
-		input.ChangeUserHashPassword(r.Form.Get("password"))
 
+		input := structs.CreateUser(r.Form.Get("username"), r.Form.Get("email"), r.Form.Get("password"))
 		id, err := h.Service.Authorization.CreateUser(input)
 		if err != nil {
 			fmt.Println("Cannot create user")
@@ -31,6 +28,7 @@ func (h *Handler) signup(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
+		input.ChangeUserId(id)
 		ts.Execute(w, id)
 	} else if r.Method == http.MethodGet {
 		ts.Execute(w, "")

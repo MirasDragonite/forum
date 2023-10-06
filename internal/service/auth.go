@@ -17,7 +17,7 @@ func NewAuth(repo repository.Authorization) *Auth {
 	return &Auth{repo: repo}
 }
 
-func (s *Auth) CreateUser(user structs.User) (int64, error) {
+func (s *Auth) CreateUser(user *structs.User) (int64, error) {
 	hashPassword, err := hashPassword(user.GetUserHashPassword())
 	if err != nil {
 		return 0, err

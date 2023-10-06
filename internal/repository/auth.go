@@ -14,7 +14,7 @@ func NewAuth(db *sql.DB) *Auth {
 	return &Auth{db: db}
 }
 
-func (r *Auth) CreateUser(user structs.User) (int64, error) {
+func (r *Auth) CreateUser(user *structs.User) (int64, error) {
 	query := `INSERT INTO users(username,email,hash_password) VALUES($1,$2,$3) RETURNING id`
 
 	result, err := r.db.Exec(query, user.GetUserName(), user.GetUserEmail(), user.GetUserHashPassword())

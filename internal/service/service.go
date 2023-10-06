@@ -6,7 +6,7 @@ import (
 )
 
 type Authorization interface {
-	CreateUser(user structs.User) (int64, error)
+	CreateUser(user *structs.User) (int64, error)
 	GetUser(email, password string) (int64, error)
 }
 type PostRedact interface {
