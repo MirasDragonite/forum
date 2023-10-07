@@ -12,6 +12,7 @@ type Authorization interface {
 	GetSession(userID int64) (structs.Session, error)
 	CreateToken(user structs.User, token, expaired_data string) error
 	UpdateToken(user structs.User, token, expaired_data string) error
+	DeleteToken(token string) error
 }
 
 type Repository struct {

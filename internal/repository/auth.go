@@ -76,10 +76,10 @@ func (r *Auth) UpdateToken(user structs.User, token, expaired_data string) error
 	return nil
 }
 
-func (r *Auth) DeleteToken(user structs.User) error {
-	query := `DELETE FROM tokens WHERE user_id=$1`
+func (r *Auth) DeleteToken(token string) error {
+	query := `DELETE FROM tokens WHERE token=$1`
 
-	_, err := r.db.Exec(query, &user.Id)
+	_, err := r.db.Exec(query, &token)
 	if err != nil {
 		return err
 	}

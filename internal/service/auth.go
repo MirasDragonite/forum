@@ -78,6 +78,19 @@ func (s *Auth) GetUser(email, password string) (*http.Cookie, error) {
 	return &cookie, nil
 }
 
+func (s *Auth) DeleteToken(cookie *http.Cookie) error {
+	err := s.repo.DeleteToken(cookie.Value)
+	cookie.Name = "Token"
+	cookie.Value = ""
+	cookie.Path = "/"
+	cookie.MaxAge = -1
+	cookie.HttpOnly = false
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
 func hashPassword(password string) (string, error) {
 	bytes, err := bcrypt.GenerateFromPassword([]byte(password), 14)
 	return string(bytes), err
