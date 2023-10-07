@@ -1,13 +1,15 @@
 package service
 
 import (
+	"net/http"
+
 	"forum/internal/repository"
 	"forum/structs"
 )
 
 type Authorization interface {
 	CreateUser(user *structs.User) (int64, error)
-	GetUser(email, password string) (int64, error)
+	GetUser(email, password string) (*http.Cookie, int64, string, error)
 }
 
 type Service struct {

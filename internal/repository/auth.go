@@ -40,3 +40,4 @@ func (r *Auth) GetUser(email string) (int64, string, error) {
 	}
 	return id, hash_password, nil
 }
+
