@@ -19,11 +19,11 @@ func (h *Handler) signin(w http.ResponseWriter, r *http.Request) {
 		email := r.Form.Get("email")
 		password := r.Form.Get("password")
 
-		cookie, id, hashedToken, err := h.Service.Authorization.GetUser(email, password)
+		cookie, err := h.Service.Authorization.GetUser(email, password)
 		if err != nil {
 			return
 		}
-		h.Cache[hashedToken] = id
+
 		http.SetCookie(w, cookie)
 		http.Redirect(w, r, "/profile", http.StatusSeeOther)
 		fmt.Println("REdirec..")

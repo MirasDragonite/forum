@@ -9,7 +9,7 @@ import (
 
 type Authorization interface {
 	CreateUser(user *structs.User) (int64, error)
-	GetUser(email, password string) (*http.Cookie, int64, string, error)
+	GetUser(email, password string) (*http.Cookie, error)
 }
 
 type Service struct {

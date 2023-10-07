@@ -15,6 +15,8 @@ func NewDB() (*sql.DB, error) {
 
 	query := `DROP TABLE IF EXISTS users;
 	CREATE TABLE users(id INTEGER PRIMARY KEY, username TEXT NOT NULL UNIQUE, email TEXT NOT NULL UNIQUE,hash_password TEXT NOT NULL);
+	DROP TABLE IF EXISTS tokens;
+	CREATE TABLE tokens(id INTEGER PRIMARY KEY, user_id INTEGER,token TEXT NOT NULL,expaired_data TEXT NOT NULL, FOREIGN KEY(user_id) REFERENCES users(id))
 	`
 
 	_, err = db.Exec(query)

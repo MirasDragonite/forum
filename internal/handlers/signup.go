@@ -28,8 +28,8 @@ func (h *Handler) signup(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
-		input.ChangeUserId(id)
-		ts.Execute(w, id)
+		input.Id = id
+		http.Redirect(w, r, "/signin", http.StatusSeeOther)
 	} else if r.Method == http.MethodGet {
 		ts.Execute(w, "")
 	} else {
