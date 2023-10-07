@@ -25,7 +25,7 @@ func (h *Handler) signin(w http.ResponseWriter, r *http.Request) {
 		}
 		h.Cache[hashedToken] = id
 		http.SetCookie(w, cookie)
-		http.Redirect(w, r, "/", http.StatusSeeOther)
+		http.Redirect(w, r, "/profile", http.StatusSeeOther)
 		fmt.Println("REdirec..")
 
 	} else if r.Method == http.MethodGet {
