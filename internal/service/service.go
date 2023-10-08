@@ -18,7 +18,7 @@ type PostRedact interface {
 	LikePost(post *structs.Post) error
 	DislikePost(post *structs.Post) error
 	// WriteCommentPost()
-	RedactContentPost(post *structs.Post) error
+	RedactContentPost(post *structs.Post, newContent string) error
 	DeletePost(post *structs.Post) error
 }
 

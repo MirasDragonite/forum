@@ -29,7 +29,11 @@ func (repo *PostRed) CreatePost(post *structs.Post, token string) error {
 	}
 	return nil
 }
-// func
+
+func (repo *PostRed) GetPostBy(from, value string) (*structs.Post, error) {
+	return repo.repo.GetPostBy(from,value)
+}
+
 func (repo *PostRed) LikePost(post *structs.Post) error {
 	if post.Like == 0 && post.Dislike == 0 {
 		post.Like++

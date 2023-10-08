@@ -42,23 +42,60 @@ func (pr *PostRedactDB) GetUSerID(token string) (int64, error) {
 }
 
 func (pr *PostRedactDB) GetPostBy(from, value string) (*structs.Post, error) {
-	if from == "id" || from == "postAuthorID" {
-		value, err := strconv.Atoi(value)
-		if err != nil {
-			
-		}
-	}
-	query := fmt.Sprintf(`SELECT * FROM post WHERE %v = $1`, from)
-
-	row := pr.db.QueryRow(query, value)
 	var post structs.Post
-	var foreignKeyComments int64
-	err := row.Scan(&post.Id, &post.PostAuthorID, &post.Topic, &post.Title, &post.Content, &post.Like, &post.Dislike, &foreignKeyComments)
-	if err != nil {
-		return &structs.Post{}, err
+	if from == "id" || from == "postAuthorID" {
+		value, err2 := strconv.Atoi(value)
+		if err2 != nil {
+			return &structs.Post{}, err2
+		}
+		query := fmt.Sprintf(`SELECT * FROM post WHERE %s = $1`, from)
+
+		row := pr.db.QueryRow(query, value)
+
+		err := row.Scan(&post.Id, &post.PostAuthorID, &post.Topic, &post.Title, &post.Content, &post.Like, &post.Dislike)
+		if err != nil {
+			return &structs.Post{}, err
+		}
+		var comments []structs.Comment
+		query = `SELECT * from comments WHERE post_id = $1`
+		rows, err := pr.db.Query(query, post.Id)
+		if err != nil {
+			return &structs.Post{}, err
+		}
+		for rows.Next() {
+			var comment structs.Comment
+			err := rows.Scan(&comment.CommentID, &comment.CommentAuthorID, &comment.PostID, &comment.Content, &comment.Like, &comment.Dislike)
+			if err != nil {
+				return &structs.Post{}, err
+			}
+			comments = append(comments, comment)
+		}
+		post.Comments = comments
+	} else {
+		query := fmt.Sprintf(`SELECT * FROM post WHERE %s = $1`, from)
+
+		row := pr.db.QueryRow(query, value)
+		err := row.Scan(&post.Id, &post.PostAuthorID, &post.Topic, &post.Title, &post.Content, &post.Like, &post.Dislike)
+		if err != nil {
+			return &structs.Post{}, err
+		}
+		var comments []structs.Comment
+		query = `SELECT * from comments WHERE post_id = $1`
+		rows, err := pr.db.Query(query, post.Id)
+		if err != nil {
+			return &structs.Post{}, err
+		}
+		for rows.Next() {
+			var comment structs.Comment
+			err := rows.Scan(&comment.CommentID, &comment.CommentAuthorID, &comment.PostID, &comment.Content, &comment.Like, &comment.Dislike)
+			if err != nil {
+				return &structs.Post{}, err
+			}
+			comments = append(comments, comment)
+		}
+		post.Comments = comments
 	}
-	var comments []structs.Comment
-	query = ``
+	return &post, nil
 }
 
 func (pr *PostRedactDB) LikePost(post *structs.Post) error {
@@ -70,7 +107,7 @@ func (pr *PostRedactDB) LikePost(post *structs.Post) error {
 	return nil
 }
 
-func (pr *PostRedactDB)  DislikePost(post *structs.Post) error {
+func (pr *PostRedactDB) DislikePost(post *structs.Post) error {
 	query := `UPDATE posts SET like = $1 dislike = $2 WHERE id = $3;`
 	_, err := pr.db.Exec(query, post.Like, post.Dislike, post.Id)
 	if err != nil {
@@ -79,7 +116,7 @@ func (pr *PostRedactDB)  DislikePost(post *structs.Post) error {
 	return nil
 }
 
-func (pr *PostRedactDB)  RedactContentPost(post *structs.Post) error {
+func (pr *PostRedactDB) RedactContentPost(post *structs.Post) error {
 	query := `UPDATE posts SET content = $1 WHERE id = $2;`
 	_, err := pr.db.Exec(query, post.Content, post.Id)
 	if err != nil {
@@ -87,7 +124,8 @@ func (pr *PostRedactDB)  RedactContentPost(post *structs.Post) error {
 	}
 	return nil
 }
-func (pr *PostRedactDB)  DeletePost(post *structs.Post) error {
+
+func (pr *PostRedactDB) DeletePost(post *structs.Post) error {
 	query := `DELETE FROM posts WHERE id = $1;`
 	_, err := pr.db.Exec(query, post.Id)
 	if err != nil {
