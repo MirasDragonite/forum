@@ -24,27 +24,27 @@ func CreatePost(id int64, authorID int64, topic string, title string, content st
 	}
 }
 
-func (post *Post) ChangeContent(newContent string) {
-	post.Content = newContent
-}
+// func (post *Post) ChangeContent(newContent string) {
+// 	post.Content = newContent
+// }
 
-func (post *Post) ChangeTitle(newTitle string) {
-	post.Title = newTitle
-}
+// func (post *Post) ChangeTitle(newTitle string) {
+// 	post.Title = newTitle
+// }
 
-func (post *Post) LikePost() {
-	post.Like++
-	post.Dislike--
-}
+// func (post *Post) LikePost() {
+// 	post.Like++
+// 	post.Dislike--
+// }
 
-func (post *Post) DislikePost() {
-	post.Like--
-	post.Dislike++
-}
+// func (post *Post) DislikePost() {
+// 	post.Like--
+// 	post.Dislike++
+// }
 
-func (post *Post) WriteComment(commentID int64, CommentAuthorID int64, PostID int64, Content string) {
-	post.Comments = append(post.Comments, *CreateComment(commentID, CommentAuthorID, PostID, Content))
-}
+// func (post *Post) WriteComment(commentID int64, CommentAuthorID int64, PostID int64, Content string) {
+// 	post.Comments = append(post.Comments, *CreateComment(commentID, CommentAuthorID, PostID, Content))
+// }
 
-func DeletePost(postID int64, authorID int64, user *User) {
-}
+// func DeletePost(postID int64, authorID int64, user *User) {
+// }

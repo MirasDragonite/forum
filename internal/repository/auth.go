@@ -65,6 +65,19 @@ func (r *Auth) GetSession(userID int64) (structs.Session, error) {
 	return session, nil
 }
 
+func (r *Auth) GetSessionByToken(token string) (structs.Session, error) {
+	var session structs.Session
+
+	query := `SELECT * FROM tokens WHERE token=$1`
+
+	row := r.db.QueryRow(query, token)
+	err := row.Scan(&session.Id, &session.UserId, &session.Token, &session.ExpairedData)
+	if err != nil {
+		return structs.Session{}, err
+	}
+	return session, nil
+}
+
 func (r *Auth) UpdateToken(user structs.User, token, expaired_data string) error {
 	query := `UPDATE tokens SET token=$1 ,expaired_data=$2 WHERE user_id=$3`
 

@@ -2,6 +2,7 @@ package repository
 
 import (
 	"database/sql"
+
 	"forum/structs"
 )
 
@@ -12,14 +13,17 @@ type Authorization interface {
 	CreateToken(user structs.User, token, expaired_data string) error
 	UpdateToken(user structs.User, token, expaired_data string) error
 	DeleteToken(token string) error
+	GetSessionByToken(token string) (structs.Session, error)
 }
 
 type PostRedact interface {
 	CreatePost(post *structs.Post) error
 	GetUSerID(token string) (int64, error)
-	// DislikePost()
-	// RedactContentPost()
-	// DeletePost()
+	GetPostBy(from, value string) (*structs.Post, error)
+	LikePost(post *structs.Post) error
+	DislikePost(post *structs.Post) error
+	RedactContentPost(post *structs.Post) error
+	DeletePost(post *structs.Post) error
 }
 
 type Repository struct {

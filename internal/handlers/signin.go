@@ -26,7 +26,7 @@ func (h *Handler) signin(w http.ResponseWriter, r *http.Request) {
 		}
 
 		http.SetCookie(w, cookie)
-		http.Redirect(w, r, "/profile", http.StatusSeeOther)
+		http.Redirect(w, r, "/submit-post", http.StatusSeeOther)
 		fmt.Println("REdirec..")
 
 	} else if r.Method == http.MethodGet {

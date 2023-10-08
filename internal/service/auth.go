@@ -38,6 +38,14 @@ func (s *Auth) CreateUser(user *structs.User) error {
 	return s.repo.CreateUser(user)
 }
 
+func (s *Auth) GetUserByToken(token string) (*structs.Session, error) {
+	session, err := s.repo.GetSessionByToken(token)
+	if err != nil {
+		return nil, err
+	}
+	return &session, nil
+}
+
 func (s *Auth) GetUser(email, password string) (*http.Cookie, error) {
 	user, err := s.repo.GetUserBy(email, emailDataBaseName)
 
