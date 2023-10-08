@@ -24,6 +24,10 @@ type PostRedact interface {
 	DeletePost(post *structs.Post) error
 }
 
+// type CommentRedact interface { 
+// 	CreateComment(comm *structs.Comment, user *str) error
+// }
+
 type Repository struct {
 	Authorization
 	PostRedact

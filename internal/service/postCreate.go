@@ -31,7 +31,7 @@ func (repo *PostRed) CreatePost(post *structs.Post, token string) error {
 }
 
 func (repo *PostRed) GetPostBy(from, value string) (*structs.Post, error) {
-	return repo.repo.GetPostBy(from,value)
+	return repo.repo.GetPostBy(from, value)
 }
 
 func (repo *PostRed) LikePost(post *structs.Post) error {
