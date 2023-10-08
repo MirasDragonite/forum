@@ -3,7 +3,9 @@ package repository
 import (
 	"database/sql"
 	"errors"
+	"fmt"
 	"forum/structs"
+	"strconv"
 )
 
 type PostRedactDB struct {
@@ -15,11 +17,16 @@ func NewPostRedactDB(db *sql.DB) *PostRedactDB {
 }
 
 func (pr *PostRedactDB) CreatePost(post *structs.Post) error {
-	query := `INSERT INTO posts(postAuthorID, topic, title, content, like, dislike) VALUES ($1, $2, $3, $4, $5, $6)`
-	_, err := pr.db.Exec(query, post.PostAuthorID, post.Topic, post.Title, post.Content, post.Like, post.Dislike)
+	query := `INSERT INTO posts(postAuthorID, topic, title, content, like, dislike) VALUES ($1, $2, $3, $4, $5, $6) RETURNING id`
+	result, err := pr.db.Exec(query, post.PostAuthorID, post.Topic, post.Title, post.Content, post.Like, post.Dislike)
 	if err != nil {
 		return errors.New("Error: cannot create new post, Check CreatePost()")
 	}
+	lastID, err := result.LastInsertId()
+	if err != nil {
+		return err
+	}
+	post.Id = lastID
 	return nil
 }
 
@@ -32,4 +39,59 @@ func (pr *PostRedactDB) GetUSerID(token string) (int64, error) {
 		return 0, errors.New("No such token in the db")
 	}
 	return userID, nil
+}
+
+func (pr *PostRedactDB) GetPostBy(from, value string) (*structs.Post, error) {
+	if from == "id" || from == "postAuthorID" {
+		value, err := strconv.Atoi(value)
+		if err != nil {
+			
+		}
+	}
+	query := fmt.Sprintf(`SELECT * FROM post WHERE %v = $1`, from)
+
+	row := pr.db.QueryRow(query, value)
+	var post structs.Post
+	var foreignKeyComments int64
+	err := row.Scan(&post.Id, &post.PostAuthorID, &post.Topic, &post.Title, &post.Content, &post.Like, &post.Dislike, &foreignKeyComments)
+	if err != nil {
+		return &structs.Post{}, err
+	}
+	var comments []structs.Comment
+	query = ``
+}
+
+func (pr *PostRedactDB) LikePost(post *structs.Post) error {
+	query := `UPDATE posts SET like = $1 dislike = $2 WHERE id = $3;`
+	_, err := pr.db.Exec(query, post.Like, post.Dislike, post.Id)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func (pr *PostRedactDB)  DislikePost(post *structs.Post) error {
+	query := `UPDATE posts SET like = $1 dislike = $2 WHERE id = $3;`
+	_, err := pr.db.Exec(query, post.Like, post.Dislike, post.Id)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func (pr *PostRedactDB)  RedactContentPost(post *structs.Post) error {
+	query := `UPDATE posts SET content = $1 WHERE id = $2;`
+	_, err := pr.db.Exec(query, post.Content, post.Id)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+func (pr *PostRedactDB)  DeletePost(post *structs.Post) error {
+	query := `DELETE FROM posts WHERE id = $1;`
+	_, err := pr.db.Exec(query, post.Id)
+	if err != nil {
+		return err
+	}
+	return nil
 }

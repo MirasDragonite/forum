@@ -15,19 +15,18 @@ func NewAuth(db *sql.DB) *Auth {
 	return &Auth{db: db}
 }
 
-func (r *Auth) CreateUser(user *structs.User) (int64, error) {
-	query := `INSERT INTO users(username,email,hash_password) VALUES($1,$2,$3) RETURNING id`
+func (r *Auth) CreateUser(user *structs.User) error {
+	query := `INSERT INTO users(username,email,hash_password) VALUES($1,$2,$3) `
 
-	result, err := r.db.Exec(query, user.Username, user.Email, user.HashedPassword)
+	_, err := r.db.Exec(query, user.Username, user.Email, user.HashedPassword)
 	if err != nil {
-		return 0, err
+		return err
 	}
-	id, err := result.LastInsertId()
+	// id, err := result.LastInsertId()
 	if err != nil {
-		return 0, err
+		return err
 	}
-
-	return id, nil
+	return nil
 }
 
 func (r *Auth) GetUserBy(element, from string) (structs.User, error) {
