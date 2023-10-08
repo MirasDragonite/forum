@@ -30,8 +30,12 @@ func (repo *PostRed) CreatePost(post *structs.Post, token string) error {
 	return nil
 }
 
+func (repo *PostRed) GetUSerID(token string) (int64, error) {
+	return repo.repo.GetUSerID(token)
+}
+
 func (repo *PostRed) GetPostBy(from, value string) (*structs.Post, error) {
-	return repo.repo.GetPostBy(from,value)
+	return repo.repo.GetPostBy(from, value)
 }
 
 func (repo *PostRed) LikePost(post *structs.Post) error {

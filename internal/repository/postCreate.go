@@ -4,8 +4,9 @@ import (
 	"database/sql"
 	"errors"
 	"fmt"
-	"forum/structs"
 	"strconv"
+
+	"forum/structs"
 )
 
 type PostRedactDB struct {
@@ -48,7 +49,7 @@ func (pr *PostRedactDB) GetPostBy(from, value string) (*structs.Post, error) {
 		if err2 != nil {
 			return &structs.Post{}, err2
 		}
-		query := fmt.Sprintf(`SELECT * FROM post WHERE %s = $1`, from)
+		query := fmt.Sprintf(`SELECT * FROM posts WHERE %s = $1`, from)
 
 		row := pr.db.QueryRow(query, value)
 
@@ -72,7 +73,7 @@ func (pr *PostRedactDB) GetPostBy(from, value string) (*structs.Post, error) {
 		}
 		post.Comments = comments
 	} else {
-		query := fmt.Sprintf(`SELECT * FROM post WHERE %s = $1`, from)
+		query := fmt.Sprintf(`SELECT * FROM posts WHERE %s = $1`, from)
 
 		row := pr.db.QueryRow(query, value)
 		err := row.Scan(&post.Id, &post.PostAuthorID, &post.Topic, &post.Title, &post.Content, &post.Like, &post.Dislike)

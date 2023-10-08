@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Post Page</title>
+</head>
+<body>
+    {{ if . }}
+    <div class="post">
+        <h2>{{ .Title }}</h2>
+        <p>{{ .Content }}</p>
+        <p>Likes: {{ .Like }}</p>
+        <p>Dislikes: {{ .Dislike }}</p>
+    </div>
+
+    <h3>Comments</h3>
+    <ul>
+        {{ range .Comments }}
+        <li>
+            <p>{{ .Content }}</p>
+            <p>Likes: {{ .Like }}</p>
+            <p>Dislikes: {{ .Dislike }}</p>
+        </li>
+        {{ end }}
+    </ul>
+
+    <!-- Comment Form -->
+    <form action="/post/{{.Id}}" method="POST">
+        <input type="hidden" name="postId" value="{{ .Id }}">
+        <input type="text" name="commentContent" placeholder="Add a comment">
+        <button type="submit">Submit Comment</button>
+    </form>
+    {{ else }}
+    <p>Post not found.</p>
+    {{ end }}
+</body>
+</html>
