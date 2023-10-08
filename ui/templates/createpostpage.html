@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile-FORUM</title>
+</head>
+<body>
+  <nav class="navbar navbar-inverse">
+    <div class="container-fluid">
+      <div class="navbar-header">
+        <a class="navbar-brand" href="/">FORUM</a>
+      </div>
+      <span><a href="/">Home</a></span>
+    </div>
+  </nav>
+  <div class="profile-info">
+    <img id="profilePhoto" src="#" alt="Profile Photo" style="max-width: 100px; max-height: 100px;">
+    <p id="userName">Name: </p>
+    <p id="userEmail">Email: </p>
+  </div>
+    
+    <div class="create-post">
+        <form id="create-post-form" >
+            <span class="title-container">
+            <p>Title</p>
+            <input type="text" id="title" placeholder="Title" style="width: 250px;">
+            </span>
+
+        <span class="filters">
+                <input type="checkbox" class="round-checkbox" id="javaCheckbox" >
+                <label class="checkbox-label" for="javaCheckbox"></label>
+                <label for="javaCheckbox">Java</label>
+                
+                <input type="checkbox" class="round-checkbox" id="kotlinCheckbox" >
+                <label class="checkbox-label" for="kotlinCheckbox"></label>
+                <label for="kotlinCheckbox">Kotlin</label>
+                
+                <input type="checkbox" class="round-checkbox" id="pythonCheckbox" >
+                <label class="checkbox-label" for="pythonCheckbox"></label>
+                <label for="pythonCheckbox">Python</label>
+                
+                <input type="checkbox" class="round-checkbox" id="golangCheckbox" >
+                <label class="checkbox-label" for="golangCheckbox"></label>
+                <label for="golangCheckbox">Golang</label>
+                
+                <input type="checkbox" class="round-checkbox" id="phpCheckbox" >
+                <label class="checkbox-label" for="phpCheckbox"></label>
+                <label for="phpCheckbox">PHP</label>
+                
+                <input type="checkbox" class="round-checkbox" id="javascriptCheckbox" >
+                <label class="checkbox-label" for="javascriptCheckbox"></label>
+                <label for="javascriptCheckbox">JavaScript</label>
+                
+                <input type="checkbox" class="round-checkbox" id="sqlCheckbox" >
+                <label class="checkbox-label" for="sqlCheckbox"></label>
+                <label for="sqlCheckbox">SQL</label>
+                
+        </span>
+
+        <span class="text-container">
+            <p>Text</p>
+            <input type="text" id="text-area" placeholder="Message" style="width: 1000px; height: 200px;">
+        </span>
+
+        <button>Publish</button>
+    </form>
+    </div>
+    <script>    
+    
+    function fetchUserProfile() {
+        fetch('/api/user-profile')
+        .then(response => response.json())
+        .then(data => {
+            const profilePhoto = document.getElementById('profilePhoto');
+            const userName = document.getElementById('userName');
+            const userEmail = document.getElementById('userEmail');
+    
+            profilePhoto.src = data.profilePhotoUrl;
+            userName.textContent = 'Name: ' + data.name;
+            userEmail.textContent = 'Email: ' + data.email;
+        })
+        .catch(error => {
+            console.error('Error fetching user profile:', error);
+        });
+    }
+    
+    document.addEventListener('DOMContentLoaded', function () {
+        fetchUserProfile();
+    });
+    
+    </script>
+</body>
+</html>
