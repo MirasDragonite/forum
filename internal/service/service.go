@@ -13,10 +13,19 @@ type Authorization interface {
 	DeleteToken(cookie *http.Cookie) error
 }
 
+type PostRedact interface {
+	CreatePost(post *structs.Post, token string) error
+	// DislikePost()
+	// WriteCommentPost()
+	// RedactContentPost()
+	// DeletePost()
+}
+
 type Service struct {
 	Authorization
+	PostRedact
 }
 
 func NewService(repo *repository.Repository) *Service {
-	return &Service{Authorization: NewAuth(repo.Authorization)}
+	return &Service{Authorization: NewAuth(repo.Authorization), PostRedact: NewPostRed(repo.PostRedact)}
 }

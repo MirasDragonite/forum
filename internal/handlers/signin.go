@@ -6,6 +6,7 @@ import (
 	"text/template"
 )
 
+// logger
 func (h *Handler) signin(w http.ResponseWriter, r *http.Request) {
 	if r.URL.Path != "/signin" {
 		return
