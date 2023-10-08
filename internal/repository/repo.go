@@ -10,7 +10,11 @@ import (
 
 type Authorization interface {
 	CreateUser(user *structs.User) (int64, error)
-	GetUser(email string) (int64, string, error)
+	GetUserBy(element, from string) (structs.User, error)
+	GetSession(userID int64) (structs.Session, error)
+	CreateToken(user structs.User, token, expaired_data string) error
+	UpdateToken(user structs.User, token, expaired_data string) error
+	DeleteToken(token string) error
 }
 
 
