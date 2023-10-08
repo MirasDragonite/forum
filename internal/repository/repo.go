@@ -2,11 +2,8 @@ package repository
 
 import (
 	"database/sql"
-
 	"forum/structs"
 )
-
-
 
 type Authorization interface {
 	CreateUser(user *structs.User) (int64, error)
@@ -17,22 +14,19 @@ type Authorization interface {
 	DeleteToken(token string) error
 }
 
-
-
 type PostRedact interface {
-	CreatePost()
-	// LikePost(LikePostinadoiad())
-	DislikePost()
-	RedactContentPost()
-	DeletePost()
+	CreatePost(post *structs.Post) error
+	GetUSerID(token string) (int64, error)
+	// DislikePost()
+	// RedactContentPost()
+	// DeletePost()
 }
 
 type Repository struct {
 	Authorization
 	PostRedact
-	
 }
 
 func NewRepository(db *sql.DB) *Repository {
-	return &Repository{Authorization: NewAuth(db)}
+	return &Repository{Authorization: NewAuth(db), PostRedact: NewPostRedactDB(db)}
 }

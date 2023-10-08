@@ -1,10 +1,9 @@
 package service
 
 import (
-	"net/http"
-
 	"forum/internal/repository"
 	"forum/structs"
+	"net/http"
 )
 
 type Authorization interface {
@@ -12,12 +11,13 @@ type Authorization interface {
 	GetUser(email, password string) (*http.Cookie, error)
 	DeleteToken(cookie *http.Cookie) error
 }
+
 type PostRedact interface {
-	CreatePost()
-	DislikePost()
-	WriteCommentPost()
-	RedactContentPost()
-	DeletePost()
+	CreatePost(post *structs.Post, token string) error
+	// DislikePost()
+	// WriteCommentPost()
+	// RedactContentPost()
+	// DeletePost()
 }
 
 type Service struct {
@@ -26,9 +26,5 @@ type Service struct {
 }
 
 func NewServiceAuth(repo *repository.Repository) *Service {
-	return &Service{Authorization: NewAuth(repo.Authorization)}
-}
-
-func NewServicePostRedeact(repo *repository.PostRedact) *Service {
-	return &Service{PostRedact: NewAuth(repo.PostRedact)}
+	return &Service{Authorization: NewAuth(repo.Authorization), PostRedact: NewPostRed(repo.PostRedact)}
 }

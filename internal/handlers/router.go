@@ -22,5 +22,6 @@ func (h *Handler) Router() {
 	h.Mux.HandleFunc("/register", h.signup)
 	h.Mux.HandleFunc("/profile", h.profile)
 	h.Mux.HandleFunc("/logout", h.logOut)
+	h.Mux.HandleFunc("/submit-post", h.PostPage)
 }
 

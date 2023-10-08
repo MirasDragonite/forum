@@ -47,5 +47,4 @@ func (post *Post) WriteComment(commentID int64, CommentAuthorID int64, PostID in
 }
 
 func DeletePost(postID int64, authorID int64, user *User) {
-	
 }
