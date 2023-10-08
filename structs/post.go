@@ -1,72 +1,51 @@
 package structs
 
 type Post struct {
-	id       int64
-	authorID int64
-	topic    string
-	title    string
-	content  string
-	like     int64
-	dislike  int64
-	comments []Comment
+	Id           int64
+	PostAuthorID int64
+	Topic        string
+	Title        string
+	Content      string
+	Like         int64
+	Dislike      int64
+	Comments     []Comment
 }
 
 func CreatePost(id int64, authorID int64, topic string, title string, content string) *Post {
 	return &Post{
-		id:       id,
-		authorID: authorID,
-		topic:    topic,
-		title:    title,
-		content:  content,
-		like:     0,
-		dislike:  0,
-		comments: []Comment{},
+		Id:           id,
+		PostAuthorID: authorID,
+		Topic:        topic,
+		Title:        title,
+		Content:      content,
+		Like:         0,
+		Dislike:      0,
+		Comments:     []Comment{},
 	}
 }
-// func DeletePost(){
-
-// }
-
-func (post *Post) GetPostID() int64 {
-	return post.id
-}
-
-func (post *Post) GetPostAuthorID() int64 {
-	return post.authorID
-}
-
-func (post *Post) GetPostTopic() string {
-	return post.topic
-}
-
-func (post *Post) GetPostTitle() string {
-	return post.title
-}
-
-func (post *Post) GetPostContent() string {
-	return post.content
-}
-
-func (post *Post) GetPostLikeNumber() int64 {
-	return post.like
-}
-
-func (post *Post) GetPostDislikeNumber() int64 {
-	return post.dislike
-}
-
-func (post *Post) GetPostComments() []Comment {
-	return post.comments
-}
-
-// Methods
 
 func (post *Post) ChangeContent(newContent string) {
-	post.content = newContent
+	post.Content = newContent
 }
 
-// func (post *Post) LikePost(user *User) {
-// 	if user.GetUserID() == int64(post.authorID) {
+func (post *Post) ChangeTitle(newTitle string) {
+	post.Title = newTitle
+}
 
-// 	}
-// }
+func (post *Post) LikePost() {
+	post.Like++
+	post.Dislike--
+}
+
+func (post *Post) DislikePost() {
+	post.Like--
+	post.Dislike++
+}
+
+func (post *Post) WriteComment(commentID int64, CommentAuthorID int64, PostID int64, Content string) {
+	post.Comments = append(post.Comments, *CreateComment(commentID, CommentAuthorID, PostID, Content))
+}
+
+func DeletePost(postID int64, authorID int64, user *User) {
+	
+}

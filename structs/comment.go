@@ -1,24 +1,41 @@
 package structs
 
 type Comment struct {
-	author_id int
-	content   string
-	like      int
-	dislike   int
+	CommentID       int64
+	CommentAuthorID int64
+	PostID          int64
+	Content         string
+	Like            int64
+	Dislike         int64
 }
 
-func (comment *Comment) getCommentAuthorID() int {
-	return comment.author_id
+func CreateComment(commentID int64, CommentAuthorID int64, PostID int64, Content string) *Comment {
+	return &Comment{
+		CommentID:       commentID,
+		CommentAuthorID: CommentAuthorID,
+		PostID:          PostID,
+		Content:         Content,
+		Like:            0,
+		Dislike:         0,
+	}
 }
 
-func (comment *Comment) getCommentContent() string {
-	return comment.content
+func (comment *Comment) LikeComment() {
+	comment.Like++
+	comment.Dislike--
 }
 
-func (comment *Comment) getCommentLikeNumber() int {
-	return comment.like
+func (comment *Comment) DislikeComment() {
+	comment.Like--
+	comment.Dislike++
 }
 
-func (comment *Comment) getCommentDislikeNumber() int {
-	return comment.dislike
+
+func DeleteComment(post *Post, commentID int64) *Comment {
+	for _, comment := range post.Comments {
+		if comment.CommentID == commentID {
+			return &comment
+		}
+	}
+	return nil
 }
