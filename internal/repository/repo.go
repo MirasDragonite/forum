@@ -24,15 +24,16 @@ type PostRedact interface {
 	DeletePost(post *structs.Post) error
 }
 
-// type CommentRedact interface { 
-// 	CreateComment(comm *structs.Comment, user *str) error
-// }
+type CommentRedact interface { 
+	CreateComment(comm *structs.Comment) error
+}
 
 type Repository struct {
 	Authorization
 	PostRedact
+	CommentRedact
 }
 
 func NewRepository(db *sql.DB) *Repository {
-	return &Repository{Authorization: NewAuth(db), PostRedact: NewPostRedactDB(db)}
+	return &Repository{Authorization: NewAuth(db), PostRedact: NewPostRedactDB(db), CommentRedact: NewCommentRedactDB(db)}
 }

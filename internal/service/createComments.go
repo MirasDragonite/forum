@@ -1,9 +1,18 @@
 package service
 
-type CommentRedact struct {
-	
+import (
+	"forum/internal/repository"
+	"forum/structs"
+)
+
+type CommentRed struct {
+	repo repository.CommentRedact
 }
 
-func NewComment() {
+func NewCommentRed(repo repository.CommentRedact) *CommentRed {
+	return &CommentRed{repo: repo}
+}
 
-} 
+func (repo *CommentRed) CreateComment(comm *structs.Comment) error {
+	return repo.repo.CreateComment(comm)
+}

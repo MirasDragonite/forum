@@ -3,20 +3,26 @@ package handlers
 import (
 	"forum/structs"
 	"net/http"
+	"strconv"
 	"text/template"
 )
 
 func (h *Handler) PostPage(w http.ResponseWriter, r *http.Request) {
-	//  check url path
-	if r.URL.Path != "/submit-post" {
+	if r.URL.Path[0:6] == "/post/" {
 		return
 	}
-	tmp, err := template.ParseFiles("./ui/templates/postpage.html")
+	post_id := r.URL.Path[6:]
+	tmp, err := template.ParseFiles("./ui/templates/post_page.html")
 	if err != nil {
 		return
 	}
-	if r.Method == http.MethodPost {
-		err := r.ParseForm()
+	if r.Method == http.MethodPost {	
+		post, err := h.Service.PostRedact.GetPostBy("id", post_id)
+		
+		if err != nil {
+			return
+		}
+		err = r.ParseForm()
 		if err != nil {
 			return
 		}
@@ -24,21 +30,29 @@ func (h *Handler) PostPage(w http.ResponseWriter, r *http.Request) {
 		if err != nil {
 			return
 		}
-		var post structs.Post
-		post.Title = r.Form.Get("postTitle")
-		post.Topic = r.Form.Get("postTopic")
-		post.Content = r.Form.Get("postContent")
-
-		err = h.Service.PostRedact.CreatePost(&post, cookie.Value)
+		user_id, err:= h.Service.PostRedact.GetUSerID(cookie.Value)
 		if err != nil {
 			return
 		}
-
+		var comment structs.Comment
+		comment.Dislike =0
+		comment.Like = 0
+		comment.CommentAuthorID= user_id
+		comment.PostID = post.Id
+		comment.Content = r.FormValue("content")
+		post.Comments = append(post.Comments, comment)
+		err = h.Service.CommentRedact.CreateComment(&comment)
+		if err != nil {
+			return
+		}
 	} else if r.Method == http.MethodGet {
-		tmp.Execute(w, nil)
+		post, err := h.Service.PostRedact.GetPostBy("id", post_id)
+		
+		if err != nil {
+			return
+		}
+		tmp.Execute(w, post)
 	} else {
 		w.Write([]byte("internal Server Error"))
 	}
-
-	tmp.Execute(w, nil)
 }
