@@ -27,10 +27,10 @@ func NewAuth(repo repository.Authorization) *Auth {
 	return &Auth{repo: repo}
 }
 
-func (s *Auth) CreateUser(user *structs.User) (int64, error) {
+func (s *Auth) CreateUser(user *structs.User) error {
 	hashPassword, err := hashPassword(user.HashedPassword)
 	if err != nil {
-		return 0, err
+		return err
 	}
 
 	user.HashedPassword = hashPassword
