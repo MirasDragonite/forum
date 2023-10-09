@@ -15,7 +15,7 @@ type Authorization interface {
 	DeleteToken(token string) error
 	GetSessionByToken(token string) (structs.Session, error)
 }
-
+// Post actions
 type PostRedact interface {
 	CreatePost(post *structs.Post) error
 	GetUSerID(token string) (int64, error)
