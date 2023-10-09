@@ -11,8 +11,6 @@ func (h *Handler) home(w http.ResponseWriter, r *http.Request) {
 	}
 
 	ts, err := template.ParseFiles("./ui/templates/index.html")
-	if err != nil {
-		return
-	}
+	h.logError(w, r, err, http.StatusInternalServerError)
 	ts.Execute(w, "")
 }

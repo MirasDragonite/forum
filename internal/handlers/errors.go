@@ -9,7 +9,7 @@ const (
 	pathToErrorPage = "./ui/templates/error.html"
 )
 
-func (h *Handler) errorHandler(w http.ResponseWriter, status int) {
+func (h *Handler) errorHandler(w http.ResponseWriter, r *http.Request, status int) {
 	w.WriteHeader(status)
 	errs := "404"
 	switch status {
@@ -21,6 +21,10 @@ func (h *Handler) errorHandler(w http.ResponseWriter, status int) {
 		errs = "405"
 	case 500:
 		errs = "500"
+	case 401:
+		http.Redirect(w, r, "/register", http.StatusSeeOther)
+		return
+
 	}
 	page, err := template.ParseFiles(pathToErrorPage)
 	if err != nil {
@@ -35,9 +39,10 @@ func (h *Handler) errorHandler(w http.ResponseWriter, status int) {
 	return
 }
 
-func (h *Handler) logError(w http.ResponseWriter, err error, num int) {
+func (h *Handler) logError(w http.ResponseWriter, r *http.Request, err error, status int) {
 	if err != nil {
-		h.errorHandler(w, num)
+		h.errorLog(err.Error())
+		h.errorHandler(w, r, status)
 		return
 	}
 }

@@ -1,7 +1,6 @@
 package handlers
 
 import (
-	"log"
 	"net/http"
 	"text/template"
 
@@ -14,17 +13,15 @@ func (h *Handler) signup(w http.ResponseWriter, r *http.Request) {
 	}
 	ts, err := template.ParseFiles("./ui/templates/signup.html")
 	err = r.ParseForm()
-	if err != nil {
-		return
-	}
+	h.logError(w, r, err, http.StatusInternalServerError)
 
 	if r.Method == http.MethodPost {
 
 		input := structs.CreateUser(r.Form.Get("username"), r.Form.Get("email"), r.Form.Get("password"))
 		err := h.Service.Authorization.CreateUser(input)
 		if err != nil {
-			log.Println("Cannot create user")
-			h.errorHandler(w, 405)
+			h.errorLog(err.Error())
+			h.errorHandler(w, r, 405)
 			return
 		}
 

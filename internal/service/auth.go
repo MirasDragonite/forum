@@ -28,6 +28,9 @@ func NewAuth(repo repository.Authorization) *Auth {
 }
 
 func (s *Auth) CreateUser(user *structs.User) error {
+	if err := checkUserInput(user); err != nil {
+		return err
+	}
 	hashPassword, err := hashPassword(user.HashedPassword)
 	if err != nil {
 		return err
@@ -47,8 +50,16 @@ func (s *Auth) GetUserByToken(token string) (*structs.Session, error) {
 }
 
 func (s *Auth) GetUser(email, password string) (*http.Cookie, error) {
+	if err := isEmailValid(email); err != nil {
+		return nil, err
+	}
+	if err := isPasswordValid(password); err != nil {
+		return nil, err
+	}
 	user, err := s.repo.GetUserBy(email, emailDataBaseName)
-
+	if err := checkUserInput(&user); err != nil {
+		return nil, err
+	}
 	if checkPasswordHash(password, user.HashedPassword) {
 	} else {
 		return nil, errors.New("Passwords not compatible")

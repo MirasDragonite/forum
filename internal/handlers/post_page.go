@@ -12,31 +12,31 @@ func (h *Handler) PostPage(w http.ResponseWriter, r *http.Request) {
 	// if r.URL.Path[0:6] != "/post/" {
 	// 	return
 	// }
-	fmt.Println("HERE")
+
 	post_id := r.URL.Path[6:]
 	tmp, err := template.ParseFiles("./ui/templates/post_page.html")
+	// h.logError(w, r, err, http.StatusInternalServerError)
 	if err != nil {
-		fmt.Println(err.Error())
+		h.errorHandler(w, r, 500)
 		return
 	}
 	if r.Method == http.MethodPost {
-		fmt.Println("Post here")
-		post, err := h.Service.PostRedact.GetPostBy("id", post_id)
-		if err != nil {
-			return
-		}
-		err = r.ParseForm()
-		if err != nil {
-			return
-		}
+
 		cookie, err := r.Cookie("Token")
 		if err != nil {
-			return
+			if err != nil {
+				http.Redirect(w, r, "/register", http.StatusSeeOther)
+				return
+			}
 		}
+
+		post, err := h.Service.PostRedact.GetPostBy("id", post_id)
+		h.logError(w, r, err, http.StatusBadRequest)
+		err = r.ParseForm()
+		h.logError(w, r, err, http.StatusInternalServerError)
+
 		user_id, err := h.Service.PostRedact.GetUSerID(cookie.Value)
-		if err != nil {
-			return
-		}
+		h.logError(w, r, err, http.StatusBadRequest)
 		var comment structs.Comment
 		comment.Dislike = 0
 		comment.Like = 0
@@ -45,19 +45,18 @@ func (h *Handler) PostPage(w http.ResponseWriter, r *http.Request) {
 		comment.Content = r.FormValue("commentContent")
 		post.Comments = append(post.Comments, comment)
 		err = h.Service.CommentRedact.CreateComment(&comment)
-		if err != nil {
-			fmt.Println(err.Error())
-			return
-		}
+		h.logError(w, r, err, http.StatusBadRequest)
 		tmp.Execute(w, post)
+
 	} else if r.Method == http.MethodGet {
-		fmt.Println("GET HERE")
+
 		post, err := h.Service.PostRedact.GetPostBy("id", post_id)
 		if err != nil {
-			fmt.Println(err.Error())
+			h.logError(w, r, err, http.StatusAccepted)
 			return
 		}
-		fmt.Println(post)
+		// h.logError(w, r, err, http.StatusNotFound)
+
 		tmp.Execute(w, post)
 	} else {
 		fmt.Println("mb here")

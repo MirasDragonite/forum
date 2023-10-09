@@ -1,2 +1,4 @@
-[ERROR]: 2023/10/09 12:31:07 log.go:29: http: named cookie not present
-9 12:13:10 log.go:23: Token time is available
+[ERROR]: 2023/10/09 16:09:22 log.go:29: http: named cookie not present
+id syntax
+ard 
+go:23: Token time is available

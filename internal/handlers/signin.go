@@ -1,7 +1,6 @@
 package handlers
 
 import (
-	"fmt"
 	"net/http"
 	"text/template"
 )
@@ -13,25 +12,19 @@ func (h *Handler) signin(w http.ResponseWriter, r *http.Request) {
 	}
 	ts, err := template.ParseFiles("./ui/templates/signin.html")
 	err = r.ParseForm()
-	if err != nil {
-		return
-	}
+	h.logError(w, r, err, http.StatusInternalServerError)
 	if r.Method == http.MethodPost {
 		email := r.Form.Get("email")
 		password := r.Form.Get("password")
 
 		cookie, err := h.Service.Authorization.GetUser(email, password)
-		if err != nil {
-			return
-		}
+		h.logError(w, r, err, http.StatusBadRequest)
 
 		http.SetCookie(w, cookie)
 		http.Redirect(w, r, "/submit-post", http.StatusSeeOther)
-		fmt.Println("REdirec..")
 
 	} else if r.Method == http.MethodGet {
 		ts.Execute(w, "")
 	} else {
-		fmt.Println("rEDIcrect didnt work")
 	}
 }

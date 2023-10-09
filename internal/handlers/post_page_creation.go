@@ -1,9 +1,10 @@
 package handlers
 
 import (
-	"forum/structs"
 	"net/http"
 	"text/template"
+
+	"forum/structs"
 )
 
 func (h *Handler) PostPageCreate(w http.ResponseWriter, r *http.Request) {
@@ -12,27 +13,19 @@ func (h *Handler) PostPageCreate(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	tmp, err := template.ParseFiles("./ui/templates/post_page_creation.html")
-	if err != nil {
-		return
-	}
+	h.logError(w, r, err, http.StatusInternalServerError)
 	if r.Method == http.MethodPost {
 		err := r.ParseForm()
-		if err != nil {
-			return
-		}
+		h.logError(w, r, err, http.StatusInternalServerError)
 		cookie, err := r.Cookie("Token")
-		if err != nil {
-			return
-		}
+		h.logError(w, r, err, http.StatusInternalServerError)
 		var post structs.Post
 		post.Title = r.Form.Get("postTitle")
 		post.Topic = r.Form.Get("postTopic")
 		post.Content = r.Form.Get("postContent")
 
 		err = h.Service.PostRedact.CreatePost(&post, cookie.Value)
-		if err != nil {
-			return
-		}
+		h.logError(w, r, err, http.StatusBadRequest)
 
 	} else if r.Method == http.MethodGet {
 		tmp.Execute(w, nil)

@@ -7,16 +7,13 @@ import (
 
 func (h *Handler) logOut(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodGet {
-		h.errorHandler(w, 400)
+		h.errorHandler(w, r, 400)
 		return
 	}
 	cookie, err := r.Cookie("Token")
 
 	err = h.Service.Authorization.DeleteToken(cookie)
-	if err != nil {
-		fmt.Println("error")
-		return
-	}
+	h.logError(w, r, err, http.StatusUnauthorized)
 	fmt.Println("Cookie:", cookie)
 	fmt.Println("not error")
 	http.SetCookie(w, cookie)

@@ -7,9 +7,7 @@ import (
 
 func (h *Handler) profile(w http.ResponseWriter, r *http.Request) {
 	ts, err := template.ParseFiles("./ui/templates/profilepage.html")
-	if err != nil {
-		return
-	}
+	h.logError(w, r, err, http.StatusInternalServerError)
 
 	ts.Execute(w, nil)
 }
