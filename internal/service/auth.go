@@ -41,12 +41,14 @@ func (s *Auth) CreateUser(user *structs.User) error {
 	return s.repo.CreateUser(user)
 }
 
-func (s *Auth) GetUserByToken(token string) (*structs.Session, error) {
+func (s *Auth) GetUserByToken(token string) (*structs.User, error) {
 	session, err := s.repo.GetSessionByToken(token)
 	if err != nil {
 		return nil, err
 	}
-	return &session, nil
+	user, err := s.repo.GetUserById(session.Id)
+
+	return &user, nil
 }
 
 func (s *Auth) GetUser(email, password string) (*http.Cookie, error) {

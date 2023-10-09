@@ -14,7 +14,9 @@ type Authorization interface {
 	UpdateToken(user structs.User, token, expaired_data string) error
 	DeleteToken(token string) error
 	GetSessionByToken(token string) (structs.Session, error)
+	GetUserById(id int64) (structs.User, error)
 }
+
 // Post actions
 type PostRedact interface {
 	CreatePost(post *structs.Post) error
@@ -26,7 +28,7 @@ type PostRedact interface {
 	DeletePost(post *structs.Post) error
 }
 
-type CommentRedact interface { 
+type CommentRedact interface {
 	CreateComment(comm *structs.Comment) error
 }
 
