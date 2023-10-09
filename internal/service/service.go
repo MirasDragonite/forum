@@ -11,7 +11,7 @@ type Authorization interface {
 	CreateUser(user *structs.User) error
 	GetUser(email, password string) (*http.Cookie, error)
 	DeleteToken(cookie *http.Cookie) error
-	GetUserByToken(token string) (*structs.Session, error)
+	GetUserByToken(token string) (*structs.User, error)
 }
 
 type PostRedact interface {
