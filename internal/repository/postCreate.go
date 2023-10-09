@@ -18,9 +18,10 @@ func NewPostRedactDB(db *sql.DB) *PostRedactDB {
 }
 
 func (pr *PostRedactDB) CreatePost(post *structs.Post) error {
-	query := `INSERT INTO posts(postAuthorID, topic, title, content, like, dislike) VALUES ($1, $2, $3, $4, $5, $6) RETURNING id`
-	result, err := pr.db.Exec(query, post.PostAuthorID, post.Topic, post.Title, post.Content, post.Like, post.Dislike)
+	query := `INSERT INTO posts(postAuthorID, topic, title, content, like, dislike, username) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING id`
+	result, err := pr.db.Exec(query, post.PostAuthorID, post.Topic, post.Title, post.Content, post.Like, post.Dislike, post.PostAuthorName)
 	if err != nil {
+		fmt.Println(err.Error())
 		return errors.New("Error: cannot create new post, Check CreatePost()")
 	}
 	lastID, err := result.LastInsertId()
@@ -69,7 +70,7 @@ func (pr *PostRedactDB) GetPostBy(from, value string) (*structs.Post, error) {
 
 		row := pr.db.QueryRow(query, value)
 
-		err := row.Scan(&post.Id, &post.PostAuthorID, &post.Topic, &post.Title, &post.Content, &post.Like, &post.Dislike)
+		err := row.Scan(&post.Id, &post.PostAuthorID,  &post.Topic, &post.Title, &post.Content, &post.Like, &post.Dislike, &post.PostAuthorName)
 		if err != nil {
 			return &structs.Post{}, err
 		}

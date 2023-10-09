@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"fmt"
 	"net/http"
 	"text/template"
 
@@ -30,7 +31,8 @@ func (h *Handler) PostPageCreate(w http.ResponseWriter, r *http.Request) {
 		}
 
 		err = h.Service.PostRedact.CreatePost(&post, cookie.Value)
-		h.logError(w, r, err, http.StatusBadRequest)
+		urlRedirect := fmt.Sprintf("/post/%v", post.Id)
+		http.Redirect(w,r, urlRedirect, http.StatusSeeOther)
 
 	} else if r.Method == http.MethodGet {
 		cookie, err := r.Cookie("Token")

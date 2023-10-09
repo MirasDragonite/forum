@@ -6,22 +6,24 @@
     <title>Post Page</title>
 </head>
 <body>
-
+    {{if .}}
     <div class="post">
-        <p> {{ .PostAuthorName }} </p>
-        <h2>{{ .Title }}</h2>
-        <p>{{ .Content }}</p>
+        <p> <b>Author:</b>  {{ .PostAuthorName }} </p>
+        <h2> <b>Title:</b>  {{ .Title }}</h2>
+        <p> <b>Content</b> {{ .Content }}</p>
         <p>Likes: {{ .Like }}</p>
         <p>Dislikes: {{ .Dislike }}</p>
         
     </div>
 
-    <h3>Comments</h3>
+    <h3>Comments section</h3>
     <ul>
+
         {{ range .Comments }}
-        <li>
+        <li>    
+            
             <p>{{ .Content }}</p>
-            {{.}}
+            <br>
             <p>Likes: {{ .Like }}</p>
             <p>Dislikes: {{ .Dislike }}</p>
         </li>
@@ -34,6 +36,8 @@
         <input type="text" name="commentContent" placeholder="Add a comment">
         <button type="submit">Submit Comment</button>
     </form>
+
+    <button> <a href="/"> Home </a> </button>
     {{ else }}
     <p>Post not found.</p>
     {{ end }}

@@ -14,6 +14,6 @@ func (s *Server) Run(port string, handler http.Handler) error {
 		Addr:    ":" + port,
 		Handler: handler,
 	}
-	fmt.Printf("Server running on localhost:%s\n", port)
+	fmt.Printf("Server running on http://localhost:%s\n", port)
 	return s.httpServer.ListenAndServe()
 }
