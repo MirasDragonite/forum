@@ -32,7 +32,7 @@ func (h *Handler) PostPage(w http.ResponseWriter, r *http.Request) {
 			h.logError(w, r, err, http.StatusBadRequest)
 			return
 		}
-		
+
 		err = r.ParseForm()
 		h.logError(w, r, err, http.StatusInternalServerError)
 
@@ -46,12 +46,15 @@ func (h *Handler) PostPage(w http.ResponseWriter, r *http.Request) {
 		comment.Content = r.FormValue("commentContent")
 		post.Comments = append(post.Comments, comment)
 		err = h.Service.CommentRedact.CreateComment(&comment)
-		h.logError(w, r, err, http.StatusBadRequest)
+		if err != nil {
+			h.logError(w, r, err, http.StatusBadRequest)
+		}
 		tmp.Execute(w, post)
 
 	} else if r.Method == http.MethodGet {
 
 		post, err := h.Service.PostRedact.GetPostBy("id", post_id)
+		fmt.Println("handlers: ",post)
 		if err != nil {
 			h.logError(w, r, err, http.StatusAccepted)
 			return

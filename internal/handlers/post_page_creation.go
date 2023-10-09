@@ -35,11 +35,16 @@ func (h *Handler) PostPageCreate(w http.ResponseWriter, r *http.Request) {
 	} else if r.Method == http.MethodGet {
 		cookie, err := r.Cookie("Token")
 		h.logError(w, r, err, http.StatusInternalServerError)
-		user := h.Service.Authorization.GetUserByToken()
-		tmp.Execute(w, nil)
+		user, err := h.Service.Authorization.GetUserByToken(cookie.Value)
+		if err != nil {
+			h.logError(w,r, err, http.StatusInternalServerError)
+			return
+		}
+		
+		tmp.Execute(w, user)
 	} else {
 		w.Write([]byte("internal Server Error"))
 	}
 
-	tmp.Execute(w, nil)
+
 }

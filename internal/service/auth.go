@@ -3,6 +3,7 @@ package service
 import (
 	"database/sql"
 	"errors"
+	"fmt"
 	"forum/internal/repository"
 	"forum/structs"
 	"net/http"
@@ -46,7 +47,7 @@ func (s *Auth) GetUserByToken(token string) (*structs.User, error) {
 		return nil, err
 	}
 	user, err := s.repo.GetUserById(session.Id)
-
+	fmt.Println(user)
 	return &user, nil
 }
 

@@ -28,6 +28,7 @@ func (pr *PostRedactDB) CreatePost(post *structs.Post) error {
 		return err
 	}
 	post.Id = lastID
+	fmt.Println("Repo:" , post)
 	return nil
 }
 

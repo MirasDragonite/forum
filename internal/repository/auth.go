@@ -3,7 +3,6 @@ package repository
 import (
 	"database/sql"
 	"fmt"
-
 	"forum/structs"
 )
 
@@ -81,10 +80,12 @@ func (r *Auth) GetSessionByToken(token string) (structs.Session, error) {
 func (r *Auth) GetUserById(id int64) (structs.User, error) {
 	var user structs.User
 
-	query := `SELECT * FROM tokens WHERE id=$1`
+	query := `SELECT * FROM users WHERE id=$1`
 
 	row := r.db.QueryRow(query, id)
 	err := row.Scan(&user.Id, &user.Username, &user.Email, &user.HashedPassword)
+	fmt.Println(user.Username)
+	fmt.Println(user)
 	if err != nil {
 		return structs.User{}, err
 	}

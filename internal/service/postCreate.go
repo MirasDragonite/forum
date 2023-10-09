@@ -2,6 +2,7 @@ package service
 
 import (
 	"errors"
+	"fmt"
 	"forum/internal/repository"
 	"forum/structs"
 )
@@ -24,6 +25,7 @@ func (repo *PostRed) CreatePost(post *structs.Post, token string) error {
 	post.Dislike = 0
 	post.Comments = []structs.Comment{}
 	err = repo.repo.CreatePost(post)
+	fmt.Println("Service:" , post)
 	if err != nil {
 		return err
 	}
