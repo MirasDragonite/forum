@@ -7,7 +7,7 @@ import (
 
 func (h *Handler) logOut(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodGet {
-		errorHandler(w, 400)
+		h.errorHandler(w, 400)
 		return
 	}
 	cookie, err := r.Cookie("Token")

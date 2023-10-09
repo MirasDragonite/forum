@@ -36,5 +36,9 @@ type Service struct {
 }
 
 func NewService(repo *repository.Repository) *Service {
-	return &Service{Authorization: NewAuth(repo.Authorization), PostRedact: NewPostRed(repo.PostRedact), CommentRedact: NewCommentRed(repo.CommentRedact)}
+	return &Service{
+		Authorization: NewAuth(repo.Authorization),
+		PostRedact:    NewPostRed(repo.PostRedact),
+		CommentRedact: NewCommentRed(repo.CommentRedact),
+	}
 }

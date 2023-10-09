@@ -9,7 +9,7 @@ const (
 	pathToErrorPage = "./ui/templates/error.html"
 )
 
-func errorHandler(w http.ResponseWriter, status int) {
+func (h *Handler) errorHandler(w http.ResponseWriter, status int) {
 	w.WriteHeader(status)
 	errs := "404"
 	switch status {
@@ -35,9 +35,9 @@ func errorHandler(w http.ResponseWriter, status int) {
 	return
 }
 
-func logError(w http.ResponseWriter, err error, num int) {
+func (h *Handler) logError(w http.ResponseWriter, err error, num int) {
 	if err != nil {
-		errorHandler(w, num)
+		h.errorHandler(w, num)
 		return
 	}
 }
