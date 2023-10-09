@@ -3,11 +3,10 @@ package service
 import (
 	"database/sql"
 	"errors"
-	"net/http"
-	"time"
-
 	"forum/internal/repository"
 	"forum/structs"
+	"net/http"
+	"time"
 
 	uuid "github.com/satori/go.uuid"
 	"golang.org/x/crypto/bcrypt"

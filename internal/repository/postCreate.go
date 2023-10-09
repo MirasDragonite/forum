@@ -42,6 +42,21 @@ func (pr *PostRedactDB) GetUSerID(token string) (int64, error) {
 	return userID, nil
 }
 
+
+func (pr *PostRedactDB) GetUserName(userID int64) (string, error) {
+	
+	query := `SELECT username FROM users WHERE id=$1`
+	row := pr.db.QueryRow(query, userID)
+	var userName string
+	err := row.Scan(&userName)
+	if err != nil {
+		return "", errors.New("Error in func GetUserName() with scanning userName value")
+	}
+	return userName, nil
+}
+
+
+
 func (pr *PostRedactDB) GetPostBy(from, value string) (*structs.Post, error) {
 	var post structs.Post
 	if from == "id" || from == "postAuthorID" {

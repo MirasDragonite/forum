@@ -2,10 +2,9 @@ package handlers
 
 import (
 	"fmt"
+	"forum/structs"
 	"net/http"
 	"text/template"
-
-	"forum/structs"
 )
 
 func (h *Handler) PostPage(w http.ResponseWriter, r *http.Request) {
@@ -24,14 +23,16 @@ func (h *Handler) PostPage(w http.ResponseWriter, r *http.Request) {
 
 		cookie, err := r.Cookie("Token")
 		if err != nil {
-			if err != nil {
-				http.Redirect(w, r, "/register", http.StatusSeeOther)
-				return
-			}
+			http.Redirect(w, r, "/register", http.StatusSeeOther)
+			return
 		}
 
 		post, err := h.Service.PostRedact.GetPostBy("id", post_id)
-		h.logError(w, r, err, http.StatusBadRequest)
+		if err != nil {
+			h.logError(w, r, err, http.StatusBadRequest)
+			return
+		}
+		
 		err = r.ParseForm()
 		h.logError(w, r, err, http.StatusInternalServerError)
 

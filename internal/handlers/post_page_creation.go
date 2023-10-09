@@ -12,7 +12,7 @@ func (h *Handler) PostPageCreate(w http.ResponseWriter, r *http.Request) {
 	if r.URL.Path != "/submit-post" {
 		return
 	}
-	tmp, err := template.ParseFiles("./ui/templates/post_page_creation.html")
+	tmp, err := template.ParseFiles("./ui/templates/createpostpage.html")
 	h.logError(w, r, err, http.StatusInternalServerError)
 	if r.Method == http.MethodPost {
 		err := r.ParseForm()
@@ -23,11 +23,19 @@ func (h *Handler) PostPageCreate(w http.ResponseWriter, r *http.Request) {
 		post.Title = r.Form.Get("postTitle")
 		post.Topic = r.Form.Get("postTopic")
 		post.Content = r.Form.Get("postContent")
+		post.PostAuthorName, err = h.Service.PostRedact.GetUserName(cookie.Value)
+		if err != nil {
+			h.logError(w,r, err, http.StatusInternalServerError)
+			return
+		}
 
 		err = h.Service.PostRedact.CreatePost(&post, cookie.Value)
 		h.logError(w, r, err, http.StatusBadRequest)
 
 	} else if r.Method == http.MethodGet {
+		cookie, err := r.Cookie("Token")
+		h.logError(w, r, err, http.StatusInternalServerError)
+		user := h.Service.Authorization.GetUserByToken()
 		tmp.Execute(w, nil)
 	} else {
 		w.Write([]byte("internal Server Error"))

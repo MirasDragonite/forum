@@ -1,14 +1,15 @@
 package structs
 
 type Post struct {
-	Id           int64
-	PostAuthorID int64
-	Topic        string
-	Title        string
-	Content      string
-	Like         int64
-	Dislike      int64
-	Comments     []Comment
+	Id             int64
+	PostAuthorID   int64
+	PostAuthorName string
+	Topic          string
+	Title          string
+	Content        string
+	Like           int64
+	Dislike        int64
+	Comments       []Comment
 }
 
 func CreatePost(id int64, authorID int64, topic string, title string, content string) *Post {

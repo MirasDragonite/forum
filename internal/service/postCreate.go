@@ -38,6 +38,17 @@ func (repo *PostRed) GetPostBy(from, value string) (*structs.Post, error) {
 	return repo.repo.GetPostBy(from, value)
 }
 
+func (repo *PostRed) GetUserName(token string) (string, error) {
+	userID, err := repo.repo.GetUSerID(token)
+	if err != nil {
+		return "", errors.New("No such user with this token...")
+	}
+
+	userName, err := repo.repo.GetUserName(userID)
+	return userName, nil
+
+}
+
 func (repo *PostRed) LikePost(post *structs.Post) error {
 	if post.Like == 0 && post.Dislike == 0 {
 		post.Like++

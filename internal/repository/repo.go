@@ -19,6 +19,7 @@ type Authorization interface {
 type PostRedact interface {
 	CreatePost(post *structs.Post) error
 	GetUSerID(token string) (int64, error)
+	GetUserName(userID int64) (string, error)
 	GetPostBy(from, value string) (*structs.Post, error)
 	LikePost(post *structs.Post) error
 	DislikePost(post *structs.Post) error

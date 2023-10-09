@@ -8,10 +8,12 @@
 <body>
     {{ if . }}
     <div class="post">
+        <p> {{ .PostAuthorName }} </p>
         <h2>{{ .Title }}</h2>
         <p>{{ .Content }}</p>
         <p>Likes: {{ .Like }}</p>
         <p>Dislikes: {{ .Dislike }}</p>
+        
     </div>
 
     <h3>Comments</h3>
@@ -19,6 +21,7 @@
         {{ range .Comments }}
         <li>
             <p>{{ .Content }}</p>
+            {{.}}
             <p>Likes: {{ .Like }}</p>
             <p>Dislikes: {{ .Dislike }}</p>
         </li>

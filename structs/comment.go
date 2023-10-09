@@ -1,12 +1,13 @@
 package structs
 
 type Comment struct {
-	CommentID       int64
-	CommentAuthorID int64
-	PostID          int64
-	Content         string
-	Like            int64
-	Dislike         int64
+	CommentID         int64
+	CommentAuthorID   int64
+	CommentAuthorName string
+	PostID            int64
+	Content           string
+	Like              int64
+	Dislike           int64
 }
 
 func CreateComment(commentID int64, CommentAuthorID int64, PostID int64, Content string) *Comment {
@@ -29,7 +30,6 @@ func (comment *Comment) DislikeComment() {
 	comment.Like--
 	comment.Dislike++
 }
-
 
 func DeleteComment(post *Post, commentID int64) *Comment {
 	for _, comment := range post.Comments {
