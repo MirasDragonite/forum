@@ -19,6 +19,7 @@
         <p>Name: </p>
         <p>Email: </p>
         <button><a href="/edit-profile">Edit profile</a></button>
+        <button><a href="/notitfications">Edit profile</a></button>
     </span>
     
     <div class="actions">
@@ -37,6 +38,10 @@
                 <input type="checkbox" class="round-checkbox" id="myCheckbox" checked>
                 <label class="checkbox-label" for="myCheckbox"></label>
                 <label for="myCheckbox">My posts</label>
+
+                <input type="checkbox" class="round-checkbox" id="commentedCheckbox" checked>
+                <label class="checkbox-label" for="commentedCheckbox"></label>
+                <label for="commentedCheckbox">Commented posts</label>
 
                 <input type="checkbox" class="round-checkbox" id="javaCheckbox" checked>
                 <label class="checkbox-label" for="javaCheckbox"></label>
@@ -79,6 +84,7 @@
         const searchInput = document.getElementById('search').value;
         const likedCheckbox = document.getElementById('likedCheckbox').checked;
         const myCheckbox = document.getElementById('myCheckbox').checked;
+        const commentedCheckbox = document.getElementById('commentedCheckbox').checked;
         const javaCheckbox = document.getElementById('javaCheckbox').checked;
         const kotlinCheckbox = document.getElementById('kotlinCheckbox').checked;
         const pythonCheckbox = document.getElementById('pythonCheckbox').checked;
@@ -96,6 +102,7 @@
                 search: searchInput,
                 liked: likedCheckbox,
                 myposts: myCheckbox,
+                commented: commentedCheckbox,
                 java: javaCheckbox,
                 kotlin: kotlinCheckbox,
                 python: pythonCheckbox,
