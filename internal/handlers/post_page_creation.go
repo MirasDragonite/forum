@@ -2,7 +2,6 @@ package handlers
 
 import (
 	"encoding/json"
-	"fmt"
 	"net/http"
 	"text/template"
 
@@ -14,7 +13,7 @@ func (h *Handler) PostPageCreate(w http.ResponseWriter, r *http.Request) {
 	if r.URL.Path != "/submit-post" {
 		return
 	}
-	tmp, err := template.ParseFiles("./ui/templates/createpostpage.html")
+	tmp, err := template.ParseFiles("./ui/templates/create_post_page.html")
 	if err != nil {
 		h.logError(w, r, err, http.StatusInternalServerError)
 		return
@@ -28,6 +27,7 @@ func (h *Handler) PostPageCreate(w http.ResponseWriter, r *http.Request) {
 		// post.Title = r.Form.Get("postTitle")
 		// post.Topic = r.Form.Get("postTopic")
 		// post.Content = r.Form.Get("postContent")
+
 		err = json.NewDecoder(r.Body).Decode(&post)
 		post.PostAuthorName, err = h.Service.PostRedact.GetUserName(cookie.Value)
 		if err != nil {
@@ -36,8 +36,8 @@ func (h *Handler) PostPageCreate(w http.ResponseWriter, r *http.Request) {
 		}
 
 		err = h.Service.PostRedact.CreatePost(post, cookie.Value)
-		urlRedirect := fmt.Sprintf("/post/%v", post.Id)
-		http.Redirect(w, r, urlRedirect, http.StatusSeeOther)
+		// urlRedirect := fmt.Sprintf("/post/%v", post.Id)
+		// // http.Redirect(w, r, urlRedirect, http.StatusSeeOther)
 
 	} else if r.Method == http.MethodGet {
 		cookie, err := r.Cookie("Token")
