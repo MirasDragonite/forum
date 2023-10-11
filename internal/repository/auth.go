@@ -2,7 +2,7 @@ package repository
 
 import (
 	"database/sql"
-
+	"fmt"
 	"forum/structs"
 )
 
@@ -14,29 +14,101 @@ func NewAuth(db *sql.DB) *Auth {
 	return &Auth{db: db}
 }
 
-func (r *Auth) CreateUser(user structs.User) (int64, error) {
-	query := `INSERT INTO users(username,email,hash_password) VALUES($1,$2,$3) RETURNING id`
+func (r *Auth) CreateUser(user *structs.User) error {
+	query := `INSERT INTO users(username,email,hash_password) VALUES($1,$2,$3) `
 
-	result, err := r.db.Exec(query, user.Username, user.Email, user.HashedPassword)
+	_, err := r.db.Exec(query, user.Username, user.Email, user.HashedPassword)
 	if err != nil {
-		return 0, err
+		return err
 	}
-	id, err := result.LastInsertId()
+	// id, err := result.LastInsertId()
 	if err != nil {
-		return 0, err
+		return err
 	}
-	return id, nil
+	return nil
 }
 
-func (r *Auth) GetUser(email string) (int64, string, error) {
-	var id int64
-	var hash_password string
+func (r *Auth) GetUserBy(element, from string) (structs.User, error) {
+	var user structs.User
 
-	query := "SELECT id, hash_password FROM users WHERE email=$1 "
-	row := r.db.QueryRow(query, email)
-	err := row.Scan(&id, &hash_password)
+	query := fmt.Sprintf("SELECT * FROM users WHERE %s=$1 ", from)
+	row := r.db.QueryRow(query, element)
+	err := row.Scan(&user.Id, &user.Username, &user.Email, &user.HashedPassword)
 	if err != nil {
-		return 0, "", err
+		return structs.User{}, err
 	}
-	return id, hash_password, nil
+	return user, nil
+}
+
+func (r *Auth) CreateToken(user structs.User, token, expaired_data string) error {
+	query := `INSERT INTO tokens(user_id,token,expaired_data ) VALUES($1,$2,$3)`
+
+	_, err := r.db.Exec(query, &user.Id, &token, &expaired_data)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (r *Auth) GetSession(userID int64) (structs.Session, error) {
+	var session structs.Session
+
+	query := `SELECT * FROM tokens WHERE user_id=$1`
+
+	row := r.db.QueryRow(query, userID)
+	err := row.Scan(&session.Id, &session.UserId, &session.Token, &session.ExpairedData)
+	if err != nil {
+		return structs.Session{}, err
+	}
+	return session, nil
+}
+
+func (r *Auth) GetSessionByToken(token string) (structs.Session, error) {
+	var session structs.Session
+
+	query := `SELECT * FROM tokens WHERE token=$1`
+
+	row := r.db.QueryRow(query, token)
+	err := row.Scan(&session.Id, &session.UserId, &session.Token, &session.ExpairedData)
+	if err != nil {
+		return structs.Session{}, err
+	}
+	return session, nil
+}
+
+func (r *Auth) GetUserById(id int64) (structs.User, error) {
+	var user structs.User
+
+	query := `SELECT * FROM users WHERE id=$1`
+
+	row := r.db.QueryRow(query, id)
+	err := row.Scan(&user.Id, &user.Username, &user.Email, &user.HashedPassword)
+	fmt.Println(user.Username)
+	fmt.Println(user)
+	if err != nil {
+		return structs.User{}, err
+	}
+	return user, nil
+}
+
+func (r *Auth) UpdateToken(user structs.User, token, expaired_data string) error {
+	query := `UPDATE tokens SET token=$1 ,expaired_data=$2 WHERE user_id=$3`
+
+	_, err := r.db.Exec(query, &token, &expaired_data, &user.Id)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (r *Auth) DeleteToken(token string) error {
+	query := `DELETE FROM tokens WHERE token=$1`
+
+	_, err := r.db.Exec(query, &token)
+	if err != nil {
+		return err
+	}
+	return nil
 }

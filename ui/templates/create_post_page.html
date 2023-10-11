@@ -16,43 +16,42 @@
   </nav>
   <div class="profile-info">
     <img id="profilePhoto" src="#" alt="Profile Photo" style="max-width: 100px; max-height: 100px;">
-    <p id="userName">Name: </p>
-    <p id="userEmail">Email: </p>
+    <p id="userName">Name:  {{.Username}}</p>
   </div>
     
     <div class="create-post">
-        <form id="create-post-form" >
+      <form action="/submit-post" method="POST">
             <span class="title-container">
             <p>Title</p>
-            <input type="text" id="title" placeholder="Title" style="width: 250px;">
+            <input type="text" id="postTitle" name="postTitle" placeholder="Title" style="width: 250px;">
             </span>
 
         <span class="filters">
-                <input type="checkbox" class="round-checkbox" id="javaCheckbox" >
+                <input type="checkbox" name="postTopic" class="round-checkbox" id="javaCheckbox" >
                 <label class="checkbox-label" for="javaCheckbox"></label>
                 <label for="javaCheckbox">Java</label>
                 
-                <input type="checkbox" class="round-checkbox" id="kotlinCheckbox" >
+                <input type="checkbox" name="postTopic" class="round-checkbox" id="kotlinCheckbox" >
                 <label class="checkbox-label" for="kotlinCheckbox"></label>
                 <label for="kotlinCheckbox">Kotlin</label>
                 
-                <input type="checkbox" class="round-checkbox" id="pythonCheckbox" >
+                <input type="checkbox" name="postTopic" class="round-checkbox" id="pythonCheckbox" >
                 <label class="checkbox-label" for="pythonCheckbox"></label>
                 <label for="pythonCheckbox">Python</label>
                 
-                <input type="checkbox" class="round-checkbox" id="golangCheckbox" >
+                <input type="checkbox" name="postTopic" class="round-checkbox" id="golangCheckbox" >
                 <label class="checkbox-label" for="golangCheckbox"></label>
                 <label for="golangCheckbox">Golang</label>
                 
-                <input type="checkbox" class="round-checkbox" id="phpCheckbox" >
+                <input type="checkbox" name="postTopic" class="round-checkbox" id="phpCheckbox" >
                 <label class="checkbox-label" for="phpCheckbox"></label>
                 <label for="phpCheckbox">PHP</label>
                 
-                <input type="checkbox" class="round-checkbox" id="javascriptCheckbox" >
+                <input type="checkbox" name="postTopic" class="round-checkbox" id="javascriptCheckbox" >
                 <label class="checkbox-label" for="javascriptCheckbox"></label>
                 <label for="javascriptCheckbox">JavaScript</label>
                 
-                <input type="checkbox" class="round-checkbox" id="sqlCheckbox" >
+                <input type="checkbox" name="postTopic" class="round-checkbox" id="sqlCheckbox" >
                 <label class="checkbox-label" for="sqlCheckbox"></label>
                 <label for="sqlCheckbox">SQL</label>
                 
@@ -60,10 +59,10 @@
 
         <span class="text-container">
             <p>Text</p>
-            <input type="text" id="text-area" placeholder="Message" style="width: 1000px; height: 200px;">
+            <input type="text" name="postContent" id="text-area" placeholder="Message" style="width: 1000px; height: 200px;">
         </span>
 
-        <button>Publish</button>
+        <button type="submit" >Publish</button>
     </form>
     </div>
     <script>    
