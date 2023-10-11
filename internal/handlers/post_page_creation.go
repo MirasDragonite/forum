@@ -36,6 +36,7 @@ func (h *Handler) PostPageCreate(w http.ResponseWriter, r *http.Request) {
 		}
 
 		err = h.Service.PostRedact.CreatePost(post, cookie.Value)
+		// DONT DELETE THIS CODE LINES:
 		// urlRedirect := fmt.Sprintf("/post/%v", post.Id)
 		// // http.Redirect(w, r, urlRedirect, http.StatusSeeOther)
 

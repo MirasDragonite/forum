@@ -41,7 +41,7 @@ func (h *Handler) signup(w http.ResponseWriter, r *http.Request) {
 			h.errorHandler(w, r, 405)
 			return
 		}
-
+		// DONT DELETE THIS CODE LINES:
 		// http.Redirect(w, r, "/signin", http.StatusSeeOther)
 	} else if r.Method == http.MethodGet {
 		err := ts.Execute(w, "")

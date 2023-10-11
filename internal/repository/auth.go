@@ -16,10 +16,9 @@ func NewAuth(db *sql.DB) *Auth {
 }
 
 func (r *Auth) CreateUser(user *structs.User) error {
-	fmt.Println("In repo")
-	query := `INSERT INTO users(username,email,hash_password) VALUES($1,$2,$3) `
+	query := `INSERT INTO users(username,email,hash_password,createdDate) VALUES($1,$2,$3,$4) `
 
-	_, err := r.db.Exec(query, &user.Username, &user.Email, &user.HashedPassword)
+	_, err := r.db.Exec(query, &user.Username, &user.Email, &user.HashedPassword, &user.CreatedDate)
 	if err != nil {
 		return err
 	}
@@ -35,7 +34,7 @@ func (r *Auth) GetUserBy(element, from string) (structs.User, error) {
 
 	query := fmt.Sprintf("SELECT * FROM users WHERE %s=$1 ", from)
 	row := r.db.QueryRow(query, element)
-	err := row.Scan(&user.Id, &user.Username, &user.Email, &user.HashedPassword)
+	err := row.Scan(&user.Id, &user.Username, &user.Email, &user.HashedPassword, &user.CreatedDate)
 	if err != nil {
 		return structs.User{}, err
 	}
@@ -85,7 +84,7 @@ func (r *Auth) GetUserById(id int64) (structs.User, error) {
 	query := `SELECT * FROM users WHERE id=$1`
 
 	row := r.db.QueryRow(query, id)
-	err := row.Scan(&user.Id, &user.Username, &user.Email, &user.HashedPassword)
+	err := row.Scan(&user.Id, &user.Username, &user.Email, &user.HashedPassword, &user.CreatedDate)
 	fmt.Println(user.Username)
 	fmt.Println(user)
 	if err != nil {

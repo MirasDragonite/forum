@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"encoding/json"
 	"fmt"
 	"net/http"
 	"text/template"
@@ -21,7 +22,8 @@ func (h *Handler) PostPage(w http.ResponseWriter, r *http.Request) {
 
 		cookie, err := r.Cookie("Token")
 		if err != nil {
-			http.Redirect(w, r, "/register", http.StatusSeeOther)
+			// DONT DELETE THIS CODE LINES:
+			// http.Redirect(w, r, "/register", http.StatusSeeOther)
 			return
 		}
 
@@ -31,21 +33,27 @@ func (h *Handler) PostPage(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
-		err = r.ParseForm()
-		h.logError(w, r, err, http.StatusInternalServerError)
-
 		user_id, err := h.Service.PostRedact.GetUSerID(cookie.Value)
-		h.logError(w, r, err, http.StatusBadRequest)
-		var comment structs.Comment
+		if err != nil {
+			h.logError(w, r, err, http.StatusBadRequest)
+			return
+		}
+		var comment *structs.Comment
+		err = json.NewDecoder(r.Body).Decode(&comment)
+		if err != nil {
+			h.logError(w, r, err, http.StatusBadRequest)
+			return
+		}
 		comment.Dislike = 0
 		comment.Like = 0
 		comment.CommentAuthorID = user_id
 		comment.PostID = post.Id
-		comment.Content = r.FormValue("commentContent")
-		post.Comments = append(post.Comments, comment)
-		err = h.Service.CommentRedact.CreateComment(&comment)
+
+		post.Comments = append(post.Comments, *comment)
+		err = h.Service.CommentRedact.CreateComment(comment)
 		if err != nil {
 			h.logError(w, r, err, http.StatusBadRequest)
+			return
 		}
 		tmp.Execute(w, post)
 

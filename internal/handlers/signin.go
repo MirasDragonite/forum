@@ -23,6 +23,10 @@ func (h *Handler) signin(w http.ResponseWriter, r *http.Request) {
 		var input *structs.User
 		err = json.NewDecoder(r.Body).Decode(&input)
 
+		if err != nil {
+			h.logError(w, r, err, http.StatusBadRequest)
+			return
+		}
 		cookie, err := h.Service.Authorization.GetUser(input.Email, input.HashedPassword)
 		if err != nil {
 			h.logError(w, r, err, http.StatusBadRequest)
@@ -30,6 +34,7 @@ func (h *Handler) signin(w http.ResponseWriter, r *http.Request) {
 		}
 		fmt.Println(cookie.Value)
 		http.SetCookie(w, cookie)
+		// DONT DELETE THIS CODE LINES:
 		// http.Redirect(w, r, "/submit-post", http.StatusSeeOther)
 
 	} else if r.Method == http.MethodGet {

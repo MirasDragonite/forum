@@ -17,5 +17,6 @@ func (h *Handler) logOut(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("Cookie:", cookie)
 	fmt.Println("not error")
 	http.SetCookie(w, cookie)
+	// DONT DELETE THIS CODE LINES:
 	// http.Redirect(w, r, "/", http.StatusSeeOther)
 }

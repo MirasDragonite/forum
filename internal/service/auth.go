@@ -29,10 +29,10 @@ func NewAuth(repo repository.Authorization) *Auth {
 }
 
 func (s *Auth) CreateUser(user *structs.User) error {
-	fmt.Println("here in service")
 	if err := checkUserInput(user); err != nil {
 		return err
 	}
+	user.CreatedDate = time.Now().Format("Jan 02, 2006")
 	hashPassword, err := hashPassword(user.HashedPassword)
 	if err != nil {
 		return err
@@ -61,7 +61,12 @@ func (s *Auth) GetUser(email, password string) (*http.Cookie, error) {
 		return nil, err
 	}
 	user, err := s.repo.GetUserBy(email, emailDataBaseName)
+	if err != nil {
+		fmt.Println(err.Error())
+		return nil, err
+	}
 	if err := checkUserInput(&user); err != nil {
+		fmt.Println(err.Error())
 		return nil, err
 	}
 	if checkPasswordHash(password, user.HashedPassword) {

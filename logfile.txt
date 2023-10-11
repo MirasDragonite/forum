@@ -1,3 +1,4 @@
-[INFO]: 2023/10/11 14:34:20 log.go:17: Token is available
- not present
-age.html: no such file or directory
+[ERROR]: 2023/10/11 16:34:29 log.go:29: sql: no rows in result set
+ent
+uments in Scan, not 4
+ or directory

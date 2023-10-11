@@ -5,6 +5,7 @@ type User struct {
 	Username       string `json:"username"`
 	Email          string `json:"email"`
 	HashedPassword string `json:"password"`
+	CreatedDate string `json:"createdDate"`
 }
 
 type Session struct {
