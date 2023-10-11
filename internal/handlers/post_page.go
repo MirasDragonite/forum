@@ -2,20 +2,22 @@ package handlers
 
 import (
 	"fmt"
-	"forum/structs"
 	"net/http"
 	"text/template"
+
+	"forum/structs"
 )
 
 func (h *Handler) PostPage(w http.ResponseWriter, r *http.Request) {
 	// if r.URL.Path[0:6] != "/post/" {
 	// 	return
 	// }
-
+	fmt.Println("Working")
 	post_id := r.URL.Path[6:]
 	tmp, err := template.ParseFiles("./ui/templates/post_page.html")
 	// h.logError(w, r, err, http.StatusInternalServerError)
 	if err != nil {
+		fmt.Println(err.Error())
 		h.errorHandler(w, r, 500)
 		return
 	}
@@ -54,7 +56,7 @@ func (h *Handler) PostPage(w http.ResponseWriter, r *http.Request) {
 	} else if r.Method == http.MethodGet {
 
 		post, err := h.Service.PostRedact.GetPostBy("id", post_id)
-		fmt.Println("handlers: ",post)
+		fmt.Println("handlers: ", post)
 		if err != nil {
 			h.logError(w, r, err, http.StatusAccepted)
 			return

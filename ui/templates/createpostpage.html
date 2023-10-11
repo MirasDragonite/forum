@@ -20,7 +20,7 @@
   </div>
     
     <div class="create-post">
-        <form id="create-post-form" method="POST" action="submit-post">
+      <form action="/submit-post" method="POST">
             <span class="title-container">
             <p>Title</p>
             <input type="text" id="postTitle" name="postTitle" placeholder="Title" style="width: 250px;">
@@ -62,7 +62,7 @@
             <input type="text" name="postContent" id="text-area" placeholder="Message" style="width: 1000px; height: 200px;">
         </span>
 
-        <button>Publish</button>
+        <button type="submit" >Publish</button>
     </form>
     </div>
     <script>    

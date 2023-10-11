@@ -1,6 +1,2 @@
-[INFO]: 2023/10/09 18:56:35 log.go:17: Token is available
- not present
-.email
-ax
-ard 
-go:23: Token time is available
+[ERROR]: 2023/10/09 19:48:00 log.go:29: sql: expected 8 destination arguments in Scan, not 7
+Token time is available
