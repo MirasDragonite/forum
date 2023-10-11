@@ -9,10 +9,6 @@ import (
 )
 
 func (h *Handler) PostPage(w http.ResponseWriter, r *http.Request) {
-	// if r.URL.Path[0:6] != "/post/" {
-	// 	return
-	// }
-	fmt.Println("Working")
 	post_id := r.URL.Path[6:]
 	tmp, err := template.ParseFiles("./ui/templates/post_page.html")
 	// h.logError(w, r, err, http.StatusInternalServerError)
@@ -58,6 +54,7 @@ func (h *Handler) PostPage(w http.ResponseWriter, r *http.Request) {
 		post, err := h.Service.PostRedact.GetPostBy("id", post_id)
 		fmt.Println("handlers: ", post)
 		if err != nil {
+			fmt.Println("handlers: ", post)
 			h.logError(w, r, err, http.StatusAccepted)
 			return
 		}
@@ -65,7 +62,7 @@ func (h *Handler) PostPage(w http.ResponseWriter, r *http.Request) {
 
 		tmp.Execute(w, post)
 	} else {
-		fmt.Println("mb here")
+		fmt.Println("else here")
 		w.Write([]byte("internal Server Error"))
 	}
 }
