@@ -1,7 +1,7 @@
 package structs
 
 type Post struct {
-	Id             int64
+	Id             int64 `json:"id"`
 	PostAuthorID   int64
 	PostAuthorName string
 	Topic          string

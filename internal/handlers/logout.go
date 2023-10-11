@@ -17,5 +17,5 @@ func (h *Handler) logOut(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("Cookie:", cookie)
 	fmt.Println("not error")
 	http.SetCookie(w, cookie)
-	http.Redirect(w, r, "/", http.StatusSeeOther)
+	// http.Redirect(w, r, "/", http.StatusSeeOther)
 }

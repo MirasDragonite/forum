@@ -4,10 +4,11 @@ import (
 	"database/sql"
 	"errors"
 	"fmt"
-	"forum/internal/repository"
-	"forum/structs"
 	"net/http"
 	"time"
+
+	"forum/internal/repository"
+	"forum/structs"
 
 	uuid "github.com/satori/go.uuid"
 	"golang.org/x/crypto/bcrypt"
@@ -28,6 +29,7 @@ func NewAuth(repo repository.Authorization) *Auth {
 }
 
 func (s *Auth) CreateUser(user *structs.User) error {
+	fmt.Println("here in service")
 	if err := checkUserInput(user); err != nil {
 		return err
 	}
