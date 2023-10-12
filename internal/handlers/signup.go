@@ -1,7 +1,6 @@
 package handlers
 
 import (
-	"encoding/json"
 	"fmt"
 	"net/http"
 	"text/template"
@@ -27,12 +26,14 @@ func (h *Handler) signup(w http.ResponseWriter, r *http.Request) {
 
 	if r.Method == http.MethodPost {
 		var input structs.User
-		err := json.NewDecoder(r.Body).Decode(&input)
-		if err != nil {
-			h.logError(w, r, err, http.StatusBadRequest)
-			return
-		}
-
+		// err := json.NewDecoder(r.Body).Decode(&input)
+		// if err != nil {
+		// 	h.logError(w, r, err, http.StatusBadRequest)
+		// 	return
+		// }
+		input.Username = r.Form.Get("username")
+		input.Email = r.Form.Get("email")
+		input.HashedPassword = r.Form.Get("password")
 		fmt.Println(input)
 		err = h.Service.Authorization.CreateUser(&input)
 

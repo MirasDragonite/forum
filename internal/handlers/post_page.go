@@ -67,8 +67,14 @@ func (h *Handler) PostPage(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 		// h.logError(w, r, err, http.StatusNotFound)
+		likes, dislikes, err := h.Service.Reaction.AllReactions(post.Id)
 
-		tmp.Execute(w, post)
+		result := map[string]interface{}{
+			"Post":     post,
+			"Likes":    likes,
+			"Dislikes": dislikes,
+		}
+		tmp.Execute(w, result)
 	} else {
 		fmt.Println("else here")
 		w.Write([]byte("internal Server Error"))

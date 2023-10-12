@@ -23,5 +23,6 @@ func (h *Handler) Router() {
 	h.Mux.Handle("/profile", h.authorized(h.profile))
 	h.Mux.Handle("/logout", h.authorized(h.logOut))
 	h.Mux.Handle("/submit-post", h.authorized(h.PostPageCreate))
+	h.Mux.Handle("/like-post",h.authorized(h.likePost))
 	h.Mux.HandleFunc("/post/", h.PostPage)
 }

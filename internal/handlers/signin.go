@@ -1,7 +1,6 @@
 package handlers
 
 import (
-	"encoding/json"
 	"fmt"
 	"net/http"
 	"text/template"
@@ -20,13 +19,19 @@ func (h *Handler) signin(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	if r.Method == http.MethodPost {
-		var input *structs.User
-		err = json.NewDecoder(r.Body).Decode(&input)
+		var input structs.User
+		// err = json.NewDecoder(r.Body).Decode(&input)
 
-		if err != nil {
-			h.logError(w, r, err, http.StatusBadRequest)
-			return
-		}
+		// if err != nil {
+		// 	fmt.Println("From here")
+		// 	h.logError(w, r, err, http.StatusBadRequest)
+		// 	return
+		// }
+		err = r.ParseForm()
+		// r.Form.Get("email")
+		// r.Form.Get("password")
+		input.Email = r.Form.Get("email")
+		input.HashedPassword = r.Form.Get("password")
 		cookie, err := h.Service.Authorization.GetUser(input.Email, input.HashedPassword)
 		if err != nil {
 			h.logError(w, r, err, http.StatusBadRequest)
@@ -35,7 +40,7 @@ func (h *Handler) signin(w http.ResponseWriter, r *http.Request) {
 		fmt.Println(cookie.Value)
 		http.SetCookie(w, cookie)
 		// DONT DELETE THIS CODE LINES:
-		// http.Redirect(w, r, "/submit-post", http.StatusSeeOther)
+		http.Redirect(w, r, "/", http.StatusSeeOther)
 
 	} else if r.Method == http.MethodGet {
 		ts.Execute(w, "")

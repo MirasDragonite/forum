@@ -10,7 +10,7 @@ func (h *Handler) home(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	ts, err := template.ParseFiles("./ui/templates/index.html")
+	ts, err := template.ParseFiles("./ui/templates/home_page.html")
 	h.logError(w, r, err, http.StatusInternalServerError)
 	ts.Execute(w, "")
 }

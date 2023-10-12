@@ -1,4 +1,7 @@
-[ERROR]: 2023/10/11 16:34:29 log.go:29: sql: no rows in result set
-ent
-uments in Scan, not 4
- or directory
+[INFO]: 2023/10/12 21:55:42 log.go:17: Token is available
+ not present
+.email
+ntax
+ of value
+tory
+irectory

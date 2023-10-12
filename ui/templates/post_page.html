@@ -7,16 +7,21 @@
 </head>
 <body>
 
-    {{if .}}
+    {{if .Post}}
 
     <div class="post">
-        <p> <b>Author:</b>  {{ .PostAuthorName }} </p>
-        <h2> <b>Title:</b>  {{ .Title }}</h2>
-        <p> <b>Content</b> {{ .Content }}</p>
-        <p>Likes: {{ .Like }}</p>
-        <p>Dislikes: {{ .Dislike }}</p>
+        <p> <b>Author:</b>  {{ .Post.PostAuthorName }} </p>
+        <h2> <b>Title:</b>  {{ .Post.Title }}</h2>
+        <p> <b>Content</b> {{ .Post.Content }}</p>
+        <form action="/like-post" method="POST">
+        <button class="like-button liked" type="submit" name="button" value="like">like</button>
+                        <span class="likes">{{.Likes}}</span>
+                        <button class="dislike-button not-disliked" type="submit" name="button" value="dislike">dislike</button>
+                        <span class="dislikes">{{.Dislikes}}</span>
+                    </form>
         
     </div>
+
 
     <h3>Comments section</h3>
     <ul>
