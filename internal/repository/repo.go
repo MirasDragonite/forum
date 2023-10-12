@@ -33,12 +33,19 @@ type CommentRedact interface {
 	CreateComment(comm *structs.Comment) error
 }
 
+type Reaction interface {
+	LikePost(post_id, user_id, value int64) error
+	FindReation(post_id, user_id, value int64) (*structs.PostReaction, error)
+	CreateReaction(post_id, user_id, value int64) error
+	DeleteReaction(post_id, user_id int64) error
+}
 type Repository struct {
 	Authorization
 	PostRedact
 	CommentRedact
+	Reaction
 }
 
 func NewRepository(db *sql.DB) *Repository {
-	return &Repository{Authorization: NewAuth(db), PostRedact: NewPostRedactDB(db), CommentRedact: NewCommentRedactDB(db)}
+	return &Repository{Authorization: NewAuth(db), PostRedact: NewPostRedactDB(db), CommentRedact: NewCommentRedactDB(db), Reaction: NewReactionDB(db)}
 }
