@@ -13,7 +13,7 @@
         <p> <b>Author:</b>  {{ .Post.PostAuthorName }} </p>
         <h2> <b>Title:</b>  {{ .Post.Title }}</h2>
         <p> <b>Content</b> {{ .Post.Content }}</p>
-        <form action="/like-post" method="POST">
+        <form action="/like-post/{{.Post.Id}}" method="POST">
         <button class="like-button liked" type="submit" name="button" value="like">like</button>
                         <span class="likes">{{.Likes}}</span>
                         <button class="dislike-button not-disliked" type="submit" name="button" value="dislike">dislike</button>

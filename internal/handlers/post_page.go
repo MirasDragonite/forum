@@ -3,10 +3,9 @@ package handlers
 import (
 	"encoding/json"
 	"fmt"
+	"forum/structs"
 	"net/http"
 	"text/template"
-
-	"forum/structs"
 )
 
 func (h *Handler) PostPage(w http.ResponseWriter, r *http.Request) {
@@ -44,6 +43,8 @@ func (h *Handler) PostPage(w http.ResponseWriter, r *http.Request) {
 			h.logError(w, r, err, http.StatusBadRequest)
 			return
 		}
+
+		h.likePost(w, r)
 		comment.Dislike = 0
 		comment.Like = 0
 		comment.CommentAuthorID = user_id
