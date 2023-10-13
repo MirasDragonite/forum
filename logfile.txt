@@ -1,7 +1,6 @@
-[INFO]: 2023/10/13 19:21:32 log.go:17: Token is available
+[INFO]: 2023/10/13 19:49:24 log.go:17: Token is available
  not present
-.email
-ax
+id syntax
 yntax
 tax
 e

@@ -25,6 +25,11 @@ func (h *Handler) authorized(next http.HandlerFunc) http.Handler {
 			}
 			return
 		}
+		user, err := h.Service.Authorization.GetUserByToken(cookie.Value)
+		if user.Id <= 0 {
+			h.logError(w, r, err, http.StatusNonAuthoritativeInfo)
+			return
+		}
 		h.infoLog("Token is available")
 
 		next.ServeHTTP(w, r)
