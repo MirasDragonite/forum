@@ -3,6 +3,7 @@ package repository
 import (
 	"database/sql"
 	"fmt"
+
 	"forum/structs"
 )
 
@@ -21,6 +22,7 @@ func (r *Auth) CreateUser(user *structs.User) error {
 	if err != nil {
 		return err
 	}
+	//
 	// id, err := result.LastInsertId()
 	if err != nil {
 		return err
