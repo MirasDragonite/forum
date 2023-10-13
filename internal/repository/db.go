@@ -13,6 +13,11 @@ func NewDB() (*sql.DB, error) {
 		return nil, err
 	}
 
+	_, err = db.Exec("PRAGMA foreign_keys = ON;")
+	if err != nil {
+		return nil, err
+	}
+
 	query := `DROP TABLE IF EXISTS users;
 	CREATE TABLE users(id INTEGER PRIMARY KEY, username TEXT NOT NULL UNIQUE, email TEXT NOT NULL UNIQUE,hash_password TEXT NOT NULL,createdDate TEXT NOT NULL);
 	DROP TABLE IF EXISTS tokens;
