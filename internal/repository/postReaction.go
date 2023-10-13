@@ -3,19 +3,18 @@ package repository
 import (
 	"database/sql"
 	"fmt"
-
 	"forum/structs"
 )
 
-type ReactionDB struct {
+type PostReactionDB struct {
 	db *sql.DB
 }
 
-func NewReactionDB(db *sql.DB) *ReactionDB {
-	return &ReactionDB{db: db}
+func NewReactionDB(db *sql.DB) *PostReactionDB {
+	return &PostReactionDB{db: db}
 }
 
-func (r *ReactionDB) LikePost(post_id, user_id, value int64) error {
+func (r *PostReactionDB) LikePost(post_id, user_id, value int64) error {
 	fmt.Println("Here2")
 	query := `UPDATE post_reactions SET reaction=$1  WHERE post_id=$2 AND user_id=$3`
 
@@ -27,7 +26,7 @@ func (r *ReactionDB) LikePost(post_id, user_id, value int64) error {
 	return nil
 }
 
-func (r *ReactionDB) AllReactions(post_id int64) (int64, int64, error) {
+func (r *PostReactionDB) AllReactions(post_id int64) (int64, int64, error) {
 	query := `SELECT COUNT(*) FROM post_reactions WHERE post_id=$1 AND reaction=1 `
 
 	row := r.db.QueryRow(query, &post_id)
@@ -49,7 +48,7 @@ func (r *ReactionDB) AllReactions(post_id int64) (int64, int64, error) {
 	return likes, dislikes, nil
 }
 
-func (r *ReactionDB) FindReation(post_id, user_id, value int64) (*structs.PostReaction, error) {
+func (r *PostReactionDB) FindReation(post_id, user_id, value int64) (*structs.PostReaction, error) {
 	fmt.Println("Here1")
 	query := `SELECT * FROM post_reactions WHERE post_id=$1 AND user_id=$2`
 
@@ -63,7 +62,7 @@ func (r *ReactionDB) FindReation(post_id, user_id, value int64) (*structs.PostRe
 	return &postReaction, nil
 }
 
-func (r *ReactionDB) CreateReaction(post_id, user_id, value int64) error {
+func (r *PostReactionDB) CreateReaction(post_id, user_id, value int64) error {
 	fmt.Println("Here3")
 	query := `INSERT INTO post_reactions(post_id,user_id,reaction) VALUES($1,$2,$3)`
 
@@ -76,7 +75,7 @@ func (r *ReactionDB) CreateReaction(post_id, user_id, value int64) error {
 	return nil
 }
 
-func (r *ReactionDB) DeleteReaction(post_id, user_id int64) error {
+func (r *PostReactionDB) DeleteReaction(post_id, user_id int64) error {
 	query := `DELETE FROM post_reactions WHERE post_id=$1 AND user_id=$2`
 
 	_, err := r.db.Exec(query, post_id, user_id)

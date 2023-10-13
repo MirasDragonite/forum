@@ -25,16 +25,23 @@
 
     <h3>Comments section</h3>
     <ul>
-
-        {{ range .Comments }}
-        <li>    
+      
+        {{ range .Post.Comments}}
+        <li>
+        <p>{{ .Content }}</p>
+        <form action="/like-comment/{{.CommentID}}" method="POST">   
             
-            <p>{{ .Content }}</p>
             <br>
-            <p>Likes: {{ .Like }}</p>
-            <p>Dislikes: {{ .Dislike }}</p>
-        </li>
-        {{ end }}
+                <button class="commButton" type="submit" name="commButton" value="like" >like</button>
+                <span class="likes">{{.Like}}</span>
+                <button class="commButton" type="submit" name="commButton" value="dislike">dislike</button>
+                <span class="dislikes">{{.Dislike}}</span>
+                         
+      
+        
+    </form>
+</li>
+{{ end }}
     </ul>
 
     <!-- Comment Form -->

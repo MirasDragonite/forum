@@ -22,7 +22,9 @@ func NewDB() (*sql.DB, error) {
 	DROP TABLE IF EXISTS comments;
 	CREATE TABLE comments(id INTEGER PRIMARY KEY NOT NULL, comment_author_id INTEGER, post_id INTEGER, content TEXT, like INTEGER, dislike INTEGER, FOREIGN KEY(comment_author_id) REFERENCES users(id), FOREIGN KEY(post_id) REFERENCES posts(id)); 
 	DROP TABLE IF EXISTS post_reactions;
-	CREATE TABLE post_reactions (id INTEGER PRIMARY KEY NOT NULL, post_id INTEGER, user_ID INTEGER, reaction INTEGER,FOREIGN KEY(user_id) REFERENCES users(id), FOREIGN KEY(post_id) REFERENCES posts(id) )
+	CREATE TABLE post_reactions (id INTEGER PRIMARY KEY NOT NULL, post_id INTEGER, user_ID INTEGER, reaction INTEGER,FOREIGN KEY(user_id) REFERENCES users(id), FOREIGN KEY(post_id) REFERENCES posts(id) );
+	DROP TABLE IF EXISTS comment_reactions;
+	CREATE TABLE comment_reactions (id INTEGER PRIMARY KEY NOT NULL, comment_id INTEGER, user_ID INTEGER, reaction INTEGER,FOREIGN KEY(user_id) REFERENCES users(id), FOREIGN KEY(comment_id) REFERENCES comments(id) );
 	`
 
 	_, err = db.Exec(query)

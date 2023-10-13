@@ -1,10 +1,9 @@
 package service
 
 import (
-	"net/http"
-
 	"forum/internal/repository"
 	"forum/structs"
+	"net/http"
 )
 
 type Authorization interface {
@@ -20,9 +19,6 @@ type PostRedact interface {
 	GetUserName(token string) (string, error)
 	GetPostBy(from, value string) (*structs.Post, error)
 
-	LikePost(post *structs.Post) error
-
-	DislikePost(post *structs.Post) error
 	// WriteCommentPost()
 	RedactContentPost(post *structs.Post, newContent string) error
 	DeletePost(post *structs.Post) error
@@ -30,11 +26,15 @@ type PostRedact interface {
 
 type CommentRedact interface {
 	CreateComment(comm *structs.Comment) error
+	GetAllComments(postID int64) ([]structs.Comment, error)
+	GetCommentByID(commentID int64) (structs.Comment, error)
 }
 
 type Reaction interface {
 	ReactPost(post_id, user_id, value int64) error
-	AllReactions(post_id int64) (int64, int64, error)
+	AllPostReactions(post_id int64) (int64, int64, error)
+	ReactComment(comment_id, user_id, value int64) error
+	AllCommentReactions(post_id int64) (int64, int64, error)
 }
 
 type Service struct {
@@ -48,7 +48,7 @@ func NewService(repo *repository.Repository) *Service {
 	return &Service{
 		Authorization: NewAuth(repo.Authorization),
 		PostRedact:    NewPostRed(repo.PostRedact),
-		CommentRedact: NewCommentRed(repo.CommentRedact),
-		Reaction:      NewReaction(repo.Reaction),
+		CommentRedact: NewCommentRed(repo.CommentRedact, repo.CommentReaction),
+		Reaction:      NewReaction(repo.PostReaction, repo.CommentReaction),
 	}
 }

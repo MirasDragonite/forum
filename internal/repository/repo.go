@@ -2,7 +2,6 @@ package repository
 
 import (
 	"database/sql"
-
 	"forum/structs"
 )
 
@@ -31,22 +30,40 @@ type PostRedact interface {
 
 type CommentRedact interface {
 	CreateComment(comm *structs.Comment) error
+	GetAllComments(postID int64) ([]structs.Comment, error)
+	GetCommentByID(commentID int64) (structs.Comment, error)
 }
 
-type Reaction interface {
+type PostReaction interface {
 	LikePost(post_id, user_id, value int64) error
 	FindReation(post_id, user_id, value int64) (*structs.PostReaction, error)
 	CreateReaction(post_id, user_id, value int64) error
 	DeleteReaction(post_id, user_id int64) error
 	AllReactions(post_id int64) (int64, int64, error)
 }
+
+type CommentReaction interface {
+	LikeComment(comment_id, user_id, value int64) error
+	FindReation(comment_id, user_id, value int64) (*structs.PostReaction, error)
+	CreateReaction(comment_id, user_id, value int64) error
+	DeleteReaction(comment_id, user_id int64) error
+	AllReactions(comment_id int64) (int64, int64, error)
+}
+
 type Repository struct {
 	Authorization
 	PostRedact
 	CommentRedact
-	Reaction
+	PostReaction
+	CommentReaction
 }
 
 func NewRepository(db *sql.DB) *Repository {
-	return &Repository{Authorization: NewAuth(db), PostRedact: NewPostRedactDB(db), CommentRedact: NewCommentRedactDB(db), Reaction: NewReactionDB(db)}
+	return &Repository{
+		Authorization:   NewAuth(db),
+		PostRedact:      NewPostRedactDB(db),
+		CommentRedact:   NewCommentRedactDB(db),
+		PostReaction:    NewReactionDB(db),
+		CommentReaction: NewCommentReactionDB(db),
+	}
 }

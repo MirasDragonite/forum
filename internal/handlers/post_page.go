@@ -61,14 +61,25 @@ func (h *Handler) PostPage(w http.ResponseWriter, r *http.Request) {
 	} else if r.Method == http.MethodGet {
 
 		post, err := h.Service.PostRedact.GetPostBy("id", post_id)
-		fmt.Println("handlers: ", post)
 		if err != nil {
-			fmt.Println("handlers: ", post)
 			h.logError(w, r, err, http.StatusAccepted)
 			return
 		}
-		// h.logError(w, r, err, http.StatusNotFound)
-		likes, dislikes, err := h.Service.Reaction.AllReactions(post.Id)
+
+		likes, dislikes, err := h.Service.Reaction.AllPostReactions(post.Id)
+		if err != nil {
+			fmt.Println(err.Error)
+			return
+		}
+
+		comments, err := h.Service.CommentRedact.GetAllComments(post.Id)
+		if err != nil {
+			fmt.Println(err.Error)
+			return
+		}
+
+		fmt.Println("cOMMENTs:", comments)
+		post.Comments = comments
 
 		result := map[string]interface{}{
 			"Post":     post,
