@@ -45,7 +45,6 @@ func (h *Handler) PostPage(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
-		h.likePost(w, r)
 		comment.Dislike = 0
 		comment.Like = 0
 		comment.CommentAuthorID = user_id

@@ -60,7 +60,7 @@
 
   {{if .Posts}}
   {{range .Posts}}
-<li><a href="/post/{{.Id}}"> {{.Title}}</a>  </li>
+<li><p>Name:<a href="/post/{{.Id}}"> {{.Title}} </a></p> <p>Author: {{.PostAuthorName}}</p>  <p> Topics: {{.Topic}}</p>  </li>
   {{end}}
   {{end}}
 </body>
