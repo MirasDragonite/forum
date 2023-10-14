@@ -57,5 +57,11 @@
   </nav>
   <div class="panel posts">
   </div>
+
+  {{if .Posts}}
+  {{range .Posts}}
+<li><a href="/post/{{.Id}}"> {{.Title}}</a>  </li>
+  {{end}}
+  {{end}}
 </body>
 </html>

@@ -3,6 +3,7 @@ package service
 import (
 	"errors"
 	"fmt"
+
 	"forum/internal/repository"
 	"forum/structs"
 )
@@ -57,4 +58,8 @@ func (repo *PostRed) RedactContentPost(post *structs.Post, newContent string) er
 
 func (repo *PostRed) DeletePost(post *structs.Post) error {
 	return repo.repo.DeletePost(post)
+}
+
+func (repo *PostRed) GetAllPosts() ([]structs.Post, error) {
+	return repo.repo.GetAllPosts()
 }

@@ -1,9 +1,10 @@
 package service
 
 import (
+	"net/http"
+
 	"forum/internal/repository"
 	"forum/structs"
-	"net/http"
 )
 
 type Authorization interface {
@@ -18,8 +19,7 @@ type PostRedact interface {
 	GetUSerID(token string) (int64, error)
 	GetUserName(token string) (string, error)
 	GetPostBy(from, value string) (*structs.Post, error)
-
-	// WriteCommentPost()
+	GetAllPosts() ([]structs.Post, error)
 	RedactContentPost(post *structs.Post, newContent string) error
 	DeletePost(post *structs.Post) error
 }

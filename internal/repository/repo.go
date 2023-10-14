@@ -2,6 +2,7 @@ package repository
 
 import (
 	"database/sql"
+
 	"forum/structs"
 )
 
@@ -26,6 +27,7 @@ type PostRedact interface {
 	DislikePost(post *structs.Post) error
 	RedactContentPost(post *structs.Post) error
 	DeletePost(post *structs.Post) error
+	GetAllPosts() ([]structs.Post, error)
 }
 
 type CommentRedact interface {

@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"encoding/json"
+	"fmt"
 	"net/http"
 	"text/template"
 
@@ -9,10 +10,10 @@ import (
 )
 
 func (h *Handler) PostPageCreate(w http.ResponseWriter, r *http.Request) {
-	//  check url path
 	if r.URL.Path != "/submit-post" {
 		return
 	}
+
 	tmp, err := template.ParseFiles("./ui/templates/create_post_page.html")
 	if err != nil {
 		h.logError(w, r, err, http.StatusInternalServerError)
@@ -20,15 +21,16 @@ func (h *Handler) PostPageCreate(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if r.Method == http.MethodPost {
-
 		cookie, err := r.Cookie("Token")
 		h.logError(w, r, err, http.StatusInternalServerError)
 		var post *structs.Post
-		// post.Title = r.Form.Get("postTitle")
-		// post.Topic = r.Form.Get("postTopic")
-		// post.Content = r.Form.Get("postContent")
 
 		err = json.NewDecoder(r.Body).Decode(&post)
+		if err != nil {
+			fmt.Println("HERE", err.Error())
+			return
+		}
+
 		post.PostAuthorName, err = h.Service.PostRedact.GetUserName(cookie.Value)
 		if err != nil {
 			h.logError(w, r, err, http.StatusInternalServerError)
@@ -42,7 +44,13 @@ func (h *Handler) PostPageCreate(w http.ResponseWriter, r *http.Request) {
 
 	} else if r.Method == http.MethodGet {
 		cookie, err := r.Cookie("Token")
-		h.logError(w, r, err, http.StatusInternalServerError)
+		if err != nil {
+			if err != http.ErrNoCookie {
+				h.logError(w, r, err, http.StatusInternalServerError)
+				return
+			}
+		}
+		
 		user, err := h.Service.Authorization.GetUserByToken(cookie.Value)
 		if err != nil {
 			h.logError(w, r, err, http.StatusInternalServerError)

@@ -1,6 +1,7 @@
-[ERROR]: 2023/10/14 18:35:52 log.go:29: http: named cookie not present
-.email
-andard 
+[INFO]: 2023/10/14 20:31:04 log.go:17: Token is available
+ not present
+expected EOF
+ 
 
 tax
 e

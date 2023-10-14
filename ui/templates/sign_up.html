@@ -77,9 +77,9 @@
                 .then(response => response.json()) 
                 .then(responseData => {
                     console.log(responseData);
-                    if (response.status === 200) {
+                    if (responseData.status === 200) {
                         window.location.href = '/signin';
-                    } else if (response.status === 400) {
+                    } else if (responseData.status === 400) {
                         alert("Bad request"); 
                     }
                 })

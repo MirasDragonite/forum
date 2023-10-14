@@ -147,3 +147,24 @@ func (pr *PostRedactDB) DeletePost(post *structs.Post) error {
 	}
 	return nil
 }
+
+func (pr *PostRedactDB) GetAllPosts() ([]structs.Post, error) {
+	query := `SELECT * FROM posts;`
+
+	var posts []structs.Post
+
+	rows, err := pr.db.Query(query)
+	if err != nil {
+		return nil, err
+	}
+	for rows.Next() {
+		var post structs.Post
+		err := rows.Scan(&post.Id, &post.PostAuthorID, &post.Topic, &post.Title, &post.Content, &post.Like, &post.Dislike, &post.PostAuthorName)
+		if err != nil {
+			return nil, err
+		}
+		posts = append(posts, post)
+	}
+
+	return posts, nil
+}

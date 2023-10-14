@@ -11,6 +11,16 @@ func (h *Handler) home(w http.ResponseWriter, r *http.Request) {
 	}
 
 	ts, err := template.ParseFiles("./ui/templates/home_page.html")
-	h.logError(w, r, err, http.StatusInternalServerError)
-	ts.Execute(w, "")
+	if err != nil {
+		h.logError(w, r, err, http.StatusInternalServerError)
+		return
+	}
+
+	posts, err := h.Service.PostRedact.GetAllPosts()
+
+	result := map[string]interface{}{
+		"Posts": posts,
+	}
+
+	ts.Execute(w, result)
 }
