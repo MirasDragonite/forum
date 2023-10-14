@@ -3,6 +3,7 @@ package repository
 import (
 	"database/sql"
 	"fmt"
+
 	"forum/structs"
 )
 
@@ -32,7 +33,7 @@ func (r *CommentReactionDB) AllReactions(comment_id int64) (int64, int64, error)
 	var likes int64
 	err := row.Scan(&likes)
 	if err != nil {
-		fmt.Println(err.Error)
+		fmt.Println(err.Error())
 		return 0, 0, err
 	}
 
@@ -42,7 +43,7 @@ func (r *CommentReactionDB) AllReactions(comment_id int64) (int64, int64, error)
 	var dislikes int64
 	err = row.Scan(&dislikes)
 	if err != nil {
-		fmt.Println(err.Error)
+		fmt.Println(err.Error())
 		return 0, 0, err
 	}
 

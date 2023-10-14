@@ -3,9 +3,10 @@ package handlers
 import (
 	"encoding/json"
 	"fmt"
-	"forum/structs"
 	"net/http"
 	"text/template"
+
+	"forum/structs"
 )
 
 func (h *Handler) PostPage(w http.ResponseWriter, r *http.Request) {
@@ -68,13 +69,13 @@ func (h *Handler) PostPage(w http.ResponseWriter, r *http.Request) {
 
 		likes, dislikes, err := h.Service.Reaction.AllPostReactions(post.Id)
 		if err != nil {
-			fmt.Println(err.Error)
+			fmt.Println(err.Error())
 			return
 		}
 
 		comments, err := h.Service.CommentRedact.GetAllComments(post.Id)
 		if err != nil {
-			fmt.Println(err.Error)
+			fmt.Println(err.Error())
 			return
 		}
 
