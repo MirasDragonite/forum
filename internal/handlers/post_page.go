@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"encoding/json"
 	"fmt"
 	"net/http"
 	"text/template"
@@ -9,10 +10,6 @@ import (
 )
 
 func (h *Handler) PostPage(w http.ResponseWriter, r *http.Request) {
-	// if r.URL.Path[0:6] != "/post/" {
-	// 	return
-	// }
-	fmt.Println("Working")
 	post_id := r.URL.Path[6:]
 	tmp, err := template.ParseFiles("./ui/templates/post_page.html")
 	// h.logError(w, r, err, http.StatusInternalServerError)
@@ -25,7 +22,8 @@ func (h *Handler) PostPage(w http.ResponseWriter, r *http.Request) {
 
 		cookie, err := r.Cookie("Token")
 		if err != nil {
-			http.Redirect(w, r, "/register", http.StatusSeeOther)
+			// DONT DELETE THIS CODE LINES:
+			// http.Redirect(w, r, "/register", http.StatusSeeOther)
 			return
 		}
 
@@ -35,37 +33,63 @@ func (h *Handler) PostPage(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
-		err = r.ParseForm()
-		h.logError(w, r, err, http.StatusInternalServerError)
-
 		user_id, err := h.Service.PostRedact.GetUSerID(cookie.Value)
-		h.logError(w, r, err, http.StatusBadRequest)
-		var comment structs.Comment
+		if err != nil {
+			h.logError(w, r, err, http.StatusBadRequest)
+			return
+		}
+		var comment *structs.Comment
+		err = json.NewDecoder(r.Body).Decode(&comment)
+		if err != nil {
+			h.logError(w, r, err, http.StatusBadRequest)
+			return
+		}
+
+		h.likePost(w, r)
 		comment.Dislike = 0
 		comment.Like = 0
 		comment.CommentAuthorID = user_id
 		comment.PostID = post.Id
-		comment.Content = r.FormValue("commentContent")
-		post.Comments = append(post.Comments, comment)
-		err = h.Service.CommentRedact.CreateComment(&comment)
+
+		post.Comments = append(post.Comments, *comment)
+		err = h.Service.CommentRedact.CreateComment(comment)
 		if err != nil {
 			h.logError(w, r, err, http.StatusBadRequest)
+			return
 		}
 		tmp.Execute(w, post)
 
 	} else if r.Method == http.MethodGet {
 
 		post, err := h.Service.PostRedact.GetPostBy("id", post_id)
-		fmt.Println("handlers: ", post)
 		if err != nil {
 			h.logError(w, r, err, http.StatusAccepted)
 			return
 		}
-		// h.logError(w, r, err, http.StatusNotFound)
 
-		tmp.Execute(w, post)
+		likes, dislikes, err := h.Service.Reaction.AllPostReactions(post.Id)
+		if err != nil {
+			fmt.Println(err.Error())
+			return
+		}
+
+		comments, err := h.Service.CommentRedact.GetAllComments(post.Id)
+		if err != nil {
+			fmt.Println(err.Error())
+			return
+		}
+
+		fmt.Println("cOMMENTs:", comments)
+		post.Comments = comments
+
+		result := map[string]interface{}{
+			"Post":     post,
+			"Likes":    likes,
+			"Dislikes": dislikes,
+		}
+		tmp.Execute(w, result)
 	} else {
-		fmt.Println("mb here")
+		fmt.Println("else here")
 		w.Write([]byte("internal Server Error"))
 	}
 }

@@ -18,9 +18,10 @@ func NewPostRedactDB(db *sql.DB) *PostRedactDB {
 }
 
 func (pr *PostRedactDB) CreatePost(post *structs.Post) error {
-	query := `INSERT INTO posts(postAuthorID, topic, title, content, like, dislike) VALUES ($1, $2, $3, $4, $5, $6) RETURNING id`
-	result, err := pr.db.Exec(query, post.PostAuthorID, post.Topic, post.Title, post.Content, post.Like, post.Dislike)
+	query := `INSERT INTO posts(postAuthorID, topic, title, content, like, dislike, username) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING id`
+	result, err := pr.db.Exec(query, post.PostAuthorID, post.Topic, post.Title, post.Content, post.Like, post.Dislike, post.PostAuthorName)
 	if err != nil {
+		fmt.Println(err.Error())
 		return errors.New("Error: cannot create new post, Check CreatePost()")
 	}
 	lastID, err := result.LastInsertId()
@@ -28,7 +29,7 @@ func (pr *PostRedactDB) CreatePost(post *structs.Post) error {
 		return err
 	}
 	post.Id = lastID
-	fmt.Println("Repo:" , post)
+	fmt.Println("Repo:", post)
 	return nil
 }
 
@@ -43,9 +44,7 @@ func (pr *PostRedactDB) GetUSerID(token string) (int64, error) {
 	return userID, nil
 }
 
-
 func (pr *PostRedactDB) GetUserName(userID int64) (string, error) {
-	
 	query := `SELECT username FROM users WHERE id=$1`
 	row := pr.db.QueryRow(query, userID)
 	var userName string
@@ -55,8 +54,6 @@ func (pr *PostRedactDB) GetUserName(userID int64) (string, error) {
 	}
 	return userName, nil
 }
-
-
 
 func (pr *PostRedactDB) GetPostBy(from, value string) (*structs.Post, error) {
 	var post structs.Post
@@ -69,7 +66,7 @@ func (pr *PostRedactDB) GetPostBy(from, value string) (*structs.Post, error) {
 
 		row := pr.db.QueryRow(query, value)
 
-		err := row.Scan(&post.Id, &post.PostAuthorID, &post.Topic, &post.Title, &post.Content, &post.Like, &post.Dislike)
+		err := row.Scan(&post.Id, &post.PostAuthorID, &post.Topic, &post.Title, &post.Content, &post.Like, &post.Dislike, &post.PostAuthorName)
 		if err != nil {
 			return &structs.Post{}, err
 		}
@@ -149,4 +146,25 @@ func (pr *PostRedactDB) DeletePost(post *structs.Post) error {
 		return err
 	}
 	return nil
+}
+
+func (pr *PostRedactDB) GetAllPosts() ([]structs.Post, error) {
+	query := `SELECT * FROM posts;`
+
+	var posts []structs.Post
+
+	rows, err := pr.db.Query(query)
+	if err != nil {
+		return nil, err
+	}
+	for rows.Next() {
+		var post structs.Post
+		err := rows.Scan(&post.Id, &post.PostAuthorID, &post.Topic, &post.Title, &post.Content, &post.Like, &post.Dislike, &post.PostAuthorName)
+		if err != nil {
+			return nil, err
+		}
+		posts = append(posts, post)
+	}
+
+	return posts, nil
 }

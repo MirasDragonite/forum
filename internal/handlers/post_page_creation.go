@@ -1,6 +1,8 @@
 package handlers
 
 import (
+	"encoding/json"
+	"fmt"
 	"net/http"
 	"text/template"
 
@@ -8,43 +10,55 @@ import (
 )
 
 func (h *Handler) PostPageCreate(w http.ResponseWriter, r *http.Request) {
-	//  check url path
 	if r.URL.Path != "/submit-post" {
 		return
 	}
-	tmp, err := template.ParseFiles("./ui/templates/createpostpage.html")
-	h.logError(w, r, err, http.StatusInternalServerError)
-	if r.Method == http.MethodPost {
-		err := r.ParseForm()
+
+	tmp, err := template.ParseFiles("./ui/templates/create_post_page.html")
+	if err != nil {
 		h.logError(w, r, err, http.StatusInternalServerError)
+		return
+	}
+
+	if r.Method == http.MethodPost {
 		cookie, err := r.Cookie("Token")
 		h.logError(w, r, err, http.StatusInternalServerError)
-		var post structs.Post
-		post.Title = r.Form.Get("postTitle")
-		post.Topic = r.Form.Get("postTopic")
-		post.Content = r.Form.Get("postContent")
-		post.PostAuthorName, err = h.Service.PostRedact.GetUserName(cookie.Value)
+		var post *structs.Post
+
+		err = json.NewDecoder(r.Body).Decode(&post)
 		if err != nil {
-			h.logError(w,r, err, http.StatusInternalServerError)
+			fmt.Println("HERE", err.Error())
 			return
 		}
 
-		err = h.Service.PostRedact.CreatePost(&post, cookie.Value)
-		h.logError(w, r, err, http.StatusBadRequest)
+		post.PostAuthorName, err = h.Service.PostRedact.GetUserName(cookie.Value)
+		if err != nil {
+			h.logError(w, r, err, http.StatusInternalServerError)
+			return
+		}
+
+		err = h.Service.PostRedact.CreatePost(post, cookie.Value)
+		// DONT DELETE THIS CODE LINES:
+		// urlRedirect := fmt.Sprintf("/post/%v", post.Id)
+		// // http.Redirect(w, r, urlRedirect, http.StatusSeeOther)
 
 	} else if r.Method == http.MethodGet {
 		cookie, err := r.Cookie("Token")
-		h.logError(w, r, err, http.StatusInternalServerError)
-		user, err := h.Service.Authorization.GetUserByToken(cookie.Value)
 		if err != nil {
-			h.logError(w,r, err, http.StatusInternalServerError)
-			return
+			if err != http.ErrNoCookie {
+				h.logError(w, r, err, http.StatusInternalServerError)
+				return
+			}
 		}
 		
+		user, err := h.Service.Authorization.GetUserByToken(cookie.Value)
+		if err != nil {
+			h.logError(w, r, err, http.StatusInternalServerError)
+			return
+		}
+
 		tmp.Execute(w, user)
 	} else {
 		w.Write([]byte("internal Server Error"))
 	}
-
-
 }

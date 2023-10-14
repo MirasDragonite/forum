@@ -1,6 +1,8 @@
 package handlers
 
 import (
+	"encoding/json"
+	"fmt"
 	"net/http"
 	"text/template"
 
@@ -11,23 +13,46 @@ func (h *Handler) signup(w http.ResponseWriter, r *http.Request) {
 	if r.URL.Path != "/register" {
 		return
 	}
-	ts, err := template.ParseFiles("./ui/templates/signup.html")
-	err = r.ParseForm()
-	h.logError(w, r, err, http.StatusInternalServerError)
+	ts, err := template.ParseFiles("./ui/templates/sign_up.html")
+	if err != nil {
+		h.logError(w, r, err, http.StatusInternalServerError)
+		return
+	}
+	ok := structs.Data{}
 
 	if r.Method == http.MethodPost {
 
-		input := structs.CreateUser(r.Form.Get("username"), r.Form.Get("email"), r.Form.Get("password"))
-		err := h.Service.Authorization.CreateUser(input)
+		var input structs.User
+		err = json.NewDecoder(r.Body).Decode(&input)
 		if err != nil {
+			ok.Status = 400
+			w.Header().Set("Content-Type", "application/json")
+			w.WriteHeader(http.StatusOK)
+			json.NewEncoder(w).Encode(ok)
+			h.logError(w, r, err, http.StatusBadRequest)
+			return
+		}
+		fmt.Println(input)
+		err = h.Service.Authorization.CreateUser(&input)
+
+		if err != nil {
+			fmt.Println("here1")
 			h.errorLog(err.Error())
 			h.errorHandler(w, r, 405)
 			return
 		}
+		ok.Status = 200
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(http.StatusOK)
+		json.NewEncoder(w).Encode(ok)
 
-		http.Redirect(w, r, "/signin", http.StatusSeeOther)
+		return
+
 	} else if r.Method == http.MethodGet {
-		ts.Execute(w, "")
+		err := ts.Execute(w, "")
+		if err != nil {
+			h.logError(w, r, err, http.StatusInternalServerError)
+		}
 	} else {
 		w.Write([]byte("Internal server error"))
 	}

@@ -18,11 +18,13 @@ func NewHandler(service *service.Service) *Handler {
 
 func (h *Handler) Router() {
 	h.Mux.HandleFunc("/", h.home)
-	h.Mux.Handle("/signin", h.isNotauthorized(h.signin))
+	// h.Mux.Handle("/signin", h.isNotauthorized(h.signin))
+	h.Mux.HandleFunc("/signin", h.signin)
 	h.Mux.Handle("/register", h.isNotauthorized(h.signup))
 	h.Mux.Handle("/profile", h.authorized(h.profile))
 	h.Mux.Handle("/logout", h.authorized(h.logOut))
 	h.Mux.Handle("/submit-post", h.authorized(h.PostPageCreate))
-	h.Mux.Handle("/like-post",h.authorized(h.likePost))
+	h.Mux.Handle("/like-post/", h.authorized(h.likePost))
+	h.Mux.Handle("/like-comment/", h.authorized(h.likeComment))
 	h.Mux.HandleFunc("/post/", h.PostPage)
 }

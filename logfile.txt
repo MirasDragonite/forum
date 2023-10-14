@@ -1,2 +1,14 @@
+<<<<<<< HEAD
 [ERROR]: 2023/10/13 11:41:39 log.go:29: open ./ui/templates/index.html: no such file or directory
  time is available
+=======
+[INFO]: 2023/10/14 20:31:04 log.go:17: Token is available
+ not present
+expected EOF
+ 
+
+tax
+e
+tory
+irectory
+>>>>>>> miras

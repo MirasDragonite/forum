@@ -1,10 +1,11 @@
 package structs
 
 type User struct {
-	Id             int64
-	Username       string
-	Email          string
-	HashedPassword string
+	Id             int64  `json:"id"`
+	Username       string `json:"username"`
+	Email          string `json:"email"`
+	HashedPassword string `json:"password"`
+	CreatedDate    string `json:"createdDate"`
 }
 
 type Session struct {
@@ -12,6 +13,10 @@ type Session struct {
 	UserId       int64
 	Token        string
 	ExpairedData string
+}
+
+type Data struct {
+	Status int `json:"status"`
 }
 
 func CreateUser(username, email, password string) *User {

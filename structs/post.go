@@ -1,14 +1,14 @@
 package structs
 
 type Post struct {
-	Id             int64
-	PostAuthorID   int64
-	PostAuthorName string
-	Topic          string
-	Title          string
-	Content        string
-	Like           int64
-	Dislike        int64
+	Id             int64  `json:"Id"`
+	PostAuthorID   int64  `json:"PostAuthorID"`
+	PostAuthorName string `json:"PostAuthorName"`
+	Topic          string `json:"Topic"`
+	Title          string `json:"Title"`
+	Content        string `json:"Content"`
+	Like           int64  `json:"Like"`
+	Dislike        int64  `json:"Dislike"`
 	Comments       []Comment
 }
 
