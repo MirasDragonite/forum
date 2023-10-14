@@ -1,6 +1,8 @@
 package handlers
 
 import (
+	"fmt"
+	"log"
 	"net/http"
 	"time"
 )
@@ -38,14 +40,19 @@ func (h *Handler) authorized(next http.HandlerFunc) http.Handler {
 
 func (h *Handler) isNotauthorized(next http.HandlerFunc) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		log.Println()
 		cookie, err := r.Cookie("Token")
 		if err != nil {
+			fmt.Println("Here3")
 			h.errorLog(err.Error())
 			if err == http.ErrNoCookie {
+				fmt.Println("NoCookie")
 				next.ServeHTTP(w, r)
+				fmt.Println("After serve")
 				return
 
 			} else {
+				fmt.Println("Here4")
 				http.Redirect(w, r, "/register", http.StatusSeeOther)
 				return
 			}
