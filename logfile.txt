@@ -1,7 +1,7 @@
-[INFO]: 2023/10/16 20:02:11 log.go:17: Token is available
+[INFO]: 2023/10/16 20:41:14 log.go:17: Token is available
  not present
-id syntax
-ml: no such file or directory
+t, Check CreateComment()
+e or directory
  time is available
 =======
 [INFO]: 2023/10/14 20:31:04 log.go:17: Token is available

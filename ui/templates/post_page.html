@@ -45,10 +45,10 @@
     </ul>
 
     <!-- Comment Form -->
-    <form action="/post/{{.Id}}" method="POST">
-        <input type="hidden" name="postId" value="{{ .Id }}">
-        <input type="text" name="commentContent" placeholder="Add a comment">
-        <button type="submit">Submit Comment</button>
+    <form action="/post/{{.Post.Id}}" method="POST">
+        <input type="hidden" name="postId" value="{{.Post.Id}}">
+        <input type="text" name="commentContent"  class="commentContent" placeholder="Add a comment">
+        <button class="submitComment" type="submit">Submit Comment</button>
     </form>
 
     <button> <a href="/"> Home </a> </button>
@@ -64,7 +64,8 @@
             const dislikeButton = document.querySelector(".dislike-button");
             const likesElement = document.querySelector(".likes");
             const dislikesElement = document.querySelector(".dislikes");
-    
+           
+
             if (likeButton) {
                 likeButton.addEventListener("click", function (event) {
                     event.preventDefault();
@@ -119,7 +120,39 @@
                     });
                 });
             }
+
+            const commentSubmit = document.querySelector(".submitComment");
+
+if (commentSubmit) {
+    commentSubmit.addEventListener("click", function (event) {
+        event.preventDefault();
+
+        // Get the comment content from the input field
+        const commentInput = document.querySelector(".commentContent");
+        const commentContent = commentInput.value;
+
+        // Send the comment content as JSON
+        fetch("/post/{{.Post.Id}}", {
+            method: "POST",
+            body: JSON.stringify({ content: commentContent }),
+            headers: {
+                "Content-Type": "application/json",
+            },
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log(data.result);
+            window.location.href = `/like-post/${data.result}`;
+            // You can handle the response data here
+        })
+        .catch(error => {
+            console.error(error);
         });
+    });
+}
+        });
+
+        
     </script>
     
 </body>

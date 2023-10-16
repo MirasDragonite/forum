@@ -57,6 +57,14 @@ func (h *Handler) PostPage(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 		tmp.Execute(w, post)
+		type commentResp struct {
+			Result int64 `json:"result"`
+		}
+		res := &commentResp{
+			Result: post.Id,
+		}
+		w.Header().Set("Content-Type", "application/json")
+		err = json.NewEncoder(w).Encode(&res)
 
 	} else if r.Method == http.MethodGet {
 
