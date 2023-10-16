@@ -1,10 +1,13 @@
 package handlers
 
 import (
+	"encoding/json"
 	"errors"
 	"fmt"
 	"net/http"
 	"strconv"
+
+	"forum/structs"
 )
 
 var input struct {
@@ -20,10 +23,11 @@ func (h *Handler) likePost(w http.ResponseWriter, r *http.Request) {
 	// 	return
 	// }
 	// fmt.Println("Data from input", input.Reaction)
-	button := r.Form.Get("button")
+	var button dataFromButton
+	err = json.NewDecoder(r.Body).Decode(&button)
 
 	fmt.Println("button:", button)
-	switch button {
+	switch button.Reaction {
 	case "like":
 		input.Reaction = 1
 	case "dislike":
@@ -57,7 +61,19 @@ func (h *Handler) likePost(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	fmt.Println("Here")
+	likes, dislikes, err := h.Service.AllPostReactions(int64(post_id))
+	if err != nil {
+		return
+	}
+	res := structs.ResponseReaction{
+		Likes:    likes,
+		Dislikes: dislikes,
+	}
+	fmt.Println(res)
+	// link := fmt.Sprintf("/post/%v", post_id)
+	// http.Redirect(w, r, link, http.StatusSeeOther)
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
 
-	link := fmt.Sprintf("/post/%v", post_id)
-	http.Redirect(w, r, link, http.StatusSeeOther)
+	err = json.NewEncoder(w).Encode(&res)
 }

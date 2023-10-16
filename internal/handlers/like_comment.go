@@ -1,11 +1,16 @@
 package handlers
 
 import (
+	"encoding/json"
 	"errors"
 	"fmt"
 	"net/http"
 	"strconv"
 )
+
+type dataFromButton struct {
+	Reaction string `json:"reaction"`
+}
 
 func (h *Handler) likeComment(w http.ResponseWriter, r *http.Request) {
 	err := r.ParseForm()
@@ -16,10 +21,11 @@ func (h *Handler) likeComment(w http.ResponseWriter, r *http.Request) {
 	// 	return
 	// }
 	// fmt.Println("Data from input", input.Reaction)
-	button := r.Form.Get("commButton")
+	var button *dataFromButton
+	err = json.NewDecoder(r.Body).Decode(&button)
 
 	fmt.Println("commButton:", button)
-	switch button {
+	switch button.Reaction {
 	case "like":
 		input.Reaction = 1
 	case "dislike":
