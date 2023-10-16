@@ -1,5 +1,4 @@
-[INFO]: 2023/10/14 21:06:33 log.go:17: Token is available
- not present
+[ERROR]: 2023/10/14 21:04:54 log.go:29: http: named cookie not present
 s/index.html: no such file or directory
  time is available
 =======
