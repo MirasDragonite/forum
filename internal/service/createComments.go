@@ -2,6 +2,8 @@ package service
 
 import (
 	"fmt"
+	"strings"
+
 	"forum/internal/repository"
 	"forum/structs"
 )
@@ -16,6 +18,9 @@ func NewCommentRed(repo repository.CommentRedact, reaction repository.CommentRea
 }
 
 func (repo *CommentRed) CreateComment(comm *structs.Comment) error {
+	if strings.TrimSpace(comm.Content) == "" {
+		return nil
+	}
 	return repo.repo.CreateComment(comm)
 }
 

@@ -1,6 +1,6 @@
-[INFO]: 2023/10/16 20:41:14 log.go:17: Token is available
- not present
-t, Check CreateComment()
+[ERROR]: 2023/10/17 15:04:40 log.go:29: http: named cookie not present
+id syntax
+reateComment()
 e or directory
  time is available
 =======

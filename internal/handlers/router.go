@@ -17,6 +17,8 @@ func NewHandler(service *service.Service) *Handler {
 }
 
 func (h *Handler) Router() {
+	fileServer := http.FileServer(http.Dir("./ui/static/"))
+	h.Mux.Handle("/static/", http.StripPrefix("/static", fileServer))
 	h.Mux.HandleFunc("/", h.home)
 	// h.Mux.Handle("/signin", h.isNotauthorized(h.signin))
 	h.Mux.HandleFunc("/signin", h.signin)

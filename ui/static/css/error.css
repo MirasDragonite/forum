@@ -1,0 +1,47 @@
+body {
+    background-color: #262626;
+}
+.element{
+    text-align: center;
+}
+.preBack {
+    text-align: center;
+    font-size: 36vh;
+    font-weight: 600;
+    color: #D4AF66;
+    display: grid
+}
+.but{
+    text-align: center;
+  width: 20%;
+  font-size: 40px;
+  height: 90px;
+   align-items: center;
+    color: #E6E6E6; 
+    font-weight: 900;
+    text-decoration: none;
+}
+@media (max-width: 1524px) {
+    .preBack {
+        font-size: 26vh;
+    }
+    .but{
+        font-size: 30px;
+    }
+}
+@media (max-width: 1024px) {
+    .preBack {
+        font-size: 18vh;
+    }
+    .but{
+        font-size: 20px;
+    }
+}
+@media (max-width: 786px) {
+    .preBack {
+        font-size: 12vh;
+    }
+    .but{
+        font-size: 15px;
+    }
+}

@@ -11,6 +11,7 @@ import (
 // logger
 func (h *Handler) signin(w http.ResponseWriter, r *http.Request) {
 	if r.URL.Path != "/signin" {
+		h.errorHandler(w, r, http.StatusMethodNotAllowed)
 		return
 	}
 	ts, err := template.ParseFiles("./ui/templates/sign_in.html")

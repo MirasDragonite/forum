@@ -11,6 +11,7 @@ import (
 
 func (h *Handler) PostPageCreate(w http.ResponseWriter, r *http.Request) {
 	if r.URL.Path != "/submit-post" {
+		h.errorHandler(w, r, http.StatusMethodNotAllowed)
 		return
 	}
 
@@ -41,6 +42,14 @@ func (h *Handler) PostPageCreate(w http.ResponseWriter, r *http.Request) {
 		// DONT DELETE THIS CODE LINES:
 		// urlRedirect := fmt.Sprintf("/post/%v", post.Id)
 		// // http.Redirect(w, r, urlRedirect, http.StatusSeeOther)
+		ok := structs.Data{
+			Status: int(post.Id),
+		}
+		fmt.Println(ok)
+		w.Header().Set("Content-Type", "application/json")
+
+		json.NewEncoder(w).Encode(ok)
+		return
 
 	} else if r.Method == http.MethodGet {
 		cookie, err := r.Cookie("Token")
@@ -50,7 +59,7 @@ func (h *Handler) PostPageCreate(w http.ResponseWriter, r *http.Request) {
 				return
 			}
 		}
-		
+
 		user, err := h.Service.Authorization.GetUserByToken(cookie.Value)
 		if err != nil {
 			h.logError(w, r, err, http.StatusInternalServerError)

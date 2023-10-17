@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"strings"
 	"text/template"
 
 	"forum/structs"
@@ -11,6 +12,10 @@ import (
 
 func (h *Handler) PostPage(w http.ResponseWriter, r *http.Request) {
 	post_id := r.URL.Path[6:]
+	if strings.TrimSpace(post_id) == "" || post_id[0] == '0' {
+		h.errorHandler(w, r, http.StatusBadRequest)
+		return
+	}
 	tmp, err := template.ParseFiles("./ui/templates/post_page.html")
 	// h.logError(w, r, err, http.StatusInternalServerError)
 	if err != nil {
@@ -65,7 +70,7 @@ func (h *Handler) PostPage(w http.ResponseWriter, r *http.Request) {
 		}
 		w.Header().Set("Content-Type", "application/json")
 		err = json.NewEncoder(w).Encode(&res)
-
+		return
 	} else if r.Method == http.MethodGet {
 
 		post, err := h.Service.PostRedact.GetPostBy("id", post_id)

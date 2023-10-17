@@ -28,20 +28,21 @@
       
         {{ range .Post.Comments}}
         <li>
-        <p>{{ .Content }}</p>
-        <form action="/like-comment/{{.CommentID}}" method="POST">   
-            
-            <br>
-                <button class="commButton" type="submit" name="commButton" value="like" >like</button>
+            <p>{{ .Content }}</p>
+            <form action="/like-comment/{{.CommentID}}" method="POST">
+                <br>
+                <button class="commButtonLike" type="submit" name="commButton" value="like" data-comment-id="{{.CommentID}}">like</button>
                 <span class="likes">{{.Like}}</span>
-                <button class="commButton" type="submit" name="commButton" value="dislike">dislike</button>
+                <button class="commButtonDislike" type="submit" name="commButton" value="dislike" data-comment-id="{{.CommentID}}">dislike</button>
                 <span class="dislikes">{{.Dislike}}</span>
-                         
-      
+            </form>
+        </li>
+       
         
-    </form>
-</li>
-{{end }}
+
+
+{{ end }}
+
     </ul>
 
     <!-- Comment Form -->
@@ -122,10 +123,11 @@
             }
 
             const commentSubmit = document.querySelector(".submitComment");
-
+            
 if (commentSubmit) {
     commentSubmit.addEventListener("click", function (event) {
         event.preventDefault();
+        window.location.reload();
 
         // Get the comment content from the input field
         const commentInput = document.querySelector(".commentContent");
@@ -141,8 +143,10 @@ if (commentSubmit) {
         })
         .then(response => response.json())
         .then(data => {
-            console.log(data.result);
-            window.location.href = `/like-post/${data.result}`;
+
+            location.reload();
+           
+          
             // You can handle the response data here
         })
         .catch(error => {
@@ -150,10 +154,85 @@ if (commentSubmit) {
         });
     });
 }
+
+
+const likeButtonsComment = document.querySelectorAll(".commButtonLike");
+    const dislikeButtonsComment = document.querySelectorAll(".commButtonDislike");
+
+    likeButtonsComment.forEach(likeButtonComment => {
+        likeButtonComment.addEventListener("click", function (event) {
+            event.preventDefault();
+
+            const commentID = likeButtonComment.getAttribute("data-comment-id");
+
+            // Select the like and dislike counts for the specific comment
+            const likesElement = likeButtonComment.nextElementSibling;
+            const dislikesElement = likeButtonComment.nextElementSibling.nextElementSibling.nextElementSibling;
+
+            // Send an AJAX request to update the reaction for the specific comment
+            fetch(`/like-comment/${commentID}`, {
+                method: "POST",
+                body: JSON.stringify({ reaction: "like" }),
+                headers: {
+                    "Content-Type": "application/json",
+                },
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
+
+                // Update the like and dislike counts for the specific comment
+                likesElement.textContent = data.likes;
+                dislikesElement.textContent = data.dislikes;
+
+                // You can handle the response data here
+            })
+            .catch(error => {
+                console.error(error);
+            });
+        });
+    });
+
+    dislikeButtonsComment.forEach(dislikeButtonComment => {
+        dislikeButtonComment.addEventListener("click", function (event) {
+            event.preventDefault();
+
+            const commentID = dislikeButtonComment.getAttribute("data-comment-id");
+
+            // Select the like and dislike counts for the specific comment
+            const likesElement = dislikeButtonComment.previousElementSibling
+            const dislikesElement = dislikeButtonComment.nextElementSibling;
+
+            // Send an AJAX request to update the reaction for the specific comment
+            fetch(`/like-comment/${commentID}`, {
+                method: "POST",
+                body: JSON.stringify({ reaction: "dislike" }),
+                headers: {
+                    "Content-Type": "application/json",
+                },
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
+
+                // Update the like and dislike counts for the specific comment
+                likesElement.textContent = data.likes;
+                dislikesElement.textContent = data.dislikes;
+
+                // You can handle the response data here
+            })
+            .catch(error => {
+                console.error(error);
+            });
+        });
+    });
+
         });
 
         
     </script>
     
+   
+
 </body>
 </html>

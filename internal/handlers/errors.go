@@ -6,7 +6,7 @@ import (
 )
 
 const (
-	pathToErrorPage = "./ui/templates/error.html"
+	pathToErrorPage = "./ui/templates/error_page.html"
 )
 
 func (h *Handler) errorHandler(w http.ResponseWriter, r *http.Request, status int) {

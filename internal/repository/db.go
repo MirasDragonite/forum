@@ -23,9 +23,9 @@ func NewDB() (*sql.DB, error) {
 	DROP TABLE IF EXISTS tokens;
 	CREATE TABLE tokens(id INTEGER PRIMARY KEY, user_id INTEGER,token TEXT NOT NULL,expaired_data TEXT NOT NULL, FOREIGN KEY(user_id) REFERENCES users(id) ON DELETE CASCADE);
 	DROP TABLE IF EXISTS posts;
-	CREATE TABLE posts(id INTEGER PRIMARY KEY NOT NULL, postAuthorID INTEGER, topic TEXT, title TEXT, content TEXT, like INTEGER, dislike INTEGER, username TEXT, FOREIGN KEY(postAuthorID) REFERENCES  users(id) ON DELETE CASCADE);
+	CREATE TABLE posts(id INTEGER PRIMARY KEY NOT NULL, postAuthorID INTEGER, topic TEXT, title TEXT NOT NULL, content TEXT NOT NULL, like INTEGER, dislike INTEGER, username TEXT, FOREIGN KEY(postAuthorID) REFERENCES  users(id) ON DELETE CASCADE);
 	DROP TABLE IF EXISTS comments;
-	CREATE TABLE comments(id INTEGER PRIMARY KEY NOT NULL, comment_author_id INTEGER, post_id INTEGER, content TEXT, like INTEGER, dislike INTEGER, FOREIGN KEY(comment_author_id) REFERENCES users(id) ON DELETE CASCADE, FOREIGN KEY(post_id) REFERENCES posts(id) ON DELETE CASCADE); 
+	CREATE TABLE comments(id INTEGER PRIMARY KEY NOT NULL, comment_author_id INTEGER, post_id INTEGER, content TEXT NOT NULL, like INTEGER, dislike INTEGER, FOREIGN KEY(comment_author_id) REFERENCES users(id) ON DELETE CASCADE, FOREIGN KEY(post_id) REFERENCES posts(id) ON DELETE CASCADE); 
 	DROP TABLE IF EXISTS post_reactions;
 	CREATE TABLE post_reactions (id INTEGER PRIMARY KEY NOT NULL, post_id INTEGER, user_ID INTEGER, reaction INTEGER,FOREIGN KEY(user_id) REFERENCES users(id) ON DELETE CASCADE, FOREIGN KEY(post_id) REFERENCES posts(id) ON DELETE CASCADE);
 	DROP TABLE IF EXISTS comment_reactions;
