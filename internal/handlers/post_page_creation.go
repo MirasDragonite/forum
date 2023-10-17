@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"strings"
 	"text/template"
 
 	"forum/structs"
@@ -31,7 +32,24 @@ func (h *Handler) PostPageCreate(w http.ResponseWriter, r *http.Request) {
 			fmt.Println("HERE", err.Error())
 			return
 		}
+		post.Content = strings.TrimSpace(post.Content)
+		post.Title = strings.TrimSpace(post.Title)
+		if len(post.Content) == 0 || len(post.Title) == 0 {
+			h.errorHandler(w, r, http.StatusBadRequest)
+			return
+		}
+		topicStr := ""
+		for _, topic := range post.Topic {
+			topicStr += topic + "|"
+		}
+		if len(topicStr) == 0 {
+			post.TopicString = ""
+		} else {
+			topicStr = topicStr[:len(topicStr)-1]
+			post.TopicString = topicStr
+		}
 
+		fmt.Println("POST:", post)
 		post.PostAuthorName, err = h.Service.PostRedact.GetUserName(cookie.Value)
 		if err != nil {
 			h.logError(w, r, err, http.StatusInternalServerError)

@@ -24,14 +24,27 @@
         <form id="create-post-form" method="POST" action="/submit-post"> 
             <span class="title-container">
             <p>Title</p>
-            <input type="text"  classid="postTitle" name="postTitle" class="postTitle" placeholder="Title" style="width: 250px;">
+            <input type="text"  minlength="1" classid="postTitle" name="postTitle" class="postTitle" placeholder="Title" style="width: 250px;">
             </span>
 
-       
+            <span class="filters">
+              <input type="checkbox" name="postTopic" class="round-checkbox" id="javaCheckbox"  value="Java" >
+              <label class="checkbox-label" for="javaCheckbox"></label>
+              <label for="javaCheckbox">Java</label>
+              
+              <input type="checkbox" name="postTopic" class="round-checkbox" id="kotlinCheckbox" value="Kotlin">
+              <label class="checkbox-label" for="kotlinCheckbox"></label>
+              <label for="kotlinCheckbox">Kotlin</label>
+              
+              <input type="checkbox" name="postTopic" class="round-checkbox" id="pythonCheckbox" value="Python">
+              <label class="checkbox-label" for="pythonCheckbox"></label>
+              <label for="pythonCheckbox">Python</label>
+              </span>
+            <input type="text"  classid="postTopicInput" name="postTopicInput" class="postTopicInput" placeholder="Topic" style="width: 250px;">
 
         <span class="text-container">
             <p>Text</p>
-            <input type="text" name="postContent" class="postContent" id="text-area" placeholder="Message" style="width: 1000px; height: 200px;">
+            <input type="text" minlength="1" name="postContent" class="postContent" id="text-area" placeholder="Message" style="width: 1000px; height: 200px;">
         </span>
 
         <button type="submit" class="postSubmit" >Publish</button>
@@ -50,14 +63,17 @@
                     event.preventDefault();
             
                     // Get the comment content from the input field
-                    const postInput = document.querySelector(".postContent");
-                    const postContent = postInput.value;
-            const postTitle = document.querySelector(".postTitle").value
+                    const postContent = document.querySelector(".postContent").value;
+            const postTitle = document.querySelector(".postTitle").value;
+            const selectedCheckboxes = document.querySelectorAll('input[name="postTopic"]:checked');
+            const postTopicInput =document.querySelector(".postTopicInput").value
+            const selectedTopics = Array.from(selectedCheckboxes).map(checkbox => checkbox.value);
+          selectedTopics.push(postTopicInput)
                     // Send the comment content as JSON
                     fetch("/submit-post", {
                         method: "POST",
                         body: JSON.stringify({
-                          Topic: "VP",
+                          Topic: selectedTopics,
                           Title: postTitle,
                           Content: postContent
                         }),

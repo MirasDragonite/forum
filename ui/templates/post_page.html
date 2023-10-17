@@ -13,6 +13,18 @@
         <p> <b>Author:</b>  {{ .Post.PostAuthorName }} </p>
         <h2> <b>Title:</b>  {{ .Post.Title }}</h2>
         <p> <b>Content</b> {{ .Post.Content }}</p>
+        <p>  <b>Topics:</b> </p>
+        {{range .Post.Topic}}
+            <ol>
+                {{ if . }} 
+                <li>{{.}}</li>
+                {{else }}
+                
+                {{end}}
+                
+            </ol>
+            
+        {{end}}
         <form action="/like-post/{{.Post.Id}}" method="POST">
         <button class="like-button liked" type="submit" name="button" value="like">like</button>
                         <span class="likes">{{.Likes}}</span>
@@ -127,7 +139,7 @@
 if (commentSubmit) {
     commentSubmit.addEventListener("click", function (event) {
         event.preventDefault();
-        window.location.reload();
+      
 
         // Get the comment content from the input field
         const commentInput = document.querySelector(".commentContent");

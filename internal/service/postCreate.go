@@ -61,5 +61,6 @@ func (repo *PostRed) DeletePost(post *structs.Post) error {
 }
 
 func (repo *PostRed) GetAllPosts() ([]structs.Post, error) {
+	
 	return repo.repo.GetAllPosts()
 }

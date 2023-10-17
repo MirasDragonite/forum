@@ -5,6 +5,7 @@ import (
 	"errors"
 	"fmt"
 	"strconv"
+	"strings"
 
 	"forum/structs"
 )
@@ -19,7 +20,7 @@ func NewPostRedactDB(db *sql.DB) *PostRedactDB {
 
 func (pr *PostRedactDB) CreatePost(post *structs.Post) error {
 	query := `INSERT INTO posts(postAuthorID, topic, title, content, like, dislike, username) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING id`
-	result, err := pr.db.Exec(query, post.PostAuthorID, post.Topic, post.Title, post.Content, post.Like, post.Dislike, post.PostAuthorName)
+	result, err := pr.db.Exec(query, post.PostAuthorID, post.TopicString, post.Title, post.Content, post.Like, post.Dislike, post.PostAuthorName)
 	if err != nil {
 		fmt.Println(err.Error())
 		return errors.New("Error: cannot create new post, Check CreatePost()")
@@ -66,7 +67,7 @@ func (pr *PostRedactDB) GetPostBy(from, value string) (*structs.Post, error) {
 
 		row := pr.db.QueryRow(query, value)
 
-		err := row.Scan(&post.Id, &post.PostAuthorID, &post.Topic, &post.Title, &post.Content, &post.Like, &post.Dislike, &post.PostAuthorName)
+		err := row.Scan(&post.Id, &post.PostAuthorID, &post.TopicString, &post.Title, &post.Content, &post.Like, &post.Dislike, &post.PostAuthorName)
 		if err != nil {
 			return &structs.Post{}, err
 		}
@@ -76,6 +77,7 @@ func (pr *PostRedactDB) GetPostBy(from, value string) (*structs.Post, error) {
 		if err != nil {
 			return &structs.Post{}, err
 		}
+		post.Topic = strings.Split(post.TopicString, "|")
 		for rows.Next() {
 			var comment structs.Comment
 			err := rows.Scan(&comment.CommentID, &comment.CommentAuthorID, &comment.PostID, &comment.Content, &comment.Like, &comment.Dislike)
@@ -89,7 +91,7 @@ func (pr *PostRedactDB) GetPostBy(from, value string) (*structs.Post, error) {
 		query := fmt.Sprintf(`SELECT * FROM posts WHERE %s = $1`, from)
 
 		row := pr.db.QueryRow(query, value)
-		err := row.Scan(&post.Id, &post.PostAuthorID, &post.Topic, &post.Title, &post.Content, &post.Like, &post.Dislike)
+		err := row.Scan(&post.Id, &post.PostAuthorID, &post.TopicString, &post.Title, &post.Content, &post.Like, &post.Dislike)
 		if err != nil {
 			return &structs.Post{}, err
 		}
@@ -99,6 +101,7 @@ func (pr *PostRedactDB) GetPostBy(from, value string) (*structs.Post, error) {
 		if err != nil {
 			return &structs.Post{}, err
 		}
+		post.Topic = strings.Split(post.TopicString, "|")
 		for rows.Next() {
 			var comment structs.Comment
 			err := rows.Scan(&comment.CommentID, &comment.CommentAuthorID, &comment.PostID, &comment.Content, &comment.Like, &comment.Dislike)
@@ -159,10 +162,11 @@ func (pr *PostRedactDB) GetAllPosts() ([]structs.Post, error) {
 	}
 	for rows.Next() {
 		var post structs.Post
-		err := rows.Scan(&post.Id, &post.PostAuthorID, &post.Topic, &post.Title, &post.Content, &post.Like, &post.Dislike, &post.PostAuthorName)
+		err := rows.Scan(&post.Id, &post.PostAuthorID, &post.TopicString, &post.Title, &post.Content, &post.Like, &post.Dislike, &post.PostAuthorName)
 		if err != nil {
 			return nil, err
 		}
+		post.Topic = strings.Split(post.TopicString, "|")
 		posts = append(posts, post)
 	}
 
