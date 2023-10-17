@@ -19,7 +19,7 @@
                 {{ if . }} 
                 <li>{{.}}</li>
                 {{else }}
-                
+
                 {{end}}
                 
             </ol>
@@ -156,9 +156,7 @@ if (commentSubmit) {
         .then(response => response.json())
         .then(data => {
 
-            location.reload();
-           
-          
+            console.log(data);
             // You can handle the response data here
         })
         .catch(error => {

@@ -1,4 +1,4 @@
-[INFO]: 2023/10/17 19:17:44 log.go:17: Token is available
+[INFO]: 2023/10/17 20:06:48 log.go:17: Token is available
  not present
 .email
 ax

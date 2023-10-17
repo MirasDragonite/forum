@@ -61,16 +61,20 @@ func (h *Handler) PostPage(w http.ResponseWriter, r *http.Request) {
 			h.logError(w, r, err, http.StatusBadRequest)
 			return
 		}
-		tmp.Execute(w, post)
-		type commentResp struct {
-			Result int64 `json:"result"`
+
+		res := &structs.Data{
+			Status: int(comment.CommentID),
 		}
-		res := &commentResp{
-			Result: post.Id,
-		}
+		fmt.Println("RES:", res)
 		w.Header().Set("Content-Type", "application/json")
 		err = json.NewEncoder(w).Encode(&res)
+		if err != nil {
+			fmt.Println("error")
+			return
+		}
+		tmp.Execute(w, post)
 		return
+
 	} else if r.Method == http.MethodGet {
 
 		post, err := h.Service.PostRedact.GetPostBy("id", post_id)

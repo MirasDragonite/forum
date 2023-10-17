@@ -28,6 +28,7 @@ type PostRedact interface {
 	RedactContentPost(post *structs.Post) error
 	DeletePost(post *structs.Post) error
 	GetAllPosts() ([]structs.Post, error)
+	GetAllLikedPosts(user_id int64) ([]structs.PostReaction, error)
 }
 
 type CommentRedact interface {

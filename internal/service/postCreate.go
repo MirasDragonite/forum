@@ -3,6 +3,7 @@ package service
 import (
 	"errors"
 	"fmt"
+	"strconv"
 
 	"forum/internal/repository"
 	"forum/structs"
@@ -61,6 +62,22 @@ func (repo *PostRed) DeletePost(post *structs.Post) error {
 }
 
 func (repo *PostRed) GetAllPosts() ([]structs.Post, error) {
-	
 	return repo.repo.GetAllPosts()
+}
+
+func (repo *PostRed) GetAllLikedPosts(user_id int64) ([]structs.Post, error) {
+	reactions, err := repo.repo.GetAllLikedPosts(user_id)
+	if err != nil {
+		return nil, err
+	}
+	var posts []structs.Post
+	for _, ch := range reactions {
+		ch_str := strconv.Itoa(int(ch.PostID))
+		post, err := repo.repo.GetPostBy("id", ch_str)
+		if err != nil {
+			return nil, err
+		}
+		posts = append(posts, *post)
+	}
+	return posts, nil
 }
