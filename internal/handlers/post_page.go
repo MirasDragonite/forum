@@ -87,7 +87,7 @@ func (h *Handler) PostPage(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
-		comments, err := h.Service.CommentRedact.GetAllComments(post.Id)
+		comments, err := h.Service.CommentRedact.GetAllComments(post.Id, user_id)
 		if err != nil {
 			fmt.Println(err.Error())
 			return

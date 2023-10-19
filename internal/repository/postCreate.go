@@ -83,6 +83,8 @@ func (pr *PostRedactDB) GetPostBy(from, value string, user_id int64) (*structs.P
 			if err != nil {
 				return &structs.Post{}, err
 			}
+
+			fmt.Println(comment)
 			comments = append(comments, comment)
 		}
 		post.Comments = comments
@@ -107,10 +109,12 @@ func (pr *PostRedactDB) GetPostBy(from, value string, user_id int64) (*structs.P
 			if err != nil {
 				return &structs.Post{}, err
 			}
+
 			comments = append(comments, comment)
 		}
 		post.Comments = comments
 	}
+
 	query := `SELECT id,reaction FROM post_reactions WHERE post_id=$1 AND user_ID=$2`
 
 	var id, reaction int64

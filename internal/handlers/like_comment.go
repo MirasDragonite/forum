@@ -4,10 +4,9 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"forum/structs"
 	"net/http"
 	"strconv"
-
-	"forum/structs"
 )
 
 type dataFromButton struct {
@@ -64,9 +63,11 @@ func (h *Handler) likeComment(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("Here")
 
 	likes, dislikes, err := h.Service.Reaction.AllCommentReactions(int64(comment_id))
+	reaction, err := h.Service.Reaction.GetCommentReaction(user.Id, int64(comment_id))
 	res := structs.ResponseReaction{
 		Likes:    likes,
 		Dislikes: dislikes,
+		Reaction: reaction,
 	}
 	fmt.Println("Result likes/dis:", res)
 	w.Header().Set("Content-Type", "application/json")

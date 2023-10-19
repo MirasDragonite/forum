@@ -8,6 +8,8 @@ type Comment struct {
 	Content           string `json:"content"`
 	Like              int64  `json:"like"`
 	Dislike           int64  `json:"dislike"`
+	Liked             bool
+	Disliked          bool
 }
 
 func CreateComment(commentID int64, CommentAuthorID int64, PostID int64, Content string) *Comment {

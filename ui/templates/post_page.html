@@ -45,15 +45,23 @@
 
     <h3>Comments section</h3>
     <ul>
-      
+
         {{ range .Post.Comments}}
         <li>
             <p>{{ .Content }}</p>
             <form action="/like-comment/{{.CommentID}}" method="POST">
                 <br>
-                <button class="commButtonLike" type="submit" name="commButton" value="like" data-comment-id="{{.CommentID}}">like</button>
+              {{if .Liked}}
+              <button class="commButtonLike" type="submit" name="commButton" value="like" data-comment-id="{{.CommentID}}" style="background-color:green ;">like</button>
+              {{else}}
+              <button class="commButtonLike" type="submit" name="commButton" value="like" data-comment-id="{{.CommentID}}">like</button>
+              {{end}}
                 <span class="likes">{{.Like}}</span>
+                {{if .Disliked}}
+                <button class="commButtonDislike" type="submit" name="commButton" value="dislike" data-comment-id="{{.CommentID}}" style="background-color: red;">dislike</button>
+                {{else}}
                 <button class="commButtonDislike" type="submit" name="commButton" value="dislike" data-comment-id="{{.CommentID}}">dislike</button>
+                {{end}}
                 <span class="dislikes">{{.Dislike}}</span>
             </form>
         </li>
@@ -198,6 +206,7 @@ const likeButtonsComment = document.querySelectorAll(".commButtonLike");
 
             // Select the like and dislike counts for the specific comment
             const likesElement = likeButtonComment.nextElementSibling;
+           const dislikeButtonComment = likeButtonComment.nextElementSibling.nextElementSibling;
             const dislikesElement = likeButtonComment.nextElementSibling.nextElementSibling.nextElementSibling;
 
             // Send an AJAX request to update the reaction for the specific comment
@@ -215,7 +224,12 @@ const likeButtonsComment = document.querySelectorAll(".commButtonLike");
                 // Update the like and dislike counts for the specific comment
                 likesElement.textContent = data.likes;
                 dislikesElement.textContent = data.dislikes;
-
+                if (data.reaction === 1) {
+                    likeButtonComment.style.backgroundColor = "green";
+                    dislikeButtonComment.style.backgroundColor ="";
+                      } else {
+                        likeButtonComment.style.backgroundColor = ""; // Reset the background color
+                      }
                 // You can handle the response data here
             })
             .catch(error => {
@@ -231,6 +245,7 @@ const likeButtonsComment = document.querySelectorAll(".commButtonLike");
             const commentID = dislikeButtonComment.getAttribute("data-comment-id");
 
             // Select the like and dislike counts for the specific comment
+         const   likeButtonComment = dislikeButtonComment.previousElementSibling.previousElementSibling;
             const likesElement = dislikeButtonComment.previousElementSibling
             const dislikesElement = dislikeButtonComment.nextElementSibling;
 
@@ -249,7 +264,12 @@ const likeButtonsComment = document.querySelectorAll(".commButtonLike");
                 // Update the like and dislike counts for the specific comment
                 likesElement.textContent = data.likes;
                 dislikesElement.textContent = data.dislikes;
-
+                if (data.reaction === -1) {
+                    dislikeButtonComment.style.backgroundColor = "red";
+                    likeButtonComment.style.backgroundColor ="";
+                      } else {
+                        dislikeButtonComment.style.backgroundColor = ""; // Reset the background color
+                      }
                 // You can handle the response data here
             })
             .catch(error => {

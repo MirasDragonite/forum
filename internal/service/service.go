@@ -27,7 +27,7 @@ type PostRedact interface {
 
 type CommentRedact interface {
 	CreateComment(comm *structs.Comment) error
-	GetAllComments(postID int64) ([]structs.Comment, error)
+	GetAllComments(postID, userID int64) ([]structs.Comment, error)
 	GetCommentByID(commentID int64) (structs.Comment, error)
 }
 
@@ -37,6 +37,7 @@ type Reaction interface {
 	ReactComment(comment_id, user_id, value int64) error
 	AllCommentReactions(post_id int64) (int64, int64, error)
 	GetPostReaction(user_id, post_id int64) (int64, error)
+	GetCommentReaction(user_id, commentId int64) (int64, error)
 }
 
 type Service struct {
