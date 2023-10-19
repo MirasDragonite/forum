@@ -26,9 +26,17 @@
             
         {{end}}
         <form action="/like-post/{{.Post.Id}}" method="POST">
+        {{if .Post.Liked}}
+        <button class="like-button liked" type="submit" name="button" value="like" style="background-color: green;">like</button>
+        {{else}}
         <button class="like-button liked" type="submit" name="button" value="like">like</button>
+        {{end}}
                         <span class="likes">{{.Likes}}</span>
+                        {{if .Post.Disliked}}
+                        <button class="dislike-button not-disliked" type="submit" name="button" value="dislike" style="background-color:red ;">dislike</button>
+                        {{else}}
                         <button class="dislike-button not-disliked" type="submit" name="button" value="dislike">dislike</button>
+                        {{end}}
                         <span class="dislikes">{{.Dislikes}}</span>
                     </form>
         
@@ -98,6 +106,12 @@
                         // Update the like count in the HTML
                         likesElement.textContent = data.likes;
                         dislikesElement.textContent = data.dislikes;
+                        if (data.reaction === 1) {
+                           likeButton.style.backgroundColor = "green";
+                           dislikeButton.style.backgroundColor ="";
+                      } else {
+                     likeButton.style.backgroundColor = ""; // Reset the background color
+                      }
                         // You can handle the response data here
                     })
                     .catch(error => {
@@ -126,6 +140,12 @@
                         likesElement.textContent = data.likes;
                         dislikesElement.textContent = data.dislikes;
     
+                        if (data.reaction === -1) {
+                            dislikeButton.style.backgroundColor = "red";
+                            likeButton.style.backgroundColor ="";
+                      } else {
+                        dislikeButton.style.backgroundColor = ""; // Reset the background color
+                      }
                         // You can handle the response data here
                     })
                     .catch(error => {

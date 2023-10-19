@@ -84,3 +84,15 @@ func (r *PostReactionDB) DeleteReaction(post_id, user_id int64) error {
 	}
 	return nil
 }
+
+func (r *PostReactionDB) GetPostReaction(user_id, post_id int64) (int64, error) {
+	query := `SELECT id,reaction FROM post_reactions WHERE post_id=$1 AND user_ID=$2`
+
+	var id, reaction int64
+	row := r.db.QueryRow(query, post_id, user_id)
+	err := row.Scan(&id, &reaction)
+	if err != nil {
+		return 0, err
+	}
+	return reaction, nil
+}

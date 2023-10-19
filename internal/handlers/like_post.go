@@ -4,10 +4,9 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"forum/structs"
 	"net/http"
 	"strconv"
-
-	"forum/structs"
 )
 
 var input struct {
@@ -65,9 +64,11 @@ func (h *Handler) likePost(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		return
 	}
+	reaction, err := h.Service.Reaction.GetPostReaction(user.Id, int64(post_id))
 	res := structs.ResponseReaction{
 		Likes:    likes,
 		Dislikes: dislikes,
+		Reaction: reaction,
 	}
 	fmt.Println(res)
 	// link := fmt.Sprintf("/post/%v", post_id)

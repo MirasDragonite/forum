@@ -18,9 +18,11 @@ type Session struct {
 type Data struct {
 	Status int `json:"status"`
 }
+
 type ResponseReaction struct {
 	Likes    int64 `json:"likes"`
 	Dislikes int64 `json:"dislikes"`
+	Reaction int64 `json:"reaction"`
 }
 
 func CreateUser(username, email, password string) *User {

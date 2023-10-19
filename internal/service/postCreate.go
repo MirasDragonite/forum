@@ -3,10 +3,9 @@ package service
 import (
 	"errors"
 	"fmt"
-	"strconv"
-
 	"forum/internal/repository"
 	"forum/structs"
+	"strconv"
 )
 
 type PostRed struct {
@@ -38,8 +37,8 @@ func (repo *PostRed) GetUSerID(token string) (int64, error) {
 	return repo.repo.GetUSerID(token)
 }
 
-func (repo *PostRed) GetPostBy(from, value string) (*structs.Post, error) {
-	return repo.repo.GetPostBy(from, value)
+func (repo *PostRed) GetPostBy(from, value string, userID int64) (*structs.Post, error) {
+	return repo.repo.GetPostBy(from, value, userID)
 }
 
 func (repo *PostRed) GetUserName(token string) (string, error) {
@@ -73,11 +72,15 @@ func (repo *PostRed) GetAllLikedPosts(user_id int64) ([]structs.Post, error) {
 	var posts []structs.Post
 	for _, ch := range reactions {
 		ch_str := strconv.Itoa(int(ch.PostID))
-		post, err := repo.repo.GetPostBy("id", ch_str)
+		post, err := repo.repo.GetPostBy("id", ch_str, user_id)
 		if err != nil {
 			return nil, err
 		}
 		posts = append(posts, *post)
 	}
 	return posts, nil
+}
+
+func (repo *PostRed) GetAllUserPosts(user_id int64) ([]structs.Post, error) {
+	return repo.GetAllUserPosts(user_id)
 }

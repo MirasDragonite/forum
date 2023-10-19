@@ -30,10 +30,8 @@ func (comm *CommentRedactDB) CreateComment(comment *structs.Comment) error {
 }
 
 func (comm *CommentRedactDB) GetAllComments(postID int64) ([]structs.Comment, error) {
-	query := `SELECT * FROM comments WHERE comment_author_id=$1 AND post_id=$2 `
-
 	var comments []structs.Comment
-	query = `SELECT * from comments WHERE post_id = $1`
+	query := `SELECT * from comments WHERE post_id = $1`
 	rows, err := comm.db.Query(query, postID)
 	if err != nil {
 		return nil, err

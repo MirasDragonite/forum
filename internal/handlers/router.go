@@ -1,9 +1,8 @@
 package handlers
 
 import (
-	"net/http"
-
 	"forum/internal/service"
+	"net/http"
 )
 
 type Handler struct {
@@ -30,4 +29,5 @@ func (h *Handler) Router() {
 	h.Mux.Handle("/like-comment/", h.authorized(h.likeComment))
 	h.Mux.HandleFunc("/post/", h.PostPage)
 	h.Mux.HandleFunc("/liked-posts", h.likedPosts)
+	h.Mux.HandleFunc("/created-posts", h.createdPosts)
 }

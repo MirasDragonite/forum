@@ -3,11 +3,10 @@ package handlers
 import (
 	"encoding/json"
 	"fmt"
+	"forum/structs"
 	"net/http"
 	"strings"
 	"text/template"
-
-	"forum/structs"
 )
 
 func (h *Handler) PostPage(w http.ResponseWriter, r *http.Request) {
@@ -23,26 +22,26 @@ func (h *Handler) PostPage(w http.ResponseWriter, r *http.Request) {
 		h.errorHandler(w, r, 500)
 		return
 	}
+	cookie, err := r.Cookie("Token")
+	if err != nil {
+		// DONT DELETE THIS CODE LINES:
+		// http.Redirect(w, r, "/register", http.StatusSeeOther)
+		return
+	}
+
+	user_id, err := h.Service.PostRedact.GetUSerID(cookie.Value)
+	if err != nil {
+		h.logError(w, r, err, http.StatusBadRequest)
+		return
+	}
 	if r.Method == http.MethodPost {
 
-		cookie, err := r.Cookie("Token")
-		if err != nil {
-			// DONT DELETE THIS CODE LINES:
-			// http.Redirect(w, r, "/register", http.StatusSeeOther)
-			return
-		}
-
-		post, err := h.Service.PostRedact.GetPostBy("id", post_id)
+		post, err := h.Service.PostRedact.GetPostBy("id", post_id, user_id)
 		if err != nil {
 			h.logError(w, r, err, http.StatusBadRequest)
 			return
 		}
 
-		user_id, err := h.Service.PostRedact.GetUSerID(cookie.Value)
-		if err != nil {
-			h.logError(w, r, err, http.StatusBadRequest)
-			return
-		}
 		var comment *structs.Comment
 		err = json.NewDecoder(r.Body).Decode(&comment)
 		if err != nil {
@@ -76,7 +75,7 @@ func (h *Handler) PostPage(w http.ResponseWriter, r *http.Request) {
 
 	} else if r.Method == http.MethodGet {
 
-		post, err := h.Service.PostRedact.GetPostBy("id", post_id)
+		post, err := h.Service.PostRedact.GetPostBy("id", post_id, user_id)
 		if err != nil {
 			h.logError(w, r, err, http.StatusAccepted)
 			return
