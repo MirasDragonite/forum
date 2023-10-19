@@ -16,8 +16,8 @@ func NewCommentRedactDB(db *sql.DB) *CommentRedactDB {
 }
 
 func (comm *CommentRedactDB) CreateComment(comment *structs.Comment) error {
-	query := `INSERT INTO comments(comment_author_id, post_id, content, like, dislike) VALUES ($1, $2, $3, $4, $5) RETURNING id`
-	result, err := comm.db.Exec(query, comment.CommentAuthorID, comment.PostID, comment.Content, comment.Like, comment.Dislike)
+	query := `INSERT INTO comments(comment_author_id,commentAuthorName, post_id, content, like, dislike) VALUES ($1, $2, $3, $4, $5,$6) RETURNING id`
+	result, err := comm.db.Exec(query, comment.CommentAuthorID, &comment.CommentAuthorName, comment.PostID, comment.Content, comment.Like, comment.Dislike)
 	if err != nil {
 		return errors.New("Error: cannot create new comment, Check CreateComment()")
 	}
@@ -38,7 +38,7 @@ func (comm *CommentRedactDB) GetAllComments(postID, userID int64) ([]structs.Com
 	}
 	for rows.Next() {
 		var comment structs.Comment
-		err := rows.Scan(&comment.CommentID, &comment.CommentAuthorID, &comment.PostID, &comment.Content, &comment.Like, &comment.Dislike)
+		err := rows.Scan(&comment.CommentID, &comment.CommentAuthorID, &comment.CommentAuthorName, &comment.PostID, &comment.Content, &comment.Like, &comment.Dislike)
 		if err != nil {
 			return nil, err
 		}
@@ -78,7 +78,7 @@ func (comm *CommentRedactDB) GetCommentByID(commentID int64) (structs.Comment, e
 	query := `SELECT * FROM comments WHERE id=$1`
 	var comment structs.Comment
 	row := comm.db.QueryRow(query, &commentID)
-	err := row.Scan(&comment.CommentID, &comment.CommentAuthorID, &comment.PostID, &comment.Content, &comment.Like, &comment.Dislike)
+	err := row.Scan(&comment.CommentID, &comment.CommentAuthorID, &comment.CommentAuthorName, &comment.PostID, &comment.Content, &comment.Like, &comment.Dislike)
 	if err != nil {
 		return structs.Comment{}, err
 	}

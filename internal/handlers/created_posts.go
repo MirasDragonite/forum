@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"errors"
 	"fmt"
 	"net/http"
 	"text/template"
@@ -10,7 +11,10 @@ func (h *Handler) createdPosts(w http.ResponseWriter, r *http.Request) {
 	if r.URL.Path != "/created-posts" {
 		return
 	}
-
+	if r.Method != http.MethodGet {
+		h.logError(w, r, errors.New("Wrong Method"), http.StatusMethodNotAllowed)
+		return
+	}
 	ts, err := template.ParseFiles("./ui/templates/created_posts.html")
 	if err != nil {
 		fmt.Println("HGF")

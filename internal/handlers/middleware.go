@@ -51,7 +51,7 @@ func (h *Handler) isNotauthorized(next http.HandlerFunc) http.Handler {
 		}
 		if cookie.Expires.Before(time.Now()) {
 			h.infoLog("Token time not expired")
-			http.Redirect(w, r, "/profile", http.StatusSeeOther)
+			http.Redirect(w, r, "/", http.StatusSeeOther)
 			return
 		}
 		h.infoLog("Token is available")

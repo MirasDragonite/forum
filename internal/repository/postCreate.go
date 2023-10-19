@@ -79,7 +79,7 @@ func (pr *PostRedactDB) GetPostBy(from, value string, user_id int64) (*structs.P
 		post.Topic = strings.Split(post.TopicString, "|")
 		for rows.Next() {
 			var comment structs.Comment
-			err := rows.Scan(&comment.CommentID, &comment.CommentAuthorID, &comment.PostID, &comment.Content, &comment.Like, &comment.Dislike)
+			err := rows.Scan(&comment.CommentID, &comment.CommentAuthorID, &comment.CommentAuthorName, &comment.PostID, &comment.Content, &comment.Like, &comment.Dislike)
 			if err != nil {
 				return &structs.Post{}, err
 			}
@@ -105,7 +105,7 @@ func (pr *PostRedactDB) GetPostBy(from, value string, user_id int64) (*structs.P
 		post.Topic = strings.Split(post.TopicString, "|")
 		for rows.Next() {
 			var comment structs.Comment
-			err := rows.Scan(&comment.CommentID, &comment.CommentAuthorID, &comment.PostID, &comment.Content, &comment.Like, &comment.Dislike)
+			err := rows.Scan(&comment.CommentID, &comment.CommentAuthorID, &comment.CommentAuthorName, &comment.PostID, &comment.Content, &comment.Like, &comment.Dislike)
 			if err != nil {
 				return &structs.Post{}, err
 			}

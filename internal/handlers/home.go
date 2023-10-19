@@ -1,12 +1,14 @@
 package handlers
 
 import (
+	"errors"
 	"net/http"
 	"text/template"
 )
 
 func (h *Handler) home(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodGet {
+		h.logError(w, r, errors.New("Wrong Method"), http.StatusMethodNotAllowed)
 		return
 	}
 	if r.URL.Path != "/" {

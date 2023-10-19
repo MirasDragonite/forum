@@ -48,9 +48,11 @@
 
         {{ range .Post.Comments}}
         <li>
+            <p> {{ .CommentAuthorName }}</p>
             <p>{{ .Content }}</p>
             <form action="/like-comment/{{.CommentID}}" method="POST">
                 <br>
+
               {{if .Liked}}
               <button class="commButtonLike" type="submit" name="commButton" value="like" data-comment-id="{{.CommentID}}" style="background-color:green ;">like</button>
               {{else}}

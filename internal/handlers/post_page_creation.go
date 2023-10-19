@@ -2,12 +2,12 @@ package handlers
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
+	"forum/structs"
 	"net/http"
 	"strings"
 	"text/template"
-
-	"forum/structs"
 )
 
 func (h *Handler) PostPageCreate(w http.ResponseWriter, r *http.Request) {
@@ -32,12 +32,14 @@ func (h *Handler) PostPageCreate(w http.ResponseWriter, r *http.Request) {
 			fmt.Println("HERE", err.Error())
 			return
 		}
+
 		post.Content = strings.TrimSpace(post.Content)
 		post.Title = strings.TrimSpace(post.Title)
 		if len(post.Content) == 0 || len(post.Title) == 0 {
 			h.errorHandler(w, r, http.StatusBadRequest)
 			return
 		}
+
 		topicStr := ""
 		for _, topic := range post.Topic {
 			topicStr += topic + "|"
@@ -49,7 +51,6 @@ func (h *Handler) PostPageCreate(w http.ResponseWriter, r *http.Request) {
 			post.TopicString = topicStr
 		}
 
-		fmt.Println("POST:", post)
 		post.PostAuthorName, err = h.Service.PostRedact.GetUserName(cookie.Value)
 		if err != nil {
 			h.logError(w, r, err, http.StatusInternalServerError)
@@ -57,13 +58,10 @@ func (h *Handler) PostPageCreate(w http.ResponseWriter, r *http.Request) {
 		}
 
 		err = h.Service.PostRedact.CreatePost(post, cookie.Value)
-		// DONT DELETE THIS CODE LINES:
-		// urlRedirect := fmt.Sprintf("/post/%v", post.Id)
-		// // http.Redirect(w, r, urlRedirect, http.StatusSeeOther)
 		ok := structs.Data{
 			Status: int(post.Id),
 		}
-		fmt.Println(ok)
+
 		w.Header().Set("Content-Type", "application/json")
 
 		json.NewEncoder(w).Encode(ok)
@@ -86,6 +84,7 @@ func (h *Handler) PostPageCreate(w http.ResponseWriter, r *http.Request) {
 
 		tmp.Execute(w, user)
 	} else {
-		w.Write([]byte("internal Server Error"))
+		h.logError(w, r, errors.New("Wrong Method"), http.StatusMethodNotAllowed)
+		return
 	}
 }

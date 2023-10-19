@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
 	"forum/structs"
 	"net/http"
@@ -24,16 +25,16 @@ func (h *Handler) PostPage(w http.ResponseWriter, r *http.Request) {
 	}
 	cookie, err := r.Cookie("Token")
 	if err != nil {
-		// DONT DELETE THIS CODE LINES:
-		// http.Redirect(w, r, "/register", http.StatusSeeOther)
+		h.logError(w, r, errors.New("Wrong Method"), http.StatusUnauthorized)
+		return
+
+	}
+	user_id, err := h.Service.PostRedact.GetUSerID(cookie.Value)
+	if err != nil {
+		h.logError(w, r, err, http.StatusInternalServerError)
 		return
 	}
 
-	user_id, err := h.Service.PostRedact.GetUSerID(cookie.Value)
-	if err != nil {
-		h.logError(w, r, err, http.StatusBadRequest)
-		return
-	}
 	if r.Method == http.MethodPost {
 
 		post, err := h.Service.PostRedact.GetPostBy("id", post_id, user_id)
@@ -53,7 +54,8 @@ func (h *Handler) PostPage(w http.ResponseWriter, r *http.Request) {
 		comment.Like = 0
 		comment.CommentAuthorID = user_id
 		comment.PostID = post.Id
-
+		user, err := h.Service.Authorization.GetUserByToken(cookie.Value)
+		comment.CommentAuthorName = user.Username
 		post.Comments = append(post.Comments, *comment)
 		err = h.Service.CommentRedact.CreateComment(comment)
 		if err != nil {
@@ -64,11 +66,10 @@ func (h *Handler) PostPage(w http.ResponseWriter, r *http.Request) {
 		res := &structs.Data{
 			Status: int(comment.CommentID),
 		}
-		fmt.Println("RES:", res)
+
 		w.Header().Set("Content-Type", "application/json")
 		err = json.NewEncoder(w).Encode(&res)
 		if err != nil {
-			fmt.Println("error")
 			return
 		}
 		tmp.Execute(w, post)
@@ -93,7 +94,6 @@ func (h *Handler) PostPage(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
-		fmt.Println("cOMMENTs:", comments)
 		post.Comments = comments
 
 		result := map[string]interface{}{
@@ -103,7 +103,7 @@ func (h *Handler) PostPage(w http.ResponseWriter, r *http.Request) {
 		}
 		tmp.Execute(w, result)
 	} else {
-		fmt.Println("else here")
-		w.Write([]byte("internal Server Error"))
+		h.logError(w, r, errors.New("Wrong Method"), http.StatusMethodNotAllowed)
+		return
 	}
 }

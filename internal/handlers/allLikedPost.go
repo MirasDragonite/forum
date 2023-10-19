@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"errors"
 	"fmt"
 	"net/http"
 	"text/template"
@@ -8,6 +9,10 @@ import (
 
 func (h *Handler) likedPosts(w http.ResponseWriter, r *http.Request) {
 	if r.URL.Path != "/liked-posts" {
+		return
+	}
+	if r.Method != http.MethodGet {
+		h.logError(w, r, errors.New("Wrong Method"), http.StatusMethodNotAllowed)
 		return
 	}
 	fmt.Println("GF")
