@@ -82,5 +82,5 @@ func (repo *PostRed) GetAllLikedPosts(user_id int64) ([]structs.Post, error) {
 }
 
 func (repo *PostRed) GetAllUserPosts(user_id int64) ([]structs.Post, error) {
-	return repo.GetAllUserPosts(user_id)
+	return repo.repo.GetAllUserPosts(user_id)
 }
