@@ -2,10 +2,9 @@ package handlers
 
 import (
 	"encoding/json"
+	"forum/structs"
 	"net/http"
 	"text/template"
-
-	"forum/structs"
 )
 
 // logger

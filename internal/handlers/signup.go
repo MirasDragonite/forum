@@ -3,10 +3,9 @@ package handlers
 import (
 	"encoding/json"
 	"fmt"
+	"forum/structs"
 	"net/http"
 	"text/template"
-
-	"forum/structs"
 )
 
 func (h *Handler) signup(w http.ResponseWriter, r *http.Request) {

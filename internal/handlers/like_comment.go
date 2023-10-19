@@ -27,7 +27,6 @@ func (h *Handler) likeComment(w http.ResponseWriter, r *http.Request) {
 	case "dislike":
 		input.Reaction = -1
 	default:
-
 		h.logError(w, r, errors.New("No like"), http.StatusBadRequest)
 		return
 	}
