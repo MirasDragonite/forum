@@ -3,7 +3,6 @@ package handlers
 import (
 	"encoding/json"
 	"errors"
-	"fmt"
 	"forum/structs"
 	"net/http"
 	"strings"
@@ -29,14 +28,14 @@ func (h *Handler) PostPageCreate(w http.ResponseWriter, r *http.Request) {
 
 		err = json.NewDecoder(r.Body).Decode(&post)
 		if err != nil {
-			fmt.Println("HERE", err.Error())
+			h.logError(w, r, errors.New("Wrong Method"), http.StatusBadRequest)
 			return
 		}
 
 		post.Content = strings.TrimSpace(post.Content)
 		post.Title = strings.TrimSpace(post.Title)
 		if len(post.Content) == 0 || len(post.Title) == 0 {
-			h.errorHandler(w, r, http.StatusBadRequest)
+			h.logError(w, r, errors.New("Can't be empty"), http.StatusBadRequest)
 			return
 		}
 
@@ -58,13 +57,21 @@ func (h *Handler) PostPageCreate(w http.ResponseWriter, r *http.Request) {
 		}
 
 		err = h.Service.PostRedact.CreatePost(post, cookie.Value)
+		if err != nil {
+			h.logError(w, r, errors.New("Wrong Method"), http.StatusInternalServerError)
+			return
+		}
 		ok := structs.Data{
 			Status: int(post.Id),
 		}
 
 		w.Header().Set("Content-Type", "application/json")
 
-		json.NewEncoder(w).Encode(ok)
+		err = json.NewEncoder(w).Encode(ok)
+		if err != nil {
+			h.logError(w, r, errors.New("Wrong Method"), http.StatusInternalServerError)
+			return
+		}
 		return
 
 	} else if r.Method == http.MethodGet {

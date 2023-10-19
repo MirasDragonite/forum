@@ -27,6 +27,6 @@ func (h *Handler) Router() {
 	h.Mux.Handle("/like-post/", h.authorized(h.likePost))
 	h.Mux.Handle("/like-comment/", h.authorized(h.likeComment))
 	h.Mux.HandleFunc("/post/", h.PostPage)
-	h.Mux.HandleFunc("/liked-posts", h.likedPosts)
-	h.Mux.HandleFunc("/created-posts", h.createdPosts)
+	h.Mux.Handle("/liked-posts", h.authorized(h.likedPosts))
+	h.Mux.Handle("/created-posts", h.authorized(h.createdPosts))
 }

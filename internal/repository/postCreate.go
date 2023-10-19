@@ -115,25 +115,27 @@ func (pr *PostRedactDB) GetPostBy(from, value string, user_id int64) (*structs.P
 		post.Comments = comments
 	}
 
-	query := `SELECT id,reaction FROM post_reactions WHERE post_id=$1 AND user_ID=$2`
+	if user_id != 0 {
+		query := `SELECT id,reaction FROM post_reactions WHERE post_id=$1 AND user_ID=$2`
 
-	var id, reaction int64
-	row := pr.db.QueryRow(query, post.Id, user_id)
-	err := row.Scan(&id, &reaction)
-	if err != nil {
-		if err == sql.ErrNoRows {
-			post.Liked = false
-			post.Disliked = false
-		} else {
-			return nil, err
+		var id, reaction int64
+		row := pr.db.QueryRow(query, post.Id, user_id)
+		err := row.Scan(&id, &reaction)
+		if err != nil {
+			if err == sql.ErrNoRows {
+				post.Liked = false
+				post.Disliked = false
+			} else {
+				return nil, err
+			}
 		}
-	}
-	if reaction == 1 {
-		post.Liked = true
-		post.Disliked = false
-	} else if reaction == -1 {
-		post.Liked = false
-		post.Disliked = true
+		if reaction == 1 {
+			post.Liked = true
+			post.Disliked = false
+		} else if reaction == -1 {
+			post.Liked = false
+			post.Disliked = true
+		}
 	}
 	return &post, nil
 }

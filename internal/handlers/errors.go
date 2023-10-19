@@ -1,6 +1,8 @@
 package handlers
 
 import (
+	"encoding/json"
+	"forum/structs"
 	"net/http"
 	"text/template"
 )
@@ -10,6 +12,7 @@ const (
 )
 
 func (h *Handler) errorHandler(w http.ResponseWriter, r *http.Request, status int) {
+	var resp structs.Data
 	w.WriteHeader(status)
 	errs := "404"
 	switch status {
@@ -22,7 +25,10 @@ func (h *Handler) errorHandler(w http.ResponseWriter, r *http.Request, status in
 	case 500:
 		errs = "500"
 	case 401:
-		http.Redirect(w, r, "/register", http.StatusSeeOther)
+		w.Header().Set("Content-Type", "application/json")
+		resp.Status = 401
+		json.NewEncoder(w).Encode(resp)
+
 		return
 
 	}

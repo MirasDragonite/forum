@@ -23,19 +23,21 @@ func (h *Handler) PostPage(w http.ResponseWriter, r *http.Request) {
 		h.errorHandler(w, r, 500)
 		return
 	}
-	cookie, err := r.Cookie("Token")
-	if err != nil {
-		h.logError(w, r, errors.New("Wrong Method"), http.StatusUnauthorized)
-		return
-
-	}
-	user_id, err := h.Service.PostRedact.GetUSerID(cookie.Value)
-	if err != nil {
-		h.logError(w, r, err, http.StatusInternalServerError)
-		return
-	}
 
 	if r.Method == http.MethodPost {
+		cookie, err := r.Cookie("Token")
+		if err != nil {
+			fmt.Println("POST METHOD")
+			fmt.Println(err.Error)
+			h.logError(w, r, errors.New("Wrong Method"), http.StatusUnauthorized)
+			return
+
+		}
+		user_id, err := h.Service.PostRedact.GetUSerID(cookie.Value)
+		if err != nil {
+			h.logError(w, r, err, http.StatusInternalServerError)
+			return
+		}
 
 		post, err := h.Service.PostRedact.GetPostBy("id", post_id, user_id)
 		if err != nil {
@@ -75,22 +77,34 @@ func (h *Handler) PostPage(w http.ResponseWriter, r *http.Request) {
 		tmp.Execute(w, post)
 
 	} else if r.Method == http.MethodGet {
+		var user_id int64
+		cookie, err := r.Cookie("Token")
+
+		if err == nil {
+			user_id, err = h.Service.PostRedact.GetUSerID(cookie.Value)
+			if err != nil {
+				h.logError(w, r, err, http.StatusInternalServerError)
+				return
+			}
+		} else {
+			user_id = 0
+		}
 
 		post, err := h.Service.PostRedact.GetPostBy("id", post_id, user_id)
 		if err != nil {
-			h.logError(w, r, err, http.StatusAccepted)
+			h.logError(w, r, err, http.StatusBadRequest)
 			return
 		}
 
 		likes, dislikes, err := h.Service.Reaction.AllPostReactions(post.Id)
 		if err != nil {
-			fmt.Println(err.Error())
+			h.logError(w, r, err, http.StatusInternalServerError)
 			return
 		}
 
 		comments, err := h.Service.CommentRedact.GetAllComments(post.Id, user_id)
 		if err != nil {
-			fmt.Println(err.Error())
+			h.logError(w, r, err, http.StatusInternalServerError)
 			return
 		}
 
