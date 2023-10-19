@@ -178,7 +178,7 @@ func (pr *PostRedactDB) GetAllLikedPosts(user_id int64) ([]structs.PostReaction,
 
 	var posts []structs.PostReaction
 
-	rows, err := pr.db.Query(query)
+	rows, err := pr.db.Query(query, &user_id)
 	if err != nil {
 		return nil, err
 	}

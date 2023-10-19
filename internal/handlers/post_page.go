@@ -73,7 +73,6 @@ func (h *Handler) PostPage(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 		tmp.Execute(w, post)
-		return
 
 	} else if r.Method == http.MethodGet {
 
