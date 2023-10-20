@@ -20,7 +20,7 @@ func (h *Handler) Router() {
 	h.Mux.Handle("/static/", http.StripPrefix("/static", fileServer))
 	h.Mux.HandleFunc("/", h.home)
 	// h.Mux.Handle("/signin", h.isNotauthorized(h.signin))
-	h.Mux.HandleFunc("/signin", h.signin)
+	h.Mux.Handle("/signin", h.isNotauthorized(h.signin))
 	h.Mux.Handle("/register", h.isNotauthorized(h.signup))
 	h.Mux.Handle("/logout", h.authorized(h.logOut))
 	h.Mux.Handle("/submit-post", h.authorized(h.PostPageCreate))

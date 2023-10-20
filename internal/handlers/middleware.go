@@ -62,6 +62,19 @@ func (h *Handler) isNotauthorized(next http.HandlerFunc) http.Handler {
 			}
 
 		}
+		_, err = h.Service.Authorization.GetUserByToken(cookie.Value)
+		if err != nil {
+			fmt.Println(err.Error())
+			cookie.Name = "Token"
+			cookie.Value = ""
+			cookie.Path = "/"
+			cookie.MaxAge = -1
+			cookie.HttpOnly = false
+			http.SetCookie(w, cookie)
+			next.ServeHTTP(w, r)
+			return
+		}
+
 		if cookie.Expires.Before(time.Now()) {
 			h.infoLog("Token time not expired")
 			http.Redirect(w, r, "/", http.StatusSeeOther)
