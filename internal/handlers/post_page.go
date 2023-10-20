@@ -3,7 +3,6 @@ package handlers
 import (
 	"encoding/json"
 	"errors"
-	"fmt"
 	"forum/structs"
 	"net/http"
 	"strings"
@@ -17,18 +16,15 @@ func (h *Handler) PostPage(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	tmp, err := template.ParseFiles("./ui/templates/post_page.html")
-	// h.logError(w, r, err, http.StatusInternalServerError)
 	if err != nil {
-		fmt.Println(err.Error())
-		h.errorHandler(w, r, 500)
+		h.logError(w, r, err, http.StatusInternalServerError)
+
 		return
 	}
 
 	if r.Method == http.MethodPost {
 		cookie, err := r.Cookie("Token")
 		if err != nil {
-			fmt.Println("POST METHOD")
-			fmt.Println(err.Error)
 			h.logError(w, r, errors.New("Wrong Method"), http.StatusUnauthorized)
 			return
 
@@ -41,7 +37,7 @@ func (h *Handler) PostPage(w http.ResponseWriter, r *http.Request) {
 
 		post, err := h.Service.PostRedact.GetPostBy("id", post_id, user_id)
 		if err != nil {
-			h.logError(w, r, err, http.StatusBadRequest)
+			h.logError(w, r, err, http.StatusNotFound)
 			return
 		}
 
@@ -92,7 +88,7 @@ func (h *Handler) PostPage(w http.ResponseWriter, r *http.Request) {
 
 		post, err := h.Service.PostRedact.GetPostBy("id", post_id, user_id)
 		if err != nil {
-			h.logError(w, r, err, http.StatusBadRequest)
+			h.logError(w, r, err, http.StatusNotFound)
 			return
 		}
 
