@@ -81,10 +81,10 @@ func (h *Handler) PostPage(w http.ResponseWriter, r *http.Request) {
 		cookie, err := r.Cookie("Token")
 
 		if err == nil {
+
 			user_id, err = h.Service.PostRedact.GetUSerID(cookie.Value)
 			if err != nil {
-				h.logError(w, r, err, http.StatusInternalServerError)
-				return
+				user_id = 0
 			}
 		} else {
 			user_id = 0

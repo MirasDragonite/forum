@@ -1,5 +1,4 @@
-[INFO]: 2023/10/20 12:53:05 log.go:17: Token time not expired
- present
+[ERROR]: 2023/10/20 14:58:05 log.go:29: http: named cookie not present
 .email
  no such file or directory
 ot a pointer

@@ -26,7 +26,7 @@ func (h *Handler) Router() {
 	h.Mux.Handle("/submit-post", h.authorized(h.PostPageCreate))
 	h.Mux.Handle("/like-post/", h.authorized(h.likePost))
 	h.Mux.Handle("/like-comment/", h.authorized(h.likeComment))
-	h.Mux.HandleFunc("/post/", h.PostPage)
+	h.Mux.Handle("/post/", h.tokenAvilableChecker(h.PostPage))
 	h.Mux.Handle("/liked-posts", h.authorized(h.likedPosts))
 	h.Mux.Handle("/created-posts", h.authorized(h.createdPosts))
 }
