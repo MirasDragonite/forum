@@ -7,16 +7,15 @@ import (
 	"text/template"
 )
 
-func (h *Handler) likedPosts(w http.ResponseWriter, r *http.Request) {
-	if r.URL.Path != "/liked-posts" {
+func (h *Handler) createdPosts(w http.ResponseWriter, r *http.Request) {
+	if r.URL.Path != "/created-posts" {
 		return
 	}
 	if r.Method != http.MethodGet {
 		h.logError(w, r, errors.New("Wrong Method"), http.StatusMethodNotAllowed)
 		return
 	}
-	fmt.Println("GF")
-	ts, err := template.ParseFiles("./ui/templates/liked_postss.html")
+	ts, err := template.ParseFiles("./ui/templates/created_posts.html")
 	if err != nil {
 		fmt.Println("HGF")
 		fmt.Println(err.Error())
@@ -34,8 +33,8 @@ func (h *Handler) likedPosts(w http.ResponseWriter, r *http.Request) {
 		h.logError(w, r, err, http.StatusBadRequest)
 		return
 	}
-
-	posts, err := h.Service.PostRedact.GetAllLikedPosts(user_id)
+	fmt.Println("USERID:", user_id)
+	posts, err := h.Service.PostRedact.GetAllUserPosts(user_id)
 	if err != nil {
 		fmt.Println("HERE")
 		fmt.Println(err.Error())

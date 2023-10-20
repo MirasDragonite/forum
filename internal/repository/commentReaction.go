@@ -3,7 +3,6 @@ package repository
 import (
 	"database/sql"
 	"fmt"
-
 	"forum/structs"
 )
 
@@ -83,4 +82,16 @@ func (r *CommentReactionDB) DeleteReaction(comment_id, user_id int64) error {
 		return err
 	}
 	return nil
+}
+
+func (r *CommentReactionDB) GetCommentReaction(user_id, commentId int64) (int64, error) {
+	query := `SELECT id,reaction FROM comment_reactions WHERE comment_id=$1 AND user_ID=$2`
+
+	var id, reaction int64
+	row := r.db.QueryRow(query, commentId, user_id)
+	err := row.Scan(&id, &reaction)
+	if err != nil {
+		return 0, err
+	}
+	return reaction, nil
 }

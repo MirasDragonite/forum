@@ -2,7 +2,6 @@ package repository
 
 import (
 	"database/sql"
-
 	"forum/structs"
 )
 
@@ -22,18 +21,19 @@ type PostRedact interface {
 	CreatePost(post *structs.Post) error
 	GetUSerID(token string) (int64, error)
 	GetUserName(userID int64) (string, error)
-	GetPostBy(from, value string) (*structs.Post, error)
+	GetPostBy(from, value string, user_id int64) (*structs.Post, error)
 	LikePost(post *structs.Post) error
 	DislikePost(post *structs.Post) error
 	RedactContentPost(post *structs.Post) error
 	DeletePost(post *structs.Post) error
 	GetAllPosts() ([]structs.Post, error)
 	GetAllLikedPosts(user_id int64) ([]structs.PostReaction, error)
+	GetAllUserPosts(user_id int64) ([]structs.Post, error)
 }
 
 type CommentRedact interface {
 	CreateComment(comm *structs.Comment) error
-	GetAllComments(postID int64) ([]structs.Comment, error)
+	GetAllComments(postID, userID int64) ([]structs.Comment, error)
 	GetCommentByID(commentID int64) (structs.Comment, error)
 }
 
@@ -43,6 +43,7 @@ type PostReaction interface {
 	CreateReaction(post_id, user_id, value int64) error
 	DeleteReaction(post_id, user_id int64) error
 	AllReactions(post_id int64) (int64, int64, error)
+	GetPostReaction(user_id, post_id int64) (int64, error)
 }
 
 type CommentReaction interface {
@@ -51,7 +52,10 @@ type CommentReaction interface {
 	CreateReaction(comment_id, user_id, value int64) error
 	DeleteReaction(comment_id, user_id int64) error
 	AllReactions(comment_id int64) (int64, int64, error)
+	GetCommentReaction(user_id, commentId int64) (int64, error)
 }
+
+
 
 type Repository struct {
 	Authorization

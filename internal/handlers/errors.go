@@ -10,6 +10,7 @@ const (
 )
 
 func (h *Handler) errorHandler(w http.ResponseWriter, r *http.Request, status int) {
+	// var resp structs.Data
 	w.WriteHeader(status)
 	errs := "404"
 	switch status {
@@ -22,7 +23,7 @@ func (h *Handler) errorHandler(w http.ResponseWriter, r *http.Request, status in
 	case 500:
 		errs = "500"
 	case 401:
-		http.Redirect(w, r, "/register", http.StatusSeeOther)
+
 		return
 
 	}
@@ -30,6 +31,11 @@ func (h *Handler) errorHandler(w http.ResponseWriter, r *http.Request, status in
 	if err != nil {
 		w.Write([]byte("Internal Server Error"))
 		return
+	}
+	if status == 401 {
+		http.Redirect(w, r, "/", http.StatusSeeOther)
+		return
+
 	}
 	err = page.Execute(w, errs)
 	if err != nil {

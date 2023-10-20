@@ -2,11 +2,11 @@ package handlers
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
+	"forum/structs"
 	"net/http"
 	"text/template"
-
-	"forum/structs"
 )
 
 func (h *Handler) signup(w http.ResponseWriter, r *http.Request) {
@@ -37,9 +37,8 @@ func (h *Handler) signup(w http.ResponseWriter, r *http.Request) {
 		err = h.Service.Authorization.CreateUser(&input)
 
 		if err != nil {
-			fmt.Println("here1")
 			h.errorLog(err.Error())
-			h.errorHandler(w, r, 405)
+			h.errorHandler(w, r, 400)
 			return
 		}
 		ok.Status = 200
@@ -55,6 +54,7 @@ func (h *Handler) signup(w http.ResponseWriter, r *http.Request) {
 			h.logError(w, r, err, http.StatusInternalServerError)
 		}
 	} else {
-		w.Write([]byte("Internal server error"))
+		h.logError(w, r, errors.New("Wrong Method"), http.StatusMethodNotAllowed)
+		return
 	}
 }

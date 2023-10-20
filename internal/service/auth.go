@@ -4,11 +4,10 @@ import (
 	"database/sql"
 	"errors"
 	"fmt"
-	"net/http"
-	"time"
-
 	"forum/internal/repository"
 	"forum/structs"
+	"net/http"
+	"time"
 
 	uuid "github.com/satori/go.uuid"
 	"golang.org/x/crypto/bcrypt"
@@ -89,21 +88,22 @@ func (s *Auth) GetUser(email, password string) (*http.Cookie, error) {
 		return &cookie, nil
 
 	} else {
-		if session.ExpairedData < time.Now().Format(timeFormat) {
-			s.repo.UpdateToken(user, hashedToken, expirationInStringFormat)
-			return &cookie, nil
-		}
+		fmt.Println("Here")
+		// if session.ExpairedData < time.Now().Format(timeFormat) {
+		s.repo.UpdateToken(user, hashedToken, expirationInStringFormat)
+		cookie.Value = hashedToken
+		cookie.Expires = expiration
+		return &cookie, nil
+		// }
 
-		parsedTime, err := time.Parse(timeFormat, session.ExpairedData)
-		if err != nil {
-			return nil, err
-		}
-		cookie.Value = session.Token
-		cookie.Expires = parsedTime
+		// parsedTime, err := time.Parse(timeFormat, session.ExpairedData)
+		// if err != nil {
+		// 	return nil, err
+		// }
+		// cookie.Value = session.Token
+		// cookie.Expires = parsedTime
 
 	}
-
-	return &cookie, nil
 }
 
 func (s *Auth) DeleteToken(cookie *http.Cookie) error {

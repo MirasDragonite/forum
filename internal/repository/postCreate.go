@@ -4,10 +4,9 @@ import (
 	"database/sql"
 	"errors"
 	"fmt"
+	"forum/structs"
 	"strconv"
 	"strings"
-
-	"forum/structs"
 )
 
 type PostRedactDB struct {
@@ -56,7 +55,7 @@ func (pr *PostRedactDB) GetUserName(userID int64) (string, error) {
 	return userName, nil
 }
 
-func (pr *PostRedactDB) GetPostBy(from, value string) (*structs.Post, error) {
+func (pr *PostRedactDB) GetPostBy(from, value string, user_id int64) (*structs.Post, error) {
 	var post structs.Post
 	if from == "id" || from == "postAuthorID" {
 		value, err2 := strconv.Atoi(value)
@@ -80,10 +79,12 @@ func (pr *PostRedactDB) GetPostBy(from, value string) (*structs.Post, error) {
 		post.Topic = strings.Split(post.TopicString, "|")
 		for rows.Next() {
 			var comment structs.Comment
-			err := rows.Scan(&comment.CommentID, &comment.CommentAuthorID, &comment.PostID, &comment.Content, &comment.Like, &comment.Dislike)
+			err := rows.Scan(&comment.CommentID, &comment.CommentAuthorID, &comment.CommentAuthorName, &comment.PostID, &comment.Content, &comment.Like, &comment.Dislike)
 			if err != nil {
 				return &structs.Post{}, err
 			}
+
+			fmt.Println(comment)
 			comments = append(comments, comment)
 		}
 		post.Comments = comments
@@ -104,13 +105,37 @@ func (pr *PostRedactDB) GetPostBy(from, value string) (*structs.Post, error) {
 		post.Topic = strings.Split(post.TopicString, "|")
 		for rows.Next() {
 			var comment structs.Comment
-			err := rows.Scan(&comment.CommentID, &comment.CommentAuthorID, &comment.PostID, &comment.Content, &comment.Like, &comment.Dislike)
+			err := rows.Scan(&comment.CommentID, &comment.CommentAuthorID, &comment.CommentAuthorName, &comment.PostID, &comment.Content, &comment.Like, &comment.Dislike)
 			if err != nil {
 				return &structs.Post{}, err
 			}
+
 			comments = append(comments, comment)
 		}
 		post.Comments = comments
+	}
+
+	if user_id != 0 {
+		query := `SELECT id,reaction FROM post_reactions WHERE post_id=$1 AND user_ID=$2`
+
+		var id, reaction int64
+		row := pr.db.QueryRow(query, post.Id, user_id)
+		err := row.Scan(&id, &reaction)
+		if err != nil {
+			if err == sql.ErrNoRows {
+				post.Liked = false
+				post.Disliked = false
+			} else {
+				return nil, err
+			}
+		}
+		if reaction == 1 {
+			post.Liked = true
+			post.Disliked = false
+		} else if reaction == -1 {
+			post.Liked = false
+			post.Disliked = true
+		}
 	}
 	return &post, nil
 }
@@ -192,5 +217,27 @@ func (pr *PostRedactDB) GetAllLikedPosts(user_id int64) ([]structs.PostReaction,
 		posts = append(posts, post)
 	}
 
+	return posts, nil
+}
+
+func (pr *PostRedactDB) GetAllUserPosts(user_id int64) ([]structs.Post, error) {
+	query := `SELECT * FROM posts WHERE postAuthorID=$1 `
+
+	var posts []structs.Post
+
+	rows, err := pr.db.Query(query, &user_id)
+	if err != nil {
+		return nil, err
+	}
+	for rows.Next() {
+		var post structs.Post
+		err := rows.Scan(&post.Id, &post.PostAuthorID, &post.TopicString, &post.Title, &post.Content, &post.Like, &post.Dislike, &post.PostAuthorName)
+		if err != nil {
+			return nil, err
+		}
+		post.Topic = strings.Split(post.TopicString, "|")
+		posts = append(posts, post)
+	}
+	fmt.Println("POSTS IN REPO:", posts)
 	return posts, nil
 }

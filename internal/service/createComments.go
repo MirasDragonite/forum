@@ -2,10 +2,9 @@ package service
 
 import (
 	"fmt"
-	"strings"
-
 	"forum/internal/repository"
 	"forum/structs"
+	"strings"
 )
 
 type CommentRed struct {
@@ -28,8 +27,8 @@ func (repo *CommentRed) GetCommentByID(commentID int64) (structs.Comment, error)
 	return repo.repo.GetCommentByID(commentID)
 }
 
-func (repo *CommentRed) GetAllComments(postID int64) ([]structs.Comment, error) {
-	comments, err := repo.repo.GetAllComments(postID)
+func (repo *CommentRed) GetAllComments(postID, userID int64) ([]structs.Comment, error) {
+	comments, err := repo.repo.GetAllComments(postID, userID)
 	if err != nil {
 		return nil, err
 	}

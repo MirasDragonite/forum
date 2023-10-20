@@ -9,7 +9,9 @@ type Post struct {
 	Content        string   `json:"Content"`
 	Like           int64    `json:"Like"`
 	Dislike        int64    `json:"Dislike"`
-	TopicString          string 
+	TopicString    string
+	Liked          bool
+	Disliked       bool
 	Comments       []Comment
 }
 

@@ -70,3 +70,11 @@ func (s *ReactionService) AllPostReactions(post_id int64) (int64, int64, error) 
 func (s *ReactionService) AllCommentReactions(post_id int64) (int64, int64, error) {
 	return s.repo2.AllReactions(post_id)
 }
+
+func (s *ReactionService) GetPostReaction(user_id, post_id int64) (int64, error) {
+	return s.repo1.GetPostReaction(user_id, post_id)
+}
+
+func (s *ReactionService) GetCommentReaction(user_id, commentId int64) (int64, error) {
+	return s.repo2.GetCommentReaction(user_id, commentId)
+}

@@ -2,10 +2,10 @@ package handlers
 
 import (
 	"encoding/json"
+	"errors"
+	"forum/structs"
 	"net/http"
 	"text/template"
-
-	"forum/structs"
 )
 
 // logger
@@ -47,5 +47,7 @@ func (h *Handler) signin(w http.ResponseWriter, r *http.Request) {
 	} else if r.Method == http.MethodGet {
 		ts.Execute(w, "")
 	} else {
+		h.logError(w, r, errors.New("Wrong Method"), http.StatusMethodNotAllowed)
+		return
 	}
 }

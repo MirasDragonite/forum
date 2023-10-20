@@ -2,12 +2,11 @@ package handlers
 
 import (
 	"encoding/json"
-	"fmt"
+	"errors"
+	"forum/structs"
 	"net/http"
 	"strings"
 	"text/template"
-
-	"forum/structs"
 )
 
 func (h *Handler) PostPage(w http.ResponseWriter, r *http.Request) {
@@ -17,32 +16,31 @@ func (h *Handler) PostPage(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	tmp, err := template.ParseFiles("./ui/templates/post_page.html")
-	// h.logError(w, r, err, http.StatusInternalServerError)
 	if err != nil {
-		fmt.Println(err.Error())
-		h.errorHandler(w, r, 500)
+		h.logError(w, r, err, http.StatusInternalServerError)
+
 		return
 	}
-	if r.Method == http.MethodPost {
 
+	if r.Method == http.MethodPost {
 		cookie, err := r.Cookie("Token")
 		if err != nil {
-			// DONT DELETE THIS CODE LINES:
-			// http.Redirect(w, r, "/register", http.StatusSeeOther)
+			h.logError(w, r, errors.New("Wrong Method"), http.StatusUnauthorized)
 			return
-		}
 
-		post, err := h.Service.PostRedact.GetPostBy("id", post_id)
-		if err != nil {
-			h.logError(w, r, err, http.StatusBadRequest)
-			return
 		}
-
 		user_id, err := h.Service.PostRedact.GetUSerID(cookie.Value)
 		if err != nil {
-			h.logError(w, r, err, http.StatusBadRequest)
+			h.logError(w, r, err, http.StatusInternalServerError)
 			return
 		}
+
+		post, err := h.Service.PostRedact.GetPostBy("id", post_id, user_id)
+		if err != nil {
+			h.logError(w, r, err, http.StatusNotFound)
+			return
+		}
+
 		var comment *structs.Comment
 		err = json.NewDecoder(r.Body).Decode(&comment)
 		if err != nil {
@@ -54,7 +52,8 @@ func (h *Handler) PostPage(w http.ResponseWriter, r *http.Request) {
 		comment.Like = 0
 		comment.CommentAuthorID = user_id
 		comment.PostID = post.Id
-
+		user, err := h.Service.Authorization.GetUserByToken(cookie.Value)
+		comment.CommentAuthorName = user.Username
 		post.Comments = append(post.Comments, *comment)
 		err = h.Service.CommentRedact.CreateComment(comment)
 		if err != nil {
@@ -65,36 +64,46 @@ func (h *Handler) PostPage(w http.ResponseWriter, r *http.Request) {
 		res := &structs.Data{
 			Status: int(comment.CommentID),
 		}
-		fmt.Println("RES:", res)
+
 		w.Header().Set("Content-Type", "application/json")
 		err = json.NewEncoder(w).Encode(&res)
 		if err != nil {
-			fmt.Println("error")
 			return
 		}
 		tmp.Execute(w, post)
 
 	} else if r.Method == http.MethodGet {
+		var user_id int64
+		cookie, err := r.Cookie("Token")
 
-		post, err := h.Service.PostRedact.GetPostBy("id", post_id)
+		if err == nil {
+
+			user_id, err = h.Service.PostRedact.GetUSerID(cookie.Value)
+			if err != nil {
+				user_id = 0
+			}
+		} else {
+			user_id = 0
+		}
+
+		post, err := h.Service.PostRedact.GetPostBy("id", post_id, user_id)
 		if err != nil {
-			h.logError(w, r, err, http.StatusAccepted)
+			h.logError(w, r, err, http.StatusNotFound)
 			return
 		}
 
 		likes, dislikes, err := h.Service.Reaction.AllPostReactions(post.Id)
 		if err != nil {
-			fmt.Println(err.Error())
+			h.logError(w, r, err, http.StatusInternalServerError)
 			return
 		}
 
-		comments, err := h.Service.CommentRedact.GetAllComments(post.Id)
+		comments, err := h.Service.CommentRedact.GetAllComments(post.Id, user_id)
 		if err != nil {
-			fmt.Println(err.Error())
+			h.logError(w, r, err, http.StatusInternalServerError)
 			return
 		}
 
-		fmt.Println("cOMMENTs:", comments)
 		post.Comments = comments
 
 		result := map[string]interface{}{
@@ -104,7 +113,7 @@ func (h *Handler) PostPage(w http.ResponseWriter, r *http.Request) {
 		}
 		tmp.Execute(w, result)
 	} else {
-		fmt.Println("else here")
-		w.Write([]byte("internal Server Error"))
+		h.logError(w, r, errors.New("Wrong Method"), http.StatusMethodNotAllowed)
+		return
 	}
 }
