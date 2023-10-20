@@ -2,9 +2,10 @@ package service
 
 import (
 	"fmt"
+	"strings"
+
 	"forum/internal/repository"
 	"forum/structs"
-	"strings"
 )
 
 type CommentRed struct {
@@ -41,7 +42,6 @@ func (repo *CommentRed) GetAllComments(postID, userID int64) ([]structs.Comment,
 		likes, dislikes, err = repo.reaction.AllReactions(ch.CommentID)
 
 		if err != nil {
-			fmt.Println(err.Error)
 			return nil, err
 		}
 
