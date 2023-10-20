@@ -1,4 +1,4 @@
-[ERROR]: 2023/10/19 19:28:16 log.go:29: http: named cookie not present
+[ERROR]: 2023/10/20 12:10:13 log.go:29: http: named cookie not present
 .email
  no such file or directory
 ot a pointer

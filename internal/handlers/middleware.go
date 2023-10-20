@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"fmt"
 	"log"
 	"net/http"
 	"time"
@@ -14,6 +15,18 @@ func (h *Handler) authorized(next http.HandlerFunc) http.Handler {
 			http.Redirect(w, r, "/register", http.StatusSeeOther)
 			return
 
+		}
+		_, err = h.Service.Authorization.GetUserByToken(cookie.Value)
+		if err != nil {
+			fmt.Println(err.Error())
+			cookie.Name = "Token"
+			cookie.Value = ""
+			cookie.Path = "/"
+			cookie.MaxAge = -1
+			cookie.HttpOnly = false
+			http.SetCookie(w, cookie)
+			http.Redirect(w, r, "/register", http.StatusSeeOther)
+			return
 		}
 
 		if !cookie.Expires.Before(time.Now()) {
