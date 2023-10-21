@@ -1,6 +1,7 @@
-[INFO]: 2023/10/21 15:47:20 log.go:17: Token is available
+[INFO]: 2023/10/21 15:58:33 log.go:17: Token is available
  not present
-.email
+
+email
  no such file or directory
 ot a pointer
 s available
