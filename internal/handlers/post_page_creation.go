@@ -3,10 +3,11 @@ package handlers
 import (
 	"encoding/json"
 	"errors"
-	"forum/structs"
 	"net/http"
 	"strings"
 	"text/template"
+
+	"forum/structs"
 )
 
 func (h *Handler) PostPageCreate(w http.ResponseWriter, r *http.Request) {

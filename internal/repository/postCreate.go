@@ -4,9 +4,10 @@ import (
 	"database/sql"
 	"errors"
 	"fmt"
-	"forum/structs"
 	"strconv"
 	"strings"
+
+	"forum/structs"
 )
 
 type PostRedactDB struct {
@@ -236,6 +237,7 @@ func (pr *PostRedactDB) GetAllUserPosts(user_id int64) ([]structs.Post, error) {
 			return nil, err
 		}
 		post.Topic = strings.Split(post.TopicString, "|")
+
 		posts = append(posts, post)
 	}
 	fmt.Println("POSTS IN REPO:", posts)

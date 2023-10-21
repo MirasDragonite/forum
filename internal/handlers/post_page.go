@@ -1,12 +1,13 @@
 package handlers
 
 import (
-	"encoding/json"
 	"errors"
-	"forum/structs"
+	"fmt"
 	"net/http"
 	"strings"
 	"text/template"
+
+	"forum/structs"
 )
 
 func (h *Handler) PostPage(w http.ResponseWriter, r *http.Request) {
@@ -19,6 +20,12 @@ func (h *Handler) PostPage(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		h.logError(w, r, err, http.StatusInternalServerError)
 
+		return
+	}
+
+	err = r.ParseForm()
+	if err != nil {
+		h.logError(w, r, err, http.StatusInternalServerError)
 		return
 	}
 
@@ -35,18 +42,16 @@ func (h *Handler) PostPage(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
+		
 		post, err := h.Service.PostRedact.GetPostBy("id", post_id, user_id)
 		if err != nil {
 			h.logError(w, r, err, http.StatusNotFound)
 			return
 		}
 
-		var comment *structs.Comment
-		err = json.NewDecoder(r.Body).Decode(&comment)
-		if err != nil {
-			h.logError(w, r, err, http.StatusBadRequest)
-			return
-		}
+		comment := &structs.Comment{}
+
+		comment.Content = r.Form.Get("commentContent")
 
 		comment.Dislike = 0
 		comment.Like = 0
@@ -61,16 +66,10 @@ func (h *Handler) PostPage(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
-		res := &structs.Data{
-			Status: int(comment.CommentID),
-		}
-
-		w.Header().Set("Content-Type", "application/json")
-		err = json.NewEncoder(w).Encode(&res)
-		if err != nil {
-			return
-		}
+		link := fmt.Sprintf("/post/%v", post.Id)
+		http.Redirect(w, r, link, http.StatusSeeOther)
 		tmp.Execute(w, post)
+		return
 
 	} else if r.Method == http.MethodGet {
 		var user_id int64
