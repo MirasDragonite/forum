@@ -21,7 +21,11 @@ func (h *Handler) PostPageCreate(w http.ResponseWriter, r *http.Request) {
 		h.logError(w, r, err, http.StatusInternalServerError)
 		return
 	}
-
+	result := map[string]interface{}{
+		"User":   nil,
+		"Logged": nil,
+		"Empty":  nil,
+	}
 	if r.Method == http.MethodPost {
 		cookie, err := r.Cookie("Token")
 		h.logError(w, r, err, http.StatusInternalServerError)
@@ -36,7 +40,8 @@ func (h *Handler) PostPageCreate(w http.ResponseWriter, r *http.Request) {
 		post.Content = strings.TrimSpace(post.Content)
 		post.Title = strings.TrimSpace(post.Title)
 		if len(post.Content) == 0 || len(post.Title) == 0 {
-			h.logError(w, r, errors.New("Can't be empty"), http.StatusBadRequest)
+			result["Empty"] = true
+			tmp.Execute(w, result)
 			return
 		}
 
@@ -94,10 +99,8 @@ func (h *Handler) PostPageCreate(w http.ResponseWriter, r *http.Request) {
 		if user != nil {
 			logged = true
 		}
-		result := map[string]interface{}{
-			"User":   user,
-			"Logged": logged,
-		}
+		result["Logged"] = logged
+		result["User"] = user
 		tmp.Execute(w, result)
 	} else {
 		h.logError(w, r, errors.New("Wrong Method"), http.StatusMethodNotAllowed)

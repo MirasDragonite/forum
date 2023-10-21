@@ -48,7 +48,7 @@ func (h *Handler) signup(w http.ResponseWriter, r *http.Request) {
 		// 	json.NewEncoder(w).Encode(ok)
 		// 	h.logError(w, r, err, http.StatusBadRequest)
 		// 	return
-		// }
+		// }                              
 		fmt.Println(input)
 		err = h.Service.Authorization.CreateUser(&input)
 

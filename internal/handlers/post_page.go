@@ -28,7 +28,12 @@ func (h *Handler) PostPage(w http.ResponseWriter, r *http.Request) {
 		h.logError(w, r, err, http.StatusInternalServerError)
 		return
 	}
-
+	result := map[string]interface{}{
+		"Post":     nil,
+		"Likes":    nil,
+		"Dislikes": nil,
+		"Empty":    nil,
+	}
 	if r.Method == http.MethodPost {
 		cookie, err := r.Cookie("Token")
 		if err != nil {
@@ -62,8 +67,11 @@ func (h *Handler) PostPage(w http.ResponseWriter, r *http.Request) {
 		post.Comments = append(post.Comments, *comment)
 		err = h.Service.CommentRedact.CreateComment(comment)
 		if err != nil {
-			h.logError(w, r, err, http.StatusBadRequest)
-			return
+			if err.Error() == "Can't be empty" {
+			} else {
+				h.logError(w, r, err, http.StatusBadRequest)
+				return
+			}
 		}
 
 		link := fmt.Sprintf("/post/%v", post.Id)
@@ -104,12 +112,9 @@ func (h *Handler) PostPage(w http.ResponseWriter, r *http.Request) {
 		}
 
 		post.Comments = comments
-
-		result := map[string]interface{}{
-			"Post":     post,
-			"Likes":    likes,
-			"Dislikes": dislikes,
-		}
+		result["Post"] = post
+		result["Likes"] = likes
+		result["Dislikes"] = dislikes
 		tmp.Execute(w, result)
 	} else {
 		h.logError(w, r, errors.New("Wrong Method"), http.StatusMethodNotAllowed)

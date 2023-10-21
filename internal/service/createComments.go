@@ -1,6 +1,7 @@
 package service
 
 import (
+	"errors"
 	"fmt"
 	"strings"
 
@@ -19,7 +20,7 @@ func NewCommentRed(repo repository.CommentRedact, reaction repository.CommentRea
 
 func (repo *CommentRed) CreateComment(comm *structs.Comment) error {
 	if strings.TrimSpace(comm.Content) == "" {
-		return nil
+		return errors.New("Can't be empty")
 	}
 	return repo.repo.CreateComment(comm)
 }
