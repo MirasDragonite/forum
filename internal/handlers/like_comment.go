@@ -3,9 +3,10 @@ package handlers
 import (
 	"encoding/json"
 	"errors"
-	"forum/structs"
 	"net/http"
 	"strconv"
+
+	"forum/structs"
 )
 
 type dataFromButton struct {

@@ -1,4 +1,4 @@
-[INFO]: 2023/10/21 16:22:16 log.go:17: Token is available
+[INFO]: 2023/10/21 17:16:08 log.go:17: Token is available
  not present
 .email
  no such file or directory

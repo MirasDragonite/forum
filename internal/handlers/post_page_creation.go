@@ -89,8 +89,16 @@ func (h *Handler) PostPageCreate(w http.ResponseWriter, r *http.Request) {
 			h.logError(w, r, err, http.StatusInternalServerError)
 			return
 		}
+		logged := false
 
-		tmp.Execute(w, user)
+		if user != nil {
+			logged = true
+		}
+		result := map[string]interface{}{
+			"User":   user,
+			"Logged": logged,
+		}
+		tmp.Execute(w, result)
 	} else {
 		h.logError(w, r, errors.New("Wrong Method"), http.StatusMethodNotAllowed)
 		return

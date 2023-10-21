@@ -16,8 +16,13 @@
 <div id="title-container">
   <p class="line-1 anim-typewriter">&lt;/forum&gt;</p>
   <div class="imgContainer">
-    <img id="notificationImg" src="https://gagaru.club/uploads/posts/2023-06/1686068744_gagaru-club-p-kolokolchik-malenkii-vkontakte-1.png"></img>
-    <img id="logoutImg"src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSNKLd_50v-5_W2gtKHNz1cjjLivUIO2KQ_cA&usqp=CAU"  onclick="window.location.href='/logout';"></img>
+
+     <img id="notificationImg" src="https://gagaru.club/uploads/posts/2023-06/1686068744_gagaru-club-p-kolokolchik-malenkii-vkontakte-1.png"></img>
+           {{if .Logged}}
+           <img id="logoutImg"src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSNKLd_50v-5_W2gtKHNz1cjjLivUIO2KQ_cA&usqp=CAU"  onclick="window.location.href='/logout';"></img>
+           {{else}}
+          
+           {{end}}
   </div>
 </div>
       </div>
@@ -26,7 +31,7 @@
         <span><a href="/submit-post"> Create Post</a></span>
         <span><a href="/liked-posts"> Liked Posts</a></span>
         <span><a href="/created-posts">Created Posts</a></span>
-        <span><a href="/register"> Sign Up</a></span>
+       
       </div>
     </div>
   </nav>

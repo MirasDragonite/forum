@@ -42,7 +42,6 @@ func (h *Handler) PostPage(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
-		
 		post, err := h.Service.PostRedact.GetPostBy("id", post_id, user_id)
 		if err != nil {
 			h.logError(w, r, err, http.StatusNotFound)

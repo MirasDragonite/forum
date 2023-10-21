@@ -114,80 +114,10 @@
 
     <script>
         document.addEventListener("DOMContentLoaded", function () {
-            // const likeButton = document.querySelector(".like-button");
-            // const dislikeButton = document.querySelector(".dislike-button");
-            const likesElement = document.querySelector(".likes");
-            const dislikesElement = document.querySelector(".dislikes");
            
 
-            // if (likeButton) {
-            //     likeButton.addEventListener("click", function (event) {
-            //         event.preventDefault();
-    
-            //         // Send an AJAX request to update the reaction
-            //         fetch("/like-post/{{.Post.Id}}", {
-            //             method: "POST",
-            //             body: JSON.stringify({ reaction: "like" }),
-            //             headers: {
-            //                 "Content-Type": "application/json",
-            //             },
-            //         })
-            //         .then(response => response.json())
-            //         .then(data => {
-            //             console.log(data);
-    
-            //             // Update the like count in the HTML
-            //             likesElement.textContent = data.likes;
-            //             dislikesElement.textContent = data.dislikes;
-            //             if (data.reaction === 1) {
-            //                likeButton.style.backgroundColor = "green";
-            //                dislikeButton.style.backgroundColor ="";
-            //           } else {
-            //          likeButton.style.backgroundColor = ""; // Reset the background color
-            //           }
-            //             // You can handle the response data here
-            //         })
-            //         .catch(error => {
-            //             console.error(error);
-            //         });
-            //     });
-            // }
-    
-            // if (dislikeButton) {
-            //     dislikeButton.addEventListener("click", function (event) {
-            //         event.preventDefault();
-    
-            //         // Send an AJAX request to update the reaction
-            //         fetch("/like-post/{{.Post.Id}}", {
-            //             method: "POST",
-            //             body: JSON.stringify({ reaction: "dislike" }),
-            //             headers: {
-            //                 "Content-Type": "application/json",
-            //             },
-            //         })
-            //         .then(response => response.json())
-            //         .then(data => {
-            //             console.log(data);
-    
-            //             // Update the dislike count in the HTML
-            //             likesElement.textContent = data.likes;
-            //             dislikesElement.textContent = data.dislikes;
-    
-            //             if (data.reaction === -1) {
-            //                 dislikeButton.style.backgroundColor = "red";
-            //                 likeButton.style.backgroundColor ="";
-            //           } else {
-            //             dislikeButton.style.backgroundColor = ""; // Reset the background color
-            //           }
-            //             // You can handle the response data here
-            //         })
-            //         .catch(error => {
-            //             console.error(error);
-            //         });
-            //     });
-            // }
 
-            const commentSubmit = document.querySelector(".submitComment");
+    
             
 
 

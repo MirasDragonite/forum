@@ -4,6 +4,8 @@ import (
 	"errors"
 	"net/http"
 	"text/template"
+
+	"forum/structs"
 )
 
 func (h *Handler) home(w http.ResponseWriter, r *http.Request) {
@@ -12,7 +14,6 @@ func (h *Handler) home(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	if r.URL.Path != "/" {
-
 		h.errorHandler(w, r, http.StatusNotFound)
 		return
 	}
@@ -22,11 +23,28 @@ func (h *Handler) home(w http.ResponseWriter, r *http.Request) {
 		h.logError(w, r, err, http.StatusInternalServerError)
 		return
 	}
+	var user *structs.User
+	cookie, err := r.Cookie("Token")
+	if err != nil {
+	} else {
+		user, err = h.Service.Authorization.GetUserByToken(cookie.Value)
+		if err != nil {
+			user = nil
+		}
+	}
+
+	logged := false
+
+	if user != nil {
+		logged = true
+	}
 
 	posts, err := h.Service.PostRedact.GetAllPosts()
 
 	result := map[string]interface{}{
-		"Posts": posts,
+		"Posts":  posts,
+		"User":   user,
+		"Logged": logged,
 	}
 
 	ts.Execute(w, result)
