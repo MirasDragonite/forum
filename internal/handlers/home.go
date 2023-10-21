@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"errors"
+	"fmt"
 	"net/http"
 	"text/template"
 
@@ -40,7 +41,7 @@ func (h *Handler) home(w http.ResponseWriter, r *http.Request) {
 	}
 
 	posts, err := h.Service.PostRedact.GetAllPosts()
-
+	fmt.Println("POSTS:", posts)
 	result := map[string]interface{}{
 		"Posts":  posts,
 		"User":   user,
