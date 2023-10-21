@@ -47,6 +47,6 @@ func (h *Handler) home(w http.ResponseWriter, r *http.Request) {
 		"User":   user,
 		"Logged": logged,
 	}
-
+	fmt.Println(result)
 	ts.Execute(w, result)
 }

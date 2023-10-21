@@ -17,11 +17,11 @@
           <p class="line-1 anim-typewriter">&lt;/forum&gt;</p>
           <div class="imgContainer">
             <img id="notificationImg" src="https://gagaru.club/uploads/posts/2023-06/1686068744_gagaru-club-p-kolokolchik-malenkii-vkontakte-1.png"></img>
-           <!-- {{if .Logged}}
+           {{if .Logged}}
            <img id="logoutImg"src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSNKLd_50v-5_W2gtKHNz1cjjLivUIO2KQ_cA&usqp=CAU"  onclick="window.location.href='/logout';"></img>
            {{else}}
           
-           {{end}} -->
+           {{end}}
             
           </div>
 
@@ -36,11 +36,16 @@
     </div>
   </nav>
   
+  
   <div class="container">
     <span>
       <div class="profile-info">
         <img id="profilePhoto" src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png" alt="Profile Photo" style="max-width: 100px; max-height: 100px;">
+        {{if .User}}
         <p id="userName">Name:  {{.User.Username}}</p>
+        {{else}}
+        <p id="userName">Name:  </p>
+        {{end}}
       </div>
     </span>
     <div class="container-content">
@@ -84,10 +89,20 @@
         </div>
       </div>
 
+  {{if .Posts}}
+  <p>HEHEAHAHA</p>
+  {{range .Posts}}
+<div class="post-card">
+    <a href="/post/{{.Id}}" class="post-title">{{.Title}}</a>
+    <p class="post-author">Author: {{.PostAuthorName}}</p>
+    <p class="post-topics">Topics: {{.Topic}} </p>
+</div>
 
+  {{end}}
+
+  {{end}}
 </div>
 </span>
 </div>
-
 </body>
 </html>
