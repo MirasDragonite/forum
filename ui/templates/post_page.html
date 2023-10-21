@@ -3,9 +3,34 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@100&family=Oswald:wght@700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="../static/css/post_style.css">
     <title>Post Page</title>
 </head>
 <body>
+    <nav class="navbar navbar-inverse">
+        <div class="container-fluid">
+          <div class="navbar-header">
+            <div id="title-container">
+              <p class="line-1 anim-typewriter">&lt;/forum&gt;</p>
+              <div class="imgContainer">
+                <img id="notificationImg" src="https://gagaru.club/uploads/posts/2023-06/1686068744_gagaru-club-p-kolokolchik-malenkii-vkontakte-1.png"></img>
+                <img id="logoutImg"src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSNKLd_50v-5_W2gtKHNz1cjjLivUIO2KQ_cA&usqp=CAU"  onclick="window.location.href='/logout';"></img>
+              </div>
+    
+            </div>
+          </div>
+          <div class="top-bar">
+            <span><a href="/"> Home</a></span>
+            <span><a href="/submit-post"> Create Post</a></span>
+            <span><a href="/liked-posts"> Liked Posts</a></span>
+            <span><a href="/created-posts">Created Posts</a></span>
+            <span><a href="/register"> Sign Up</a></span>
+          </div>
+        </div>
+      </nav>
 
     {{if .Post}}
 
@@ -43,7 +68,7 @@
     </div>
 
 
-    <h3>Comments section</h3>
+    <h3 id="comm_title">Comments</h3>
     <ul>
 
         {{ range .Post.Comments}}
@@ -81,8 +106,6 @@
         <input type="text" name="commentContent"  class="commentContent" placeholder="Add a comment">
         <button class="submitComment" type="submit">Submit Comment</button>
     </form>
-
-    <button> <a href="/"> Home </a> </button>
     {{ else }}
     <p>Post not found.</p>
     {{ end }}
@@ -183,10 +206,10 @@ if (commentSubmit) {
                 "Content-Type": "application/json",
             },
         })
-        .then(response => response.json())
         .then(data => {
 
             console.log(data);
+            
             // You can handle the response data here
         })
         .catch(error => {

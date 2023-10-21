@@ -3,24 +3,27 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@100&family=Oswald:wght@700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="../static/css/sign_up_style.css">
     <title>Sign up</title>
 </head>
 <body>
     <nav class="navbar navbar-default">
         <div class="navbar-header">
-            <a class="navbar-brand" href="/">FORUM</a>
+            <div id="title-container">
+                <p class="line-1 anim-typewriter">Welcome to the &lt;/forum&gt;! </p>
+              </div>
         </div>
     </nav>
     <form method="POST" class="custom-form">
             <div class="form-row">
-                <h2 style="text-align:center">Login</h2>
-                <div class="column">
 
-                </div>
                 <div class="column">
                     <div class="form-group">
                         
-<label class='error'>{{.}}</label>
+<!-- <label class='error'>{{.}}</label> -->
 
                         <label for="username">Username:</label>
                         <input type="text" name="username" class="form-control" id="username" maxlength="20" placeholder="Enter username" required>
@@ -38,7 +41,7 @@
             </div>
             <div class="bottom-container">
                 <div class="row">
-                    New to forum? <a href="/signin" class="signip-link" role="button">Sign in</a>
+                    Don't have an account?  <a href="/signin" class="signip-link" role="button">Sign in</a>
                 </div>
             </div>
     </form>

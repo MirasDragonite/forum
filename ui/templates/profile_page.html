@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile-FORUM</title>
+</head>
+<body>
+  <nav class="navbar navbar-inverse">
+    <div class="container-fluid">
+      <div class="navbar-header">
+        <a class="navbar-brand" href="/">FORUM</a>
+      </div>
+      <span><a href="/logout">Logout</a></span>
+    </div>
+
+    <span class="user-info">
+        <image></image>
+        <p>Name: </p>
+        <p>Email: </p>
+        <button><a href="/settings">Settings</a></button>
+        <button><a href="/notitfications">Edit profile</a></button>
+    </span>
+    
+    <div class="actions">
+        <button>
+            <a href="/create-post">Create Post</a>
+        </button>
+        <form id="search-form" >
+            <input type="text" id="search" placeholder="Search" style="width: 250px;">
+            <button type="submit">Search</button>
+        </form>
+        <span class="filters">
+                <input type="checkbox" class="round-checkbox" id="likedCheckbox" checked>
+                <label class="checkbox-label" for="likedCheckbox"></label>
+                <label for="likedCheckbox">Liked posts</label>
+
+                <input type="checkbox" class="round-checkbox" id="myCheckbox" checked>
+                <label class="checkbox-label" for="myCheckbox"></label>
+                <label for="myCheckbox">My posts</label>
+
+                <input type="checkbox" class="round-checkbox" id="commentedCheckbox" checked>
+                <label class="checkbox-label" for="commentedCheckbox"></label>
+                <label for="commentedCheckbox">Commented posts</label>
+
+                <input type="checkbox" class="round-checkbox" id="javaCheckbox" checked>
+                <label class="checkbox-label" for="javaCheckbox"></label>
+                <label for="javaCheckbox">Commented Posts</label>
+                
+                <input type="checkbox" class="round-checkbox" id="kotlinCheckbox" checked>
+                <label class="checkbox-label" for="kotlinCheckbox"></label>
+                <label for="kotlinCheckbox">Kotlin</label>
+                
+                <input type="checkbox" class="round-checkbox" id="pythonCheckbox" checked>
+                <label class="checkbox-label" for="pythonCheckbox"></label>
+                <label for="pythonCheckbox">Python</label>
+                
+                <input type="checkbox" class="round-checkbox" id="golangCheckbox" checked>
+                <label class="checkbox-label" for="golangCheckbox"></label>
+                <label for="golangCheckbox">Golang</label>
+                
+                <input type="checkbox" class="round-checkbox" id="phpCheckbox" checked>
+                <label class="checkbox-label" for="phpCheckbox"></label>
+                <label for="phpCheckbox">PHP</label>
+                
+                <input type="checkbox" class="round-checkbox" id="javascriptCheckbox" checked>
+                <label class="checkbox-label" for="javascriptCheckbox"></label>
+                <label for="javascriptCheckbox">JavaScript</label>
+                
+                <input type="checkbox" class="round-checkbox" id="sqlCheckbox" checked>
+                <label class="checkbox-label" for="sqlCheckbox"></label>
+                <label for="sqlCheckbox">SQL</label>
+                
+        </span>
+    </div>
+  </nav>
+  <div class="panel posts">
+    <h1>POSTS HERE</h1>
+  </div>
+
+  <script>
+    document.getElementById('search-form').addEventListener('submit', function (e) {
+        e.preventDefault();
+        const searchInput = document.getElementById('search').value;
+        const likedCheckbox = document.getElementById('likedCheckbox').checked;
+        const myCheckbox = document.getElementById('myCheckbox').checked;
+        const commentedCheckbox = document.getElementById('commentedCheckbox').checked;
+        const javaCheckbox = document.getElementById('javaCheckbox').checked;
+        const kotlinCheckbox = document.getElementById('kotlinCheckbox').checked;
+        const pythonCheckbox = document.getElementById('pythonCheckbox').checked;
+        const golangCheckbox = document.getElementById('golangCheckbox').checked;
+        const phpCheckbox = document.getElementById('phpCheckbox').checked;
+        const javascriptCheckbox = document.getElementById('javascriptCheckbox').checked;
+        const sqlCheckbox = document.getElementById('sqlCheckbox').checked;
+
+        fetch('/api/search', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                search: searchInput,
+                liked: likedCheckbox,
+                myposts: myCheckbox,
+                commented: commentedCheckbox,
+                java: javaCheckbox,
+                kotlin: kotlinCheckbox,
+                python: pythonCheckbox,
+                golang: golangCheckbox,
+                php: phpCheckbox,
+                javascript: javascriptCheckbox, 
+                sql: sqlCheckbox,
+            }),
+        })
+        .then(response => response.json())
+        .then(data => {
+            
+            console.log(data);
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+    });
+  </script>
+
+</body>
+</html>

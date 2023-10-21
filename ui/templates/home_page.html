@@ -3,98 +3,93 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@100&family=Oswald:wght@700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="../static/css/home_style.css">
     <title>FORUM</title>
 </head>
 <body>
   <nav class="navbar navbar-inverse">
     <div class="container-fluid">
       <div class="navbar-header">
-        <a class="navbar-brand" href="/">FORUM</a>
+        <div id="title-container">
+          <p class="line-1 anim-typewriter">&lt;/forum&gt;</p>
+          <div class="imgContainer">
+            <img id="notificationImg" src="https://gagaru.club/uploads/posts/2023-06/1686068744_gagaru-club-p-kolokolchik-malenkii-vkontakte-1.png"></img>
+            <img id="logoutImg"src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSNKLd_50v-5_W2gtKHNz1cjjLivUIO2KQ_cA&usqp=CAU"  onclick="window.location.href='/logout';"></img>
+          </div>
+
+        </div>
       </div>
-        <span><a href="/register"> Sign Up</a></span>
+      <div class="top-bar">
+        <span><a href="/"> Home</a></span>
         <span><a href="/submit-post"> Create Post</a></span>
         <span><a href="/liked-posts"> Liked Posts</a></span>
         <span><a href="/created-posts">Created Posts</a></span>
-        <span><a href="/logout">Log out</a></span>
-    </div>
-    
-    <div class="actions">
-       
-        
-      <form id="create-post-form" method="POST" action="/submit-post"> 
-      
-        <span class="filters">
-          <input type="checkbox" name="postTopic" class="round-checkbox" id="javaCheckbox"  value="Java" >
-          <label class="checkbox-label" for="javaCheckbox"></label>
-          <label for="javaCheckbox">Java</label>
-          
-          <input type="checkbox" name="postTopic" class="round-checkbox" id="kotlinCheckbox" value="Kotlin">
-          <label class="checkbox-label" for="kotlinCheckbox"></label>
-          <label for="kotlinCheckbox">Kotlin</label>
-          
-          <input type="checkbox" name="postTopic" class="round-checkbox" id="pythonCheckbox" value="Python">
-          <label class="checkbox-label" for="pythonCheckbox"></label>
-          <label for="pythonCheckbox">Python</label>
-        </span>
-          <input type="text"  classid="postTopicInput" name="postTopicInput" class="postTopicInput" placeholder="Topic" style="width: 250px;">
-
-    <button type="submit" class="postSubmit" >Publish</button>
-</form>
-
-        
+        <span><a href="/register"> Sign Up</a></span>
+      </div>
     </div>
   </nav>
- 
+  <div class="container">
+    <span>
+      <div class="profile-info">
+        <img id="profilePhoto" src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png" alt="Profile Photo" style="max-width: 100px; max-height: 100px;">
+        <p id="userName">Name:  {{.Username}}</p>
+      </div>
+    </span>
+    <div class="container-content">
+      <div class="actions">
+      
+        <div class="search">
+          <input type="search" name="q" placeholder="Search..." />
+          <button type="submit">Search</button>
+        </div>
+        
+        <div class="filters">
+          <a class="filters-title" >Filters:</a>
+          <input type="checkbox" class="round-checkbox" id="javaCheckbox">
+          <label class="checkbox-label" for="javaCheckbox"></label>
+          <label for="javaCheckbox">Java</label>
 
+          <input type="checkbox" class="round-checkbox" id="kotlinCheckbox">
+          <label class="checkbox-label" for="kotlinCheckbox"></label>
+          <label for="kotlinCheckbox">Kotlin</label>
+
+          <input type="checkbox" class="round-checkbox" id="pythonCheckbox">
+          <label class="checkbox-label" for="pythonCheckbox"></label>
+          <label for="pythonCheckbox">Python</label>
+
+          <input type="checkbox" class="round-checkbox" id="golangCheckbox">
+          <label class="checkbox-label" for="golangCheckbox"></label>
+          <label for="golangCheckbox">Golang</label>
+
+          <input type="checkbox" class="round-checkbox" id="phpCheckbox">
+          <label class="checkbox-label" for="phpCheckbox"></label>
+          <label for="phpCheckbox">PHP</label>
+
+          <input type="checkbox" class="round-checkbox" id="javascriptCheckbox">
+          <label class="checkbox-label" for="javascriptCheckbox"></label>
+          <label for="javascriptCheckbox">JavaScript</label>
+
+          <input type="checkbox" class="round-checkbox" id="sqlCheckbox">
+          <label class="checkbox-label" for="sqlCheckbox"></label>
+          <label for="sqlCheckbox">SQL</label>
+
+        </div>
+      </div>
   {{if .Posts}}
   {{range .Posts}}
-<li><p>Name:<a href="/post/{{.Id}}"> {{.Title}} </a></p> <p>Author: {{.PostAuthorName}}</p>  <p> Topics: {{.Topic}}</p>  </li>
+<div class="post-card">
+    <a href="/post/{{.Id}}" class="post-title">{{.Title}}</a>
+    <p class="post-author">Author: {{.PostAuthorName}}</p>
+    <p class="post-topics">Topics: {{.Topic}} </p>
+</div>
+
   {{end}}
   {{end}}
-
-
-
-  <script>
-    document.addEventListener("DOMContentLoaded", function () {
-       
-
-      const postSubmit = document.querySelector(".postSubmit");
-          
-          if (postSubmit) {
-            postSubmit.addEventListener("click", function (event) {
-                  event.preventDefault();
-          
-                  // Get the comment content from the input field
-                  
-          const selectedCheckboxes = document.querySelectorAll('input[name="postTopic"]:checked');
-          const postTopicInput =document.querySelector(".postTopicInput").value
-          const selectedTopics = Array.from(selectedCheckboxes).map(checkbox => checkbox.value);
-        selectedTopics.push(postTopicInput)
-                  // Send the comment content as JSON
-                  fetch("/filter", {
-                      method: "POST",
-                      body: JSON.stringify({
-                        topics: selectedTopics
-                      }),
-                      headers: {
-                          "Content-Type": "application/json",
-                      },
-                  })
-                  .then(response => response.json())
-                  .then(data => {
-          
-                      console.log(data)
-                  
-                      // You can handle the response data here
-                  })
-                  .catch(error => {
-                      console.error(error);
-                  });
-              });
-          }
-
-    });
-</script>
-
+</div>
+</span>
+</div>
 </body>
 </html>
