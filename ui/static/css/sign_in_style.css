@@ -1,0 +1,158 @@
+body {
+    background-color: lightgray;
+}
+
+.line-1{
+    color: #000080;
+    font-family: 'Oswald', sans-serif;
+    text-decoration: none;
+    display: flex;
+    line-height: 1.5;
+    white-space: nowrap;
+    overflow: hidden;
+    position: relative;
+    border-right: 4px solid #000080; 
+    font-size: 3em;
+    width: 24em;
+    text-align: center;
+}
+
+/* Animation */
+.anim-typewriter {
+    animation: typewriter 1.5s steps(20) 1s 1 normal both,
+               blinkTextCursor 700ms steps(20) infinite normal;
+}
+
+@keyframes typewriter {
+    from {width: 0em;}
+    to {width: 13em; }
+}
+
+@keyframes blinkTextCursor {
+    from {border-right-color: #000080;}
+    to {border-right-color: transparent;}
+}
+
+#title-container {
+    
+    padding: 10px;
+    margin: 10px;
+    display: flex;
+    flex-direction: row;
+    background-color: white;
+    border-radius: 10px;
+}
+
+.custom-form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 20px;
+}
+
+.form-row {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    max-width: 600px;
+    background-color: white;
+    border-radius: 10px;
+}
+
+.column {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 100%;
+    justify-content: center;
+    margin: 10px;
+}
+
+.google-button, .github-button {
+    width: auto;
+    color: #0000df;
+    text-decoration: none;
+    border: none;
+    border-radius: 5px;
+    padding: 10px;
+    margin-top: 30px;
+    display: flex;
+    align-items: center;
+    border-radius: 10px;
+    border: 2px solid#0000df; 
+    border-radius: 10px; 
+
+    transition: box-shadow 0.3s;
+}
+
+.google-button:hover{
+    box-shadow: 0 0 20px #0000df;
+}  
+.github-button:hover {
+    box-shadow: 0 0 20px #0000df;
+}
+
+.google-button i, .github-button i {
+    margin-right: 10px;   
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    margin: 10px;
+}
+
+.form-group label {
+    color: #000080;
+    margin-bottom: 5px;
+}
+
+.form-control {
+    padding: 10px;
+    border: 2px solid #000080;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+.submit-button {
+    background: #000080;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.4s;
+}
+
+.submit-button:hover {
+  background-color: #0000df;
+}
+
+.signup-link {
+    color: #000080;
+    text-decoration: none;
+}
+
+.bottom-container {
+    display: flex;
+    justify-content: center;
+    margin: 10px;
+}
+.navbar-header {
+    display: flex;
+    justify-content: center; 
+    align-items: center; 
+}
+#googleIcon{
+    margin-left: 20px;
+
+    height: 20px;
+    width: auto;
+}
+#githubIcon{
+margin-left: 20px;
+    height: 20px;
+    width: auto;
+}
