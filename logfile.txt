@@ -1,12 +1,7 @@
-[INFO]: 2023/10/21 18:33:46 log.go:17: Token is available
- not present
-nexpected EOF
-}}
-ile or directory
-ot a pointer
-s available
-=======
-[INFO]: 2023/10/14 20:31:04 log.go:17: Token is available
+[ERROR]: 2023/10/21 19:49:10 log.go:29: http: named cookie not present
+ot up to standard 
+tml" at <.Unique>: can't evaluate field Unique in type string
+0/14 20:31:04 log.go:17: Token is available
  not present
 expected EOF
  

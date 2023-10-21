@@ -7,6 +7,8 @@ import (
 	"text/template"
 
 	"forum/structs"
+
+	"github.com/mattn/go-sqlite3"
 )
 
 func (h *Handler) signup(w http.ResponseWriter, r *http.Request) {
@@ -24,6 +26,12 @@ func (h *Handler) signup(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		h.logError(w, r, err, 500)
 		return
+	}
+	errorsCatch := map[string]interface{}{
+		"Unique":         nil,
+		"PasswordLength": nil,
+		"UserLength":     nil,
+		"EmailLength":    nil,
 	}
 	if r.Method == http.MethodPost {
 
@@ -45,16 +53,32 @@ func (h *Handler) signup(w http.ResponseWriter, r *http.Request) {
 		err = h.Service.Authorization.CreateUser(&input)
 
 		if err != nil {
-			h.errorLog(err.Error())
-			h.errorHandler(w, r, 400)
+			_, isUniqueConstraintError := err.(sqlite3.Error)
+
+			if isUniqueConstraintError {
+				errorsCatch["Unique"] = isUniqueConstraintError
+			} else if err.Error() == "The length of the password is not up to standard " {
+				errorsCatch["PasswordLength"] = true
+			} else if err.Error() == "The length of the email is not up to standard " {
+				errorsCatch["EmailLength"] = true
+			} else if err.Error() == "The length of the user is not up to standard " {
+				errorsCatch["UserLength"] = true
+			}
+			if errorsCatch["Unique"] == nil && errorsCatch["PasswordLength"] == nil && errorsCatch["UserLength"] == nil && errorsCatch["EmailLength"] == nil {
+				h.errorLog(err.Error())
+				h.errorHandler(w, r, 400)
+				return
+			}
+			ts.Execute(w, errorsCatch)
 			return
+
 		}
 		http.Redirect(w, r, "/signin", http.StatusSeeOther)
 
 		return
 
 	} else if r.Method == http.MethodGet {
-		err := ts.Execute(w, "")
+		err := ts.Execute(w, errorsCatch)
 		if err != nil {
 			h.logError(w, r, err, http.StatusInternalServerError)
 		}
