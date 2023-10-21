@@ -95,7 +95,18 @@
 <div class="post-card">
     <a href="/post/{{.Id}}" class="post-title">{{.Title}}</a>
     <p class="post-author">Author: {{.PostAuthorName}}</p>
-    <p class="post-topics">Topics: {{.Topic}} </p>
+    <p class="post-topics">Topics: </p>
+    {{range .Topic}}
+            <ol>
+                {{ if . }} 
+                <p class="post-topics">{{.}}</p>
+                {{else }}
+
+                {{end}}
+                
+            </ol>
+            
+        {{end}}
 </div>
 
   {{end}}

@@ -32,6 +32,7 @@ func (h *Handler) PostPage(w http.ResponseWriter, r *http.Request) {
 	if r.Method == http.MethodPost {
 		cookie, err := r.Cookie("Token")
 		if err != nil {
+			http.Redirect(w, r, "/register", http.StatusSeeOther)
 			h.logError(w, r, errors.New("Wrong Method"), http.StatusUnauthorized)
 			return
 
