@@ -33,6 +33,7 @@ func (h *Handler) PostPage(w http.ResponseWriter, r *http.Request) {
 		"Likes":    nil,
 		"Dislikes": nil,
 		"Empty":    nil,
+		"Logged":   nil,
 	}
 	if r.Method == http.MethodPost {
 		cookie, err := r.Cookie("Token")
@@ -110,7 +111,9 @@ func (h *Handler) PostPage(w http.ResponseWriter, r *http.Request) {
 			h.logError(w, r, err, http.StatusInternalServerError)
 			return
 		}
-
+		if user_id != 0 {
+			result["Logged"] = true
+		}
 		post.Comments = comments
 		result["Post"] = post
 		result["Likes"] = likes

@@ -1,4 +1,4 @@
-[INFO]: 2023/10/22 14:25:46 log.go:17: Token is available
+[INFO]: 2023/10/22 14:41:32 log.go:17: Token is available
  not present
 :53: unexpected {{end}}
 at <.Unique>: can't evaluate field Unique in type string
