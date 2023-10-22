@@ -28,10 +28,13 @@ func (h *Handler) home(w http.ResponseWriter, r *http.Request) {
 	cookie, err := r.Cookie("Token")
 	if err != nil {
 	} else {
+		fmt.Println("FCKING TOKEN:", cookie.Value)
 		user, err = h.Service.Authorization.GetUserByToken(cookie.Value)
 		if err != nil {
 			user = nil
 		}
+
+		fmt.Println("USER IN HOME: ", user)
 	}
 
 	logged := false

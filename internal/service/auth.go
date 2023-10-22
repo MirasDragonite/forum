@@ -54,7 +54,7 @@ func (s *Auth) GetUserByToken(token string) (*structs.User, error) {
 	if err != nil {
 		return nil, err
 	}
-	user, err := s.repo.GetUserById(session.Id)
+	user, err := s.repo.GetUserById(session.UserId)
 	fmt.Println(user)
 	return &user, nil
 }
@@ -71,6 +71,8 @@ func (s *Auth) GetUser(email, password string) (*http.Cookie, error) {
 		fmt.Println(err.Error())
 		return nil, err
 	}
+
+	fmt.Println("USER in service", user)
 	if err := checkUserInput(&user); err != nil {
 		fmt.Println(err.Error())
 		return nil, err

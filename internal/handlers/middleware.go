@@ -62,7 +62,9 @@ func (h *Handler) isNotauthorized(next http.HandlerFunc) http.Handler {
 			}
 
 		}
-		_, err = h.Service.Authorization.GetUserByToken(cookie.Value)
+
+		user, err := h.Service.Authorization.GetUserByToken(cookie.Value)
+		fmt.Println("USER IN FKCING :", user)
 		if err != nil {
 			fmt.Println(err.Error())
 			cookie.Name = "Token"
