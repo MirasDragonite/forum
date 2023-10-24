@@ -1,39 +1,47 @@
 package handlers
 
 import (
-	"encoding/json"
 	"errors"
 	"fmt"
 	"net/http"
+	"strings"
 
 	"forum/structs"
 )
 
-type filters struct {
-	Topics []string `json:"topics"`
-}
-
-type Filtered struct {
-	Result []structs.Post `json:"result"`
-}
-
-func (h *Handler) filter(w http.ResponseWriter, r *http.Request) {
+func (h *Handler) filter(w http.ResponseWriter, r *http.Request) []structs.Post {
 	if r.Method != http.MethodPost {
 		h.logError(w, r, errors.New("Wrong method"), http.StatusMethodNotAllowed)
-		return
+		return nil
 	}
-	var filters filters
-	err := json.NewDecoder(r.Body).Decode(&filters)
-	if err != nil {
-		h.logError(w, r, err, http.StatusBadRequest)
-		return
-	}
-	fmt.Println(filters.Topics)
-	filtered, err := h.Service.Filter.Filter(filters.Topics)
 
-	err = json.NewEncoder(w).Encode(&filtered)
-	if err != nil {
-		return
+	java := r.Form.Get("postTopicJava")
+	python := r.Form.Get("postTopicPython")
+	kotlin := r.Form.Get("postTopicKotlin")
+	topic := r.Form.Get("postTopicInput")
+
+	fmt.Println(java, python, kotlin, topic)
+	topics := make([]string, 0)
+	if java == "Java" {
+		topics = append(topics, java)
 	}
-	
+	if python == "Python" {
+		topics = append(topics, python)
+	}
+	if kotlin == "Kotlin" {
+		topics = append(topics, kotlin)
+	}
+	if strings.TrimSpace(topic) != "" {
+		topics = append(topics, topic)
+	}
+
+	fmt.Println(topics)
+	result, err := h.Service.Filter.Filter(topics)
+	if err != nil {
+		h.logError(w, r, errors.New("Wrong method"), http.StatusBadRequest)
+		return nil
+	}
+
+	return result
+	// http.Redirect(w, r, "/", http.StatusSeeOther)
 }

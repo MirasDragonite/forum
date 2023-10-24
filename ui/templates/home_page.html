@@ -55,38 +55,30 @@
           <input type="search" name="q" placeholder="Search..." />
           <button type="submit">Search</button>
         </div> -->
-        
+        <form id="create-post-form" method="POST" > 
         <div class="filters">
-          <a class="filters-title" >Filters:</a>
-          <input type="checkbox" class="round-checkbox" id="javaCheckbox">
-          <label class="checkbox-label" for="javaCheckbox"></label>
-          <label for="javaCheckbox">Java</label>
+          <span class="filters">
+  
+            <a class="filters-title" >Filters:</a>
+  
+            <input type="checkbox" name="postTopicJava" class="round-checkbox" id="javaCheckbox"  value="Java" >
+            <label class="checkbox-label" for="javaCheckbox"></label>
+            <label for="javaCheckbox">Java</label>
+            
+            <input type="checkbox" name="postTopicKotlin" class="round-checkbox" id="kotlinCheckbox" value="Kotlin">
+            <label class="checkbox-label" for="kotlinCheckbox"></label>
+            <label for="kotlinCheckbox">Kotlin</label>
+            
+            <input type="checkbox" name="postTopicPython" class="round-checkbox" id="pythonCheckbox" value="Python">
+            <label class="checkbox-label" for="pythonCheckbox"></label>
+            <label for="pythonCheckbox">Python</label>
+  
+          </span>
+          <input type="text" id="postTopicInput" name="postTopicInput" class="postTopicInput" placeholder="Topic" style="width: 250px;">
 
-          <input type="checkbox" class="round-checkbox" id="kotlinCheckbox">
-          <label class="checkbox-label" for="kotlinCheckbox"></label>
-          <label for="kotlinCheckbox">Kotlin</label>
-
-          <input type="checkbox" class="round-checkbox" id="pythonCheckbox">
-          <label class="checkbox-label" for="pythonCheckbox"></label>
-          <label for="pythonCheckbox">Python</label>
-
-          <input type="checkbox" class="round-checkbox" id="golangCheckbox">
-          <label class="checkbox-label" for="golangCheckbox"></label>
-          <label for="golangCheckbox">Golang</label>
-
-          <input type="checkbox" class="round-checkbox" id="phpCheckbox">
-          <label class="checkbox-label" for="phpCheckbox"></label>
-          <label for="phpCheckbox">PHP</label>
-
-          <input type="checkbox" class="round-checkbox" id="javascriptCheckbox">
-          <label class="checkbox-label" for="javascriptCheckbox"></label>
-          <label for="javascriptCheckbox">JavaScript</label>
-
-          <input type="checkbox" class="round-checkbox" id="sqlCheckbox">
-          <label class="checkbox-label" for="sqlCheckbox"></label>
-          <label for="sqlCheckbox">SQL</label>
-
+          <button type="submit" class="postSubmit" >Publish</button>
         </div>
+        </form>
       </div>
 
   {{if .Posts}}

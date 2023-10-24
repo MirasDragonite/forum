@@ -1,7 +1,6 @@
 package handlers
 
 import (
-	"errors"
 	"fmt"
 	"net/http"
 	"text/template"
@@ -10,10 +9,10 @@ import (
 )
 
 func (h *Handler) home(w http.ResponseWriter, r *http.Request) {
-	if r.Method != http.MethodGet {
-		h.logError(w, r, errors.New("Wrong Method"), http.StatusMethodNotAllowed)
-		return
-	}
+	// if r.Method != http.MethodGet {
+	// 	h.logError(w, r, errors.New("Wrong Method"), http.StatusMethodNotAllowed)
+	// 	return
+	// }
 	if r.URL.Path != "/" {
 		h.errorHandler(w, r, http.StatusNotFound)
 		return
@@ -24,6 +23,8 @@ func (h *Handler) home(w http.ResponseWriter, r *http.Request) {
 		h.logError(w, r, err, http.StatusInternalServerError)
 		return
 	}
+	err = r.ParseForm()
+
 	var user *structs.User
 	cookie, err := r.Cookie("Token")
 	if err != nil {
@@ -35,15 +36,23 @@ func (h *Handler) home(w http.ResponseWriter, r *http.Request) {
 		}
 
 	}
-
 	logged := false
 
 	if user != nil {
 		logged = true
 	}
+	var posts []structs.Post
+	if r.Method == http.MethodPost {
+		posts = h.filter(w, r)
+	} else if r.Method == http.MethodGet {
+		posts, err = h.Service.PostRedact.GetAllPosts()
+		if err != nil {
+			fmt.Println("EMpty")
+			h.logError(w, r, err, http.StatusInternalServerError)
+			return
+		}
+	}
 
-	posts, err := h.Service.PostRedact.GetAllPosts()
-	fmt.Println("POSTS:", posts)
 	result := map[string]interface{}{
 		"Posts":  posts,
 		"User":   user,

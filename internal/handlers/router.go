@@ -30,5 +30,4 @@ func (h *Handler) Router() {
 	h.Mux.Handle("/post/", h.tokenAvilableChecker(h.PostPage))
 	h.Mux.Handle("/liked-posts", h.authorized(h.likedPosts))
 	h.Mux.Handle("/created-posts", h.authorized(h.createdPosts))
-	h.Mux.HandleFunc("/filter", h.filter)
 }
