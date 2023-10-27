@@ -2,6 +2,7 @@ package repository
 
 import (
 	"database/sql"
+
 	"forum/structs"
 )
 
@@ -29,6 +30,7 @@ type PostRedact interface {
 	GetAllPosts() ([]structs.Post, error)
 	GetAllLikedPosts(user_id int64) ([]structs.PostReaction, error)
 	GetAllUserPosts(user_id int64) ([]structs.Post, error)
+	GetFilteredPosts(java, kotlin, python, topic string) ([]structs.Post, error)
 }
 
 type CommentRedact interface {
@@ -54,8 +56,6 @@ type CommentReaction interface {
 	AllReactions(comment_id int64) (int64, int64, error)
 	GetCommentReaction(user_id, commentId int64) (int64, error)
 }
-
-
 
 type Repository struct {
 	Authorization

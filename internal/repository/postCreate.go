@@ -243,3 +243,35 @@ func (pr *PostRedactDB) GetAllUserPosts(user_id int64) ([]structs.Post, error) {
 	fmt.Println("POSTS IN REPO:", posts)
 	return posts, nil
 }
+
+func (pr *PostRedactDB) GetFilteredPosts(java, kotlin, python, topic string) ([]structs.Post, error) {
+	query := `SELECT * FROM posts  WHERE topic LIKE ? AND topic LIKE ? AND topic LIKE ? AND topic LIKE ?`
+
+	var posts []structs.Post
+	var rows *sql.Rows
+	var err error
+
+	if len(java+kotlin+python+topic) == 0 {
+		rows, err = pr.db.Query(query, "", "", "", "")
+		if err != nil {
+			return nil, err
+		}
+	} else {
+		rows, err = pr.db.Query(query, "%"+java+"%", "%"+kotlin+"%", "%"+python+"%", "%"+topic+"%")
+		if err != nil {
+			return nil, err
+		}
+	}
+
+	for rows.Next() {
+		var post structs.Post
+		err := rows.Scan(&post.Id, &post.PostAuthorID, &post.TopicString, &post.Title, &post.Content, &post.Like, &post.Dislike, &post.PostAuthorName)
+		if err != nil {
+			return nil, err
+		}
+		post.Topic = strings.Split(post.TopicString, "|")
+		posts = append(posts, post)
+	}
+	fmt.Println("FILTRED POST IN REPO:", posts)
+	return posts, nil
+}

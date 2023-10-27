@@ -41,7 +41,7 @@ type Reaction interface {
 	GetCommentReaction(user_id, commentId int64) (int64, error)
 }
 type Filter interface {
-	Filter(topics []string) ([]structs.Post, error)
+	Filter(java, kotlin, python, topic string) ([]structs.Post, error)
 }
 
 type Service struct {
