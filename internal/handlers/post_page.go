@@ -13,7 +13,7 @@ import (
 func (h *Handler) PostPage(w http.ResponseWriter, r *http.Request) {
 	post_id := r.URL.Path[6:]
 	if strings.TrimSpace(post_id) == "" || post_id[0] == '0' {
-		h.errorHandler(w, r, http.StatusBadRequest)
+		h.errorHandler(w, r, http.StatusNotFound)
 		return
 	}
 	tmp, err := template.ParseFiles("./ui/templates/post_page.html")
@@ -118,6 +118,7 @@ func (h *Handler) PostPage(w http.ResponseWriter, r *http.Request) {
 		result["Post"] = post
 		result["Likes"] = likes
 		result["Dislikes"] = dislikes
+		fmt.Println("Liked:", post.Liked, "DIsliked:", post.Disliked)
 		tmp.Execute(w, result)
 	} else {
 		h.logError(w, r, errors.New("Wrong Method"), http.StatusMethodNotAllowed)

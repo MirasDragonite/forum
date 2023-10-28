@@ -2,7 +2,6 @@ package handlers
 
 import (
 	"errors"
-	"fmt"
 	"net/http"
 	"text/template"
 
@@ -40,16 +39,6 @@ func (h *Handler) signup(w http.ResponseWriter, r *http.Request) {
 		input.Username = r.Form.Get("username")
 		input.Email = r.Form.Get("email")
 		input.HashedPassword = r.Form.Get("password")
-		// err = json.NewDecoder(r.Body).Decode(&input)
-		// if err != nil {
-		// 	ok.Status = 400
-		// 	w.Header().Set("Content-Type", "application/json")
-		// 	w.WriteHeader(http.StatusOK)
-		// 	json.NewEncoder(w).Encode(ok)
-		// 	h.logError(w, r, err, http.StatusBadRequest)
-		// 	return
-		// }                              
-		fmt.Println(input)
 		err = h.Service.Authorization.CreateUser(&input)
 
 		if err != nil {

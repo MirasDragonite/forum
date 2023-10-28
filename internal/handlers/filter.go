@@ -33,5 +33,4 @@ func (h *Handler) filter(w http.ResponseWriter, r *http.Request) []structs.Post 
 	}
 
 	return result
-	// http.Redirect(w, r, "/", http.StatusSeeOther)
 }

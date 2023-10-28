@@ -251,7 +251,7 @@ func (pr *PostRedactDB) GetFilteredPosts(java, kotlin, python, topic string) ([]
 	var rows *sql.Rows
 	var err error
 
-	if len(java+kotlin+python+topic) == 0 {
+	if len(java+kotlin+python+strings.TrimSpace(topic)) == 0 {
 		rows, err = pr.db.Query(query, "", "", "", "")
 		if err != nil {
 			return nil, err

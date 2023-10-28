@@ -149,7 +149,7 @@ blinkTextCursor 700ms steps(8) infinite normal;
 }
 
 .dislike-button {
-    background-color: red;
+    background-color:#000080;
     color: white;
 }
 
@@ -202,12 +202,12 @@ ul li form {
 }
 
 .commButtonLike {
-    background-color: green;
+    background-color: #000080;
     color: white;
 }
 
 .commButtonDislike {
-    background-color: red;
+    background-color: #000080;
     color: white;
 }
 

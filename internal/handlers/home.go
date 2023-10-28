@@ -9,10 +9,6 @@ import (
 )
 
 func (h *Handler) home(w http.ResponseWriter, r *http.Request) {
-	// if r.Method != http.MethodGet {
-	// 	h.logError(w, r, errors.New("Wrong Method"), http.StatusMethodNotAllowed)
-	// 	return
-	// }
 	if r.URL.Path != "/" {
 		h.errorHandler(w, r, http.StatusNotFound)
 		return
@@ -51,6 +47,9 @@ func (h *Handler) home(w http.ResponseWriter, r *http.Request) {
 			h.logError(w, r, err, http.StatusInternalServerError)
 			return
 		}
+	} else {
+		h.logError(w, r, err, http.StatusMethodNotAllowed)
+		return
 	}
 
 	result := map[string]interface{}{
@@ -58,6 +57,6 @@ func (h *Handler) home(w http.ResponseWriter, r *http.Request) {
 		"User":   user,
 		"Logged": logged,
 	}
-	fmt.Println(result)
+
 	ts.Execute(w, result)
 }

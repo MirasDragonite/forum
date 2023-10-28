@@ -20,7 +20,7 @@ func (h *Handler) likePost(w http.ResponseWriter, r *http.Request) {
 	err := r.ParseForm()
 
 	var button dataFromButton
-	// err := json.NewDecoder(r.Body).Decode(&button)
+
 	button.Reaction = r.Form.Get("button")
 	switch button.Reaction {
 	case "like":
@@ -53,19 +53,4 @@ func (h *Handler) likePost(w http.ResponseWriter, r *http.Request) {
 	link := fmt.Sprintf("/post/%v", post_id)
 	http.Redirect(w, r, link, http.StatusSeeOther)
 	return
-	// likes, dislikes, err := h.Service.AllPostReactions(int64(post_id))
-	// if err != nil {
-	// 	return
-	// }
-
-	// reaction, err := h.Service.Reaction.GetPostReaction(user.Id, int64(post_id))
-	// res := structs.ResponseReaction{
-	// 	Likes:    likes,
-	// 	Dislikes: dislikes,
-	// 	Reaction: reaction,
-	// }
-	// w.Header().Set("Content-Type", "application/json")
-	// w.WriteHeader(http.StatusOK)
-
-	// err = json.NewEncoder(w).Encode(&res)
 }
