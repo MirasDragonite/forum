@@ -3,6 +3,7 @@ package repository
 import (
 	"database/sql"
 	"fmt"
+
 	"forum/structs"
 )
 
@@ -15,7 +16,6 @@ func NewReactionDB(db *sql.DB) *PostReactionDB {
 }
 
 func (r *PostReactionDB) LikePost(post_id, user_id, value int64) error {
-	fmt.Println("Here2")
 	query := `UPDATE post_reactions SET reaction=$1  WHERE post_id=$2 AND user_id=$3`
 
 	_, err := r.db.Exec(query, &value, &post_id, &user_id)
@@ -49,7 +49,6 @@ func (r *PostReactionDB) AllReactions(post_id int64) (int64, int64, error) {
 }
 
 func (r *PostReactionDB) FindReation(post_id, user_id, value int64) (*structs.PostReaction, error) {
-	fmt.Println("Here1")
 	query := `SELECT * FROM post_reactions WHERE post_id=$1 AND user_id=$2`
 
 	row := r.db.QueryRow(query, post_id, user_id)
@@ -63,7 +62,6 @@ func (r *PostReactionDB) FindReation(post_id, user_id, value int64) (*structs.Po
 }
 
 func (r *PostReactionDB) CreateReaction(post_id, user_id, value int64) error {
-	fmt.Println("Here3")
 	query := `INSERT INTO post_reactions(post_id,user_id,reaction) VALUES($1,$2,$3)`
 
 	_, err := r.db.Exec(query, &post_id, &user_id, &value)

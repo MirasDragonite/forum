@@ -30,7 +30,7 @@ func (pr *PostRedactDB) CreatePost(post *structs.Post) error {
 		return err
 	}
 	post.Id = lastID
-	fmt.Println("Repo:", post)
+
 	return nil
 }
 
@@ -85,7 +85,6 @@ func (pr *PostRedactDB) GetPostBy(from, value string, user_id int64) (*structs.P
 				return &structs.Post{}, err
 			}
 
-			fmt.Println(comment)
 			comments = append(comments, comment)
 		}
 		post.Comments = comments
@@ -240,7 +239,7 @@ func (pr *PostRedactDB) GetAllUserPosts(user_id int64) ([]structs.Post, error) {
 
 		posts = append(posts, post)
 	}
-	fmt.Println("POSTS IN REPO:", posts)
+
 	return posts, nil
 }
 
@@ -272,6 +271,6 @@ func (pr *PostRedactDB) GetFilteredPosts(java, kotlin, python, topic string) ([]
 		post.Topic = strings.Split(post.TopicString, "|")
 		posts = append(posts, post)
 	}
-	fmt.Println("FILTRED POST IN REPO:", posts)
+
 	return posts, nil
 }

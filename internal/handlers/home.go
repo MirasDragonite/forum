@@ -1,7 +1,6 @@
 package handlers
 
 import (
-	"fmt"
 	"net/http"
 	"text/template"
 
@@ -43,7 +42,7 @@ func (h *Handler) home(w http.ResponseWriter, r *http.Request) {
 	} else if r.Method == http.MethodGet {
 		posts, err = h.Service.PostRedact.GetAllPosts()
 		if err != nil {
-			fmt.Println("EMpty")
+
 			h.logError(w, r, err, http.StatusInternalServerError)
 			return
 		}

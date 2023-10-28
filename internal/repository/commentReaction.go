@@ -3,6 +3,7 @@ package repository
 import (
 	"database/sql"
 	"fmt"
+
 	"forum/structs"
 )
 
@@ -27,7 +28,7 @@ func (r *CommentReactionDB) LikeComment(comment_id, user_id, value int64) error 
 
 func (r *CommentReactionDB) AllReactions(comment_id int64) (int64, int64, error) {
 	query := `SELECT COUNT(*) FROM comment_reactions WHERE comment_id=$1 AND reaction=1 `
-	fmt.Println("Calling...")
+
 	row := r.db.QueryRow(query, comment_id)
 	var likes int64
 	err := row.Scan(&likes)

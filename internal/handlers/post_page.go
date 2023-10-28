@@ -118,7 +118,6 @@ func (h *Handler) PostPage(w http.ResponseWriter, r *http.Request) {
 		result["Post"] = post
 		result["Likes"] = likes
 		result["Dislikes"] = dislikes
-		fmt.Println("Liked:", post.Liked, "DIsliked:", post.Disliked)
 		tmp.Execute(w, result)
 	} else {
 		h.logError(w, r, errors.New("Wrong Method"), http.StatusMethodNotAllowed)

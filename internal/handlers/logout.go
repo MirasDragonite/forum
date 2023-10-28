@@ -1,7 +1,6 @@
 package handlers
 
 import (
-	"fmt"
 	"net/http"
 )
 
@@ -13,8 +12,13 @@ func (h *Handler) logOut(w http.ResponseWriter, r *http.Request) {
 
 	cookie, err := r.Cookie("Token")
 	err = h.Service.Authorization.DeleteToken(cookie)
-	h.logError(w, r, err, http.StatusUnauthorized)
-	fmt.Println("Cookie:", cookie)
+	if err != nil {
+		h.logError(w, r, err, http.StatusUnauthorized)
+		return
+	}
+	// cookieMsG := fmt.Sprintf("Cookie:", cookie)
+
+	h.infoLog("Sign out from session")
 	http.SetCookie(w, cookie)
 	http.Redirect(w, r, "/register", http.StatusSeeOther)
 }

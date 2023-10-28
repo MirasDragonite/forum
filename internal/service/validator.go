@@ -2,7 +2,6 @@ package service
 
 import (
 	"errors"
-	"fmt"
 	"net/mail"
 	"strings"
 
@@ -23,10 +22,8 @@ func checkUserInput(user *structs.User) error {
 }
 
 func isEmailValid(email string) error {
-	fmt.Println("email", email)
 	_, err := mail.ParseAddress(email)
 	if err != nil {
-		fmt.Println(err.Error())
 		return errors.New("Not valid email")
 	}
 	if strings.TrimSpace(email) == "" {

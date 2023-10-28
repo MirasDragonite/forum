@@ -3,7 +3,6 @@ package service
 import (
 	"database/sql"
 	"errors"
-	"fmt"
 	"net/http"
 	"time"
 
@@ -55,7 +54,7 @@ func (s *Auth) GetUserByToken(token string) (*structs.User, error) {
 		return nil, err
 	}
 	user, err := s.repo.GetUserById(session.UserId)
-	fmt.Println(user)
+
 	return &user, nil
 }
 
@@ -68,13 +67,10 @@ func (s *Auth) GetUser(email, password string) (*http.Cookie, error) {
 	}
 	user, err := s.repo.GetUserBy(email, emailDataBaseName)
 	if err != nil {
-		fmt.Println(err.Error())
 		return nil, err
 	}
 
-	fmt.Println("USER in service", user)
 	if err := checkUserInput(&user); err != nil {
-		fmt.Println(err.Error())
 		return nil, err
 	}
 	if checkPasswordHash(password, user.HashedPassword) {
@@ -97,7 +93,7 @@ func (s *Auth) GetUser(email, password string) (*http.Cookie, error) {
 		return &cookie, nil
 
 	} else {
-		fmt.Println("Here")
+
 		// if session.ExpairedData < time.Now().Format(timeFormat) {
 		s.repo.UpdateToken(user, hashedToken, expirationInStringFormat)
 		cookie.Value = hashedToken

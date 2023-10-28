@@ -2,7 +2,6 @@ package service
 
 import (
 	"errors"
-	"fmt"
 	"strings"
 
 	"forum/internal/repository"
@@ -39,7 +38,7 @@ func (repo *CommentRed) GetAllComments(postID, userID int64) ([]structs.Comment,
 
 		var likes int64
 		var dislikes int64
-		fmt.Println("Ch.Commentid:", ch.CommentID)
+
 		likes, dislikes, err = repo.reaction.AllReactions(ch.CommentID)
 
 		if err != nil {

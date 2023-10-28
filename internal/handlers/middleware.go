@@ -11,7 +11,7 @@ func (h *Handler) authorized(next http.HandlerFunc) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		cookie, err := r.Cookie("Token")
 		if err != nil {
-			h.errorLog(err.Error())
+			h.errorLog("Don't have any Token")
 			http.Redirect(w, r, "/register", http.StatusSeeOther)
 			return
 

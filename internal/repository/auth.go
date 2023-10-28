@@ -3,6 +3,7 @@ package repository
 import (
 	"database/sql"
 	"fmt"
+
 	"forum/structs"
 )
 
@@ -85,8 +86,6 @@ func (r *Auth) GetUserById(id int64) (structs.User, error) {
 
 	row := r.db.QueryRow(query, id)
 	err := row.Scan(&user.Id, &user.Username, &user.Email, &user.HashedPassword, &user.CreatedDate)
-	fmt.Println(user.Username)
-	fmt.Println(user)
 	if err != nil {
 		return structs.User{}, err
 	}

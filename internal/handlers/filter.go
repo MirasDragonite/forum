@@ -2,7 +2,6 @@ package handlers
 
 import (
 	"errors"
-	"fmt"
 	"net/http"
 
 	"forum/structs"
@@ -22,11 +21,7 @@ func (h *Handler) filter(w http.ResponseWriter, r *http.Request) []structs.Post 
 	kotlin = r.Form.Get("postTopicKotlin")
 	topic = r.Form.Get("postTopicInput")
 
-	fmt.Println(java, python, kotlin, topic)
-
 	result, err := h.Service.Filter.Filter(java, kotlin, python, topic)
-
-	fmt.Println("FILTERED:", result)
 	if err != nil {
 		h.logError(w, r, errors.New("Wrong method"), http.StatusBadRequest)
 		return nil
