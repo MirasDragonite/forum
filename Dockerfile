@@ -9,6 +9,6 @@ FROM alpine:3.16
 
 WORKDIR /app
 
-COPY --from=builder /app/ /app/
-
+COPY --from=builder /app/main /app/
+COPY --from=builder /app/ui /app/ui
 CMD ["./main"]
