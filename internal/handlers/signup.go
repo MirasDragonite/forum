@@ -6,8 +6,6 @@ import (
 	"text/template"
 
 	"forum/structs"
-
-	"github.com/mattn/go-sqlite3"
 )
 
 func (h *Handler) signup(w http.ResponseWriter, r *http.Request) {
@@ -42,10 +40,9 @@ func (h *Handler) signup(w http.ResponseWriter, r *http.Request) {
 		err = h.Service.Authorization.CreateUser(&input)
 
 		if err != nil {
-			_, isUniqueConstraintError := err.(sqlite3.Error)
 
-			if isUniqueConstraintError {
-				errorsCatch["Unique"] = isUniqueConstraintError
+			if err.Error() == "UNIQUE constraint failed: users.email" {
+				errorsCatch["Unique"] = true
 			} else if err.Error() == "The length of the password is not up to standard " {
 				errorsCatch["PasswordLength"] = true
 			} else if err.Error() == "The length of the email is not up to standard " {
