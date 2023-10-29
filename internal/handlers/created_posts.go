@@ -31,11 +31,26 @@ func (h *Handler) createdPosts(w http.ResponseWriter, r *http.Request) {
 		h.logError(w, r, err, http.StatusBadRequest)
 		return
 	}
-
+	user, err := h.Service.Authorization.GetUserByToken(cookie.Value)
+	if err != nil {
+		h.logError(w, r, err, http.StatusBadRequest)
+		return
+	}
 	posts, err := h.Service.PostRedact.GetAllUserPosts(user_id)
 	if err != nil {
 		fmt.Println(err.Error())
 		return
 	}
-	ts.Execute(w, posts)
+	logged := false
+
+	if user != nil {
+		logged = true
+	}
+
+	result := map[string]interface{}{
+		"User":   user,
+		"Logged": logged,
+		"Post":   posts,
+	}
+	ts.Execute(w, result)
 }
