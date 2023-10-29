@@ -9,6 +9,7 @@ import (
 
 func (h *Handler) likedPosts(w http.ResponseWriter, r *http.Request) {
 	if r.URL.Path != "/liked-posts" {
+		h.errorHandler(w, r, http.StatusNotFound)
 		return
 	}
 	if r.Method != http.MethodGet {

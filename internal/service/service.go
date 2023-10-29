@@ -44,12 +44,17 @@ type Filter interface {
 	Filter(java, kotlin, python, topic string) ([]structs.Post, error)
 }
 
+type Notification interface {
+	AllUserNotifications(userID int64) error
+}
+
 type Service struct {
 	Authorization
 	PostRedact
 	CommentRedact
 	Reaction
 	Filter
+	Notification
 }
 
 func NewService(repo *repository.Repository) *Service {
@@ -59,5 +64,6 @@ func NewService(repo *repository.Repository) *Service {
 		CommentRedact: NewCommentRed(repo.CommentRedact, repo.CommentReaction),
 		Reaction:      NewReaction(repo.PostReaction, repo.CommentReaction),
 		Filter:        NewFilter(repo.PostRedact),
+		Notification:  NewNotify(repo.PostReaction, repo.PostRedact),
 	}
 }

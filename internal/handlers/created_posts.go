@@ -9,6 +9,7 @@ import (
 
 func (h *Handler) createdPosts(w http.ResponseWriter, r *http.Request) {
 	if r.URL.Path != "/created-posts" {
+		h.errorHandler(w, r, http.StatusNotFound)
 		return
 	}
 	if r.Method != http.MethodGet {
