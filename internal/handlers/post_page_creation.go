@@ -72,11 +72,13 @@ func (h *Handler) PostPageCreate(w http.ResponseWriter, r *http.Request) {
 		post.Content = strings.TrimSpace(r.Form.Get("postContent"))
 
 		if len(post.Title) == 0 {
+			w.WriteHeader(http.StatusBadRequest)
 			result["EmptyTitle"] = true
 			tmp.Execute(w, result)
 			return
 		}
 		if len(post.Content) == 0 {
+			w.WriteHeader(http.StatusBadRequest)
 			result["EmptyContent"] = true
 			tmp.Execute(w, result)
 			return

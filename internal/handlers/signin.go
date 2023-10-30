@@ -53,7 +53,7 @@ func (h *Handler) signin(w http.ResponseWriter, r *http.Request) {
 				h.errorHandler(w, r, 400)
 				return
 			}
-
+			w.WriteHeader(http.StatusBadRequest)
 			ts.Execute(w, errorsCatch)
 			return
 		}

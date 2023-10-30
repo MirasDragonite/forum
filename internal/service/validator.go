@@ -36,7 +36,7 @@ func isEmailValid(email string) error {
 }
 
 func isNameValid(name string) error {
-	if len(strings.TrimSpace(name)) < 2 || len(strings.TrimSpace(name)) > 32 {
+	if len(strings.TrimSpace(name)) < 4 || len(strings.TrimSpace(name)) > 32 {
 		return errors.New("The length of the user is not up to standard ")
 	}
 	if strings.TrimSpace(name) == "" {
@@ -46,7 +46,7 @@ func isNameValid(name string) error {
 }
 
 func isPasswordValid(password string) error {
-	if len(strings.TrimSpace(password)) < 2 || len(strings.TrimSpace(password)) > 32 {
+	if len(strings.TrimSpace(password)) < 5 || len(strings.TrimSpace(password)) > 32 {
 		return errors.New("The length of the password is not up to standard ")
 	}
 

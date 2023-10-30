@@ -1,4 +1,7 @@
-[ERROR]: 2023/10/30 18:24:59 log.go:29: template: post_page.html:119: expected end; found {{else}}
+[INFO]: 2023/10/30 19:48:07 log.go:17: Token is available
+red
+ present
+xpected end; found {{else}}
 .Unique>: can't evaluate field Unique in type string
 0/14 20:31:04 log.go:17: Token is available
  not present

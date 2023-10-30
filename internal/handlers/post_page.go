@@ -70,6 +70,7 @@ func (h *Handler) PostPage(w http.ResponseWriter, r *http.Request) {
 		result["Likes"] = likes
 		result["Dislikes"] = dislikes
 		if comment.Content == "" {
+			w.WriteHeader(http.StatusBadRequest)
 			result["Empty"] = true
 			tmp.Execute(w, result)
 			return
