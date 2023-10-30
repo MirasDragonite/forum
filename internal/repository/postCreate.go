@@ -77,6 +77,7 @@ func (pr *PostRedactDB) GetPostBy(from, value string, user_id int64) (*structs.P
 		if err != nil {
 			return &structs.Post{}, err
 		}
+		defer rows.Close()
 		post.Topic = strings.Split(post.TopicString, "|")
 		for rows.Next() {
 			var comment structs.Comment
@@ -103,6 +104,7 @@ func (pr *PostRedactDB) GetPostBy(from, value string, user_id int64) (*structs.P
 			return &structs.Post{}, err
 		}
 		post.Topic = strings.Split(post.TopicString, "|")
+		defer rows.Close()
 		for rows.Next() {
 			var comment structs.Comment
 			err := rows.Scan(&comment.CommentID, &comment.CommentAuthorID, &comment.CommentAuthorName, &comment.PostID, &comment.Content, &comment.Like, &comment.Dislike)
@@ -185,6 +187,7 @@ func (pr *PostRedactDB) GetAllPosts() ([]structs.Post, error) {
 	if err != nil {
 		return nil, err
 	}
+	defer rows.Close()
 	for rows.Next() {
 		var post structs.Post
 		err := rows.Scan(&post.Id, &post.PostAuthorID, &post.TopicString, &post.Title, &post.Content, &post.Like, &post.Dislike, &post.PostAuthorName)
@@ -207,6 +210,7 @@ func (pr *PostRedactDB) GetAllLikedPosts(user_id int64) ([]structs.PostReaction,
 	if err != nil {
 		return nil, err
 	}
+	defer rows.Close()
 	for rows.Next() {
 		var post structs.PostReaction
 		err := rows.Scan(&post.ID, &post.PostID, &post.UserID, &post.Value)
@@ -229,6 +233,7 @@ func (pr *PostRedactDB) GetAllUserPosts(user_id int64) ([]structs.Post, error) {
 	if err != nil {
 		return nil, err
 	}
+	defer rows.Close()
 	for rows.Next() {
 		var post structs.Post
 		err := rows.Scan(&post.Id, &post.PostAuthorID, &post.TopicString, &post.Title, &post.Content, &post.Like, &post.Dislike, &post.PostAuthorName)
@@ -261,7 +266,7 @@ func (pr *PostRedactDB) GetFilteredPosts(java, kotlin, python, topic string) ([]
 			return nil, err
 		}
 	}
-
+	defer rows.Close()
 	for rows.Next() {
 		var post structs.Post
 		err := rows.Scan(&post.Id, &post.PostAuthorID, &post.TopicString, &post.Title, &post.Content, &post.Like, &post.Dislike, &post.PostAuthorName)
