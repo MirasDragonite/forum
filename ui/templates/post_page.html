@@ -106,11 +106,16 @@
     </ul>
 
     <!-- Comment Form -->
+    {{if .Empty}}
+    <p style="color: red;"> Can't be empty</p>
+    {{end}}
     <form action="/post/{{.Post.Id}}" method="POST">
         <input type="hidden" name="postId" value="{{.Post.Id}}">
         <input type="text" name="commentContent"  class="commentContent" placeholder="Add a comment">
         <button class="submitComment" type="submit">Submit Comment</button>
     </form>
+
+
     {{ else }}
     <p>Post not found.</p>
     {{ end }}

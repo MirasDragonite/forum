@@ -1,8 +1,16 @@
+<<<<<<< HEAD
 [INFO]: 2023/10/30 16:46:32 log.go:17: Token is available
  not present
 t, Check CreateComment()
 nation not a pointer
 aluate field Unique in type string
+=======
+[INFO]: 2023/10/30 19:48:07 log.go:17: Token is available
+red
+ present
+xpected end; found {{else}}
+.Unique>: can't evaluate field Unique in type string
+>>>>>>> master
 0/14 20:31:04 log.go:17: Token is available
  not present
 expected EOF

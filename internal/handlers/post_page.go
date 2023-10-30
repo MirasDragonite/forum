@@ -55,9 +55,26 @@ func (h *Handler) PostPage(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
+		likes, dislikes, err := h.Service.Reaction.AllPostReactions(post.Id)
+		if err != nil {
+			h.logError(w, r, err, http.StatusInternalServerError)
+			return
+		}
+		if user_id != 0 {
+			result["Logged"] = true
+		}
 		comment := &structs.Comment{}
 
-		comment.Content = r.Form.Get("commentContent")
+		comment.Content = strings.TrimSpace(r.Form.Get("commentContent"))
+		result["Post"] = post
+		result["Likes"] = likes
+		result["Dislikes"] = dislikes
+		if comment.Content == "" {
+			w.WriteHeader(http.StatusBadRequest)
+			result["Empty"] = true
+			tmp.Execute(w, result)
+			return
+		}
 
 		comment.Dislike = 0
 		comment.Like = 0

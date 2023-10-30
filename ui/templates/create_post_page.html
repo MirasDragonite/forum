@@ -48,7 +48,7 @@
               <span class="title-container">
               <p id="title">Title</p>  
               <input type="text"  minlength="1" id="postTitle" name="postTitle" class="postTitle" placeholder="Title" style="width: 250px;">
-              {{if .Empty}}
+              {{if .EmptyTitle}}
               <p style="color: red;"> Can't be empty</p>
               {{end}}
               </span>
@@ -57,15 +57,15 @@
   
                 <a class="filters-title" >Filters:</a>
       
-    <input type="checkbox" name="postTopic" class="round-checkbox" id="javaCheckbox"  value="Java" >
+    <input type="checkbox" name="postTopicJava" class="round-checkbox" id="javaCheckbox"  value="Java" >
                 <label class="checkbox-label" for="javaCheckbox"></label>
                 <label for="javaCheckbox">Java</label>
                 
-                <input type="checkbox" name="postTopic" class="round-checkbox" id="kotlinCheckbox" value="Kotlin">
+                <input type="checkbox" name="postTopicKotlin" class="round-checkbox" id="kotlinCheckbox" value="Kotlin">
                 <label class="checkbox-label" for="kotlinCheckbox"></label>
                 <label for="kotlinCheckbox">Kotlin</label>
                 
-                <input type="checkbox" name="postTopic" class="round-checkbox" id="pythonCheckbox" value="Python">
+                <input type="checkbox" name="postTopicPython" class="round-checkbox" id="pythonCheckbox" value="Python">
                 <label class="checkbox-label" for="pythonCheckbox"></label>
                 <label for="pythonCheckbox">Python</label>
       
@@ -74,6 +74,9 @@
   
           <span class="text-container">
               <p id = "your-message">Your message</p>
+              {{if .EmptyContent}}
+              <p style="color: red;"> Can't be empty</p>
+              {{end}}
               <textarea  name="postContent" class="postContent" id="text-area" placeholder="Message" ></textarea>
           </span>
           <button type="submit" class="postSubmit" >Publish</button>
@@ -83,7 +86,7 @@
   </span>
   </div>
     
-
+<!-- 
     <script>
       document.addEventListener("DOMContentLoaded", function () {
 
@@ -127,6 +130,6 @@
 
  
 
-  </script>
+  </script> -->
 </body>
 </html>
