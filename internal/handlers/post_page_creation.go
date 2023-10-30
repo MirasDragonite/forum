@@ -1,8 +1,8 @@
 package handlers
 
 import (
-	"encoding/json"
 	"errors"
+	"fmt"
 	"net/http"
 	"strings"
 	"text/template"
@@ -15,32 +15,69 @@ func (h *Handler) PostPageCreate(w http.ResponseWriter, r *http.Request) {
 		h.errorHandler(w, r, http.StatusMethodNotAllowed)
 		return
 	}
-
+	err := r.ParseForm()
+	if err != nil {
+		h.logError(w, r, err, http.StatusInternalServerError)
+		return
+	}
 	tmp, err := template.ParseFiles("./ui/templates/create_post_page.html")
 	if err != nil {
 		h.logError(w, r, err, http.StatusInternalServerError)
 		return
 	}
 	result := map[string]interface{}{
-		"User":   nil,
-		"Logged": nil,
-		"Empty":  nil,
+		"User":         nil,
+		"Logged":       false,
+		"EmptyTitle":   false,
+		"EmptyContent": false,
 	}
-	if r.Method == http.MethodPost {
-		cookie, err := r.Cookie("Token")
-		h.logError(w, r, err, http.StatusInternalServerError)
-		var post *structs.Post
 
-		err = json.NewDecoder(r.Body).Decode(&post)
-		if err != nil {
-			h.logError(w, r, errors.New("Wrong Method"), http.StatusBadRequest)
+	cookie, err := r.Cookie("Token")
+	if err != nil {
+		if err != http.ErrNoCookie {
+			h.logError(w, r, err, http.StatusInternalServerError)
 			return
 		}
+	}
 
-		post.Content = strings.TrimSpace(post.Content)
-		post.Title = strings.TrimSpace(post.Title)
-		if len(post.Content) == 0 || len(post.Title) == 0 {
-			result["Empty"] = true
+	user, err := h.Service.Authorization.GetUserByToken(cookie.Value)
+	if err != nil {
+		h.logError(w, r, err, http.StatusInternalServerError)
+		return
+	}
+	logged := false
+
+	if user != nil {
+		logged = true
+	}
+	result["Logged"] = logged
+	result["User"] = user
+	if r.Method == http.MethodPost {
+
+		post := &structs.Post{}
+
+		post.Title = strings.TrimSpace(r.Form.Get("postTitle"))
+		if r.Form.Get("postTopicJava") == "Java" {
+			post.Topic = append(post.Topic, r.Form.Get("postTopicJava"))
+		}
+		if r.Form.Get("postTopicKotlin") == "Kotlin" {
+			post.Topic = append(post.Topic, r.Form.Get("postTopicKotlin"))
+		}
+		if r.Form.Get("postTopicPython") == "Python" {
+			post.Topic = append(post.Topic, r.Form.Get("postTopicPython"))
+		}
+		if r.Form.Get("postTopicInput") != "" {
+			post.Topic = append(post.Topic, r.Form.Get("postTopicInput"))
+		}
+		post.Content = strings.TrimSpace(r.Form.Get("postContent"))
+
+		if len(post.Title) == 0 {
+			result["EmptyTitle"] = true
+			tmp.Execute(w, result)
+			return
+		}
+		if len(post.Content) == 0 {
+			result["EmptyContent"] = true
 			tmp.Execute(w, result)
 			return
 		}
@@ -67,40 +104,11 @@ func (h *Handler) PostPageCreate(w http.ResponseWriter, r *http.Request) {
 			h.logError(w, r, errors.New("Wrong Method"), http.StatusInternalServerError)
 			return
 		}
-		ok := structs.Data{
-			Status: int(post.Id),
-		}
-
-		w.Header().Set("Content-Type", "application/json")
-
-		err = json.NewEncoder(w).Encode(ok)
-		if err != nil {
-			h.logError(w, r, errors.New("Wrong Method"), http.StatusInternalServerError)
-			return
-		}
+		link := fmt.Sprintf("/post/%v", post.Id)
+		http.Redirect(w, r, link, http.StatusSeeOther)
 		return
 
 	} else if r.Method == http.MethodGet {
-		cookie, err := r.Cookie("Token")
-		if err != nil {
-			if err != http.ErrNoCookie {
-				h.logError(w, r, err, http.StatusInternalServerError)
-				return
-			}
-		}
-
-		user, err := h.Service.Authorization.GetUserByToken(cookie.Value)
-		if err != nil {
-			h.logError(w, r, err, http.StatusInternalServerError)
-			return
-		}
-		logged := false
-
-		if user != nil {
-			logged = true
-		}
-		result["Logged"] = logged
-		result["User"] = user
 		tmp.Execute(w, result)
 	} else {
 		h.logError(w, r, errors.New("Wrong Method"), http.StatusMethodNotAllowed)
