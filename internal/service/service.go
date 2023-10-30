@@ -27,13 +27,13 @@ type PostRedact interface {
 }
 
 type CommentRedact interface {
-	CreateComment(comm *structs.Comment) error
+	CreateComment(comm *structs.Comment, user_id int64) error
 	GetAllComments(postID, userID int64) ([]structs.Comment, error)
 	GetCommentByID(commentID int64) (structs.Comment, error)
 }
 
 type Reaction interface {
-	ReactPost(post_id, user_id, value int64) error
+	ReactPost(post_id, user_id, author_id, value int64, username string) error
 	AllPostReactions(post_id int64) (int64, int64, error)
 	ReactComment(comment_id, user_id, value int64) error
 	AllCommentReactions(post_id int64) (int64, int64, error)
@@ -45,7 +45,7 @@ type Filter interface {
 }
 
 type Notification interface {
-	AllUserNotifications(userID int64) error
+	AllUserNotifications(author_id int64) ([]structs.Notify, error)
 }
 
 type Service struct {
@@ -61,9 +61,9 @@ func NewService(repo *repository.Repository) *Service {
 	return &Service{
 		Authorization: NewAuth(repo.Authorization),
 		PostRedact:    NewPostRed(repo.PostRedact),
-		CommentRedact: NewCommentRed(repo.CommentRedact, repo.CommentReaction),
-		Reaction:      NewReaction(repo.PostReaction, repo.CommentReaction),
+		CommentRedact: NewCommentRed(repo.CommentRedact, repo.CommentReaction, repo.NotificationPost),
+		Reaction:      NewReaction(repo.PostReaction, repo.CommentReaction, repo.NotificationPost),
 		Filter:        NewFilter(repo.PostRedact),
-		Notification:  NewNotify(repo.PostReaction, repo.PostRedact),
+		Notification:  NewNotify(repo.NotificationPost),
 	}
 }

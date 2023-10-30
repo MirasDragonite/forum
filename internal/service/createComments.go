@@ -11,17 +11,28 @@ import (
 type CommentRed struct {
 	repo     repository.CommentRedact
 	reaction repository.CommentReaction
+	repoNot  repository.NotificationPost
 }
 
-func NewCommentRed(repo repository.CommentRedact, reaction repository.CommentReaction) *CommentRed {
-	return &CommentRed{repo: repo, reaction: reaction}
+func NewCommentRed(repo repository.CommentRedact, reaction repository.CommentReaction, repoNot repository.NotificationPost) *CommentRed {
+	return &CommentRed{repo: repo, reaction: reaction, repoNot: repoNot}
 }
 
-func (repo *CommentRed) CreateComment(comm *structs.Comment) error {
+func (repo *CommentRed) CreateComment(comm *structs.Comment, user_id int64) error {
 	if strings.TrimSpace(comm.Content) == "" {
 		return errors.New("Can't be empty")
 	}
-	return repo.repo.CreateComment(comm)
+	err := repo.repo.CreateComment(comm)
+	if err != nil {
+		return err
+	}
+	if comm.CommentAuthorID != user_id {
+		err = repo.repoNot.CreateNotifyReaction(comm.PostID, comm.CommentAuthorID, user_id, 3, comm.CommentAuthorName)
+		if err != nil {
+			return err
+		}
+	}
+	return nil
 }
 
 func (repo *CommentRed) GetCommentByID(commentID int64) (structs.Comment, error) {

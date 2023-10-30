@@ -31,11 +31,13 @@ func (comm *CommentRedactDB) CreateComment(comment *structs.Comment) error {
 
 func (comm *CommentRedactDB) GetAllComments(postID, userID int64) ([]structs.Comment, error) {
 	var comments []structs.Comment
-	query := `SELECT * from comments WHERE post_id = $1`
+	query := `SELECT * from comments WHERE post_id = $1 ORDER BY id DESC`
 	rows, err := comm.db.Query(query, postID)
 	if err != nil {
 		return nil, err
 	}
+
+	defer rows.Close()
 	for rows.Next() {
 		var comment structs.Comment
 		err := rows.Scan(&comment.CommentID, &comment.CommentAuthorID, &comment.CommentAuthorName, &comment.PostID, &comment.Content, &comment.Like, &comment.Dislike)
@@ -72,9 +74,10 @@ func (comm *CommentRedactDB) GetAllComments(postID, userID int64) ([]structs.Com
 }
 
 func (comm *CommentRedactDB) GetCommentByID(commentID int64) (structs.Comment, error) {
-	query := `SELECT * FROM comments WHERE id=$1`
+	query := `SELECT * FROM comments WHERE id=$1 `
 	var comment structs.Comment
 	row := comm.db.QueryRow(query, &commentID)
+
 	err := row.Scan(&comment.CommentID, &comment.CommentAuthorID, &comment.CommentAuthorName, &comment.PostID, &comment.Content, &comment.Like, &comment.Dislike)
 	if err != nil {
 		return structs.Comment{}, err

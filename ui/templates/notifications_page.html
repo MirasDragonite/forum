@@ -21,6 +21,23 @@
   </nav>
   <div class="panel notification">
     <h1>NOTIFICATIONS HERE</h1>
+
   </div>
+
+  {{range .}}
+  <li>{{.Username}}
+   
+
+    {{if eq .Reaction 1}}
+    liked
+    {{else if eq .Reaction -1}}
+    disliked
+    {{else if eq .Reaction 3}}
+    commented
+    {{end}}
+    your <a href="/post/{{.PostID}}">post</a>  
+  </li>
+    {{end}}
+    
 </body>
 </html>

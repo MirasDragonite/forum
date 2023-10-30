@@ -44,7 +44,15 @@ func (h *Handler) likePost(w http.ResponseWriter, r *http.Request) {
 	}
 
 	user, err := h.Service.Authorization.GetUserByToken(cookie.Value)
-	err = h.Service.Reaction.ReactPost(int64(post_id), user.Id, input.Reaction)
+
+	post, err := h.Service.PostRedact.GetPostBy("id", post_id_string, user.Id)
+	if err != nil {
+		h.logError(w, r, err, http.StatusInternalServerError)
+		return
+	}
+
+	fmt.Println("POstid", post_id, "UserID", user.Id, "PostAuthorName", post.PostAuthorName, "PostAuthId", post.PostAuthorID, "REACTION", input.Reaction, "username", user.Username)
+	err = h.Service.Reaction.ReactPost(int64(post_id), user.Id, post.PostAuthorID, input.Reaction, user.Username)
 	if err != nil {
 		h.logError(w, r, err, http.StatusBadRequest)
 		return

@@ -15,6 +15,15 @@ type Post struct {
 	Comments       []Comment
 }
 
+type Notify struct {
+	ID       int64
+	UserID   int64
+	AuthorID int64
+	PostID   int64
+	Reaction int64
+	Username string
+}
+
 // func CreatePost(id int64, authorID int64, topic string, title string, content string) *Post {
 // 	return &Post{
 // 		Id:           id,

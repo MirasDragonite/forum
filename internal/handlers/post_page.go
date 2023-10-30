@@ -66,7 +66,7 @@ func (h *Handler) PostPage(w http.ResponseWriter, r *http.Request) {
 		user, err := h.Service.Authorization.GetUserByToken(cookie.Value)
 		comment.CommentAuthorName = user.Username
 		post.Comments = append(post.Comments, *comment)
-		err = h.Service.CommentRedact.CreateComment(comment)
+		err = h.Service.CommentRedact.CreateComment(comment, post.PostAuthorID)
 		if err != nil {
 			if err.Error() == "Can't be empty" {
 			} else {

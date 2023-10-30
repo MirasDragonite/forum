@@ -13,13 +13,11 @@ func NewDB() (*sql.DB, error) {
 		return nil, err
 	}
 
-	_, err = db.Exec("PRAGMA foreign_keys = ON;")
-	if err != nil {
-		return nil, err
-	}
+	// _, err = db.Exec("PRAGMA foreign_keys = ON;")
+	// if err != nil {
+	// 	return nil, err
+	// }
 
-	// DROP TABLE IF EXISTS post_notification;
-	// CREATE TABLE post_notification(id INTEGER PRIMARY KEY NOT NULL,reacted_user_id INTEGER, post_user_id INTEGER,post_id INTEGER , reacted )
 	query := `DROP TABLE IF EXISTS users;
 	CREATE TABLE users(id INTEGER PRIMARY KEY, username TEXT NOT NULL, email TEXT NOT NULL UNIQUE,hash_password TEXT NOT NULL,createdDate TEXT NOT NULL);
 	DROP TABLE IF EXISTS tokens;
@@ -32,13 +30,15 @@ func NewDB() (*sql.DB, error) {
 	CREATE TABLE post_reactions (id INTEGER PRIMARY KEY NOT NULL, post_id INTEGER, user_ID INTEGER, reaction INTEGER,FOREIGN KEY(user_id) REFERENCES users(id) ON DELETE CASCADE, FOREIGN KEY(post_id) REFERENCES posts(id) ON DELETE CASCADE);
 	DROP TABLE IF EXISTS comment_reactions;
 	CREATE TABLE comment_reactions (id INTEGER PRIMARY KEY NOT NULL, comment_id INTEGER, user_ID INTEGER, reaction INTEGER,FOREIGN KEY(user_id) REFERENCES users(id) ON DELETE CASCADE, FOREIGN KEY(comment_id) REFERENCES comments(id) ON DELETE CASCADE);
-	
+	DROP TABLE IF EXISTS post_notification;
+	CREATE TABLE post_notification(id INTEGER PRIMARY KEY NOT NULL, user_id INTEGER, author_id INTEGER,post_id INTEGER , reaction INTEGER,username TEXT, FOREIGN KEY(user_id) REFERENCES users(id),FOREIGN KEY(author_id) REFERENCES users(id),FOREIGN KEY(post_id) REFERENCES posts(id));
 	`
 
 	_, err = db.Exec(query)
 	if err != nil {
 		return nil, err
 	}
+
 	fmt.Println("Successfuly connect to database")
 	return db, nil
 }

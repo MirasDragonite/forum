@@ -3,6 +3,7 @@ package service
 import (
 	"database/sql"
 	"errors"
+	"fmt"
 
 	"forum/internal/repository"
 )
@@ -10,26 +11,45 @@ import (
 type ReactionService struct {
 	repo1 repository.PostReaction
 	repo2 repository.CommentReaction
+	repo3 repository.NotificationPost
 }
 
-func NewReaction(repo repository.PostReaction, repo2 repository.CommentReaction) *ReactionService {
-	return &ReactionService{repo1: repo, repo2: repo2}
+func NewReaction(repo repository.PostReaction, repo2 repository.CommentReaction, repo3 repository.NotificationPost) *ReactionService {
+	return &ReactionService{repo1: repo, repo2: repo2, repo3: repo3}
 }
 
-func (s *ReactionService) ReactPost(post_id, user_id, value int64) error {
+func (s *ReactionService) ReactPost(post_id, user_id, author_id, value int64, username string) error {
 	if value != 1 && value != -1 {
 		return errors.New("BadRequest")
 	}
+
+	fmt.Println("HERE IN service react post")
 	postReaction, err := s.repo1.FindReation(post_id, user_id, value)
 	if err == sql.ErrNoRows {
+		fmt.Println("I am here")
 		err = s.repo1.CreateReaction(post_id, user_id, value)
+		if author_id != user_id {
+			fmt.Println("Before create notify reaction")
+			err = s.repo3.CreateNotifyReaction(post_id, user_id, author_id, value, username)
+			if err != nil {
+				fmt.Println(err.Error())
+				return err
+			}
+		}
 	} else if err != nil {
 		return err
 	} else {
 		if postReaction.Value == value {
 			err = s.repo1.DeleteReaction(post_id, user_id)
+			if author_id != user_id {
+				err = s.repo3.DeletenNotifyReaction(post_id, user_id, author_id)
+			}
 		} else {
 			err = s.repo1.LikePost(post_id, user_id, value)
+			if author_id != user_id {
+				err = s.repo3.DeletenNotifyReaction(post_id, user_id, author_id)
+				err = s.repo3.CreateNotifyReaction(post_id, user_id, author_id, value, username)
+			}
 		}
 	}
 

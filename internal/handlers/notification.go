@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"fmt"
 	"net/http"
 	"text/template"
 )
@@ -13,7 +14,7 @@ func (h *Handler) notify(w http.ResponseWriter, r *http.Request) {
 
 	switch r.Method {
 	case http.MethodGet:
-		tmp, err := template.ParseFiles("./ui/templates/notification.html")
+		tmp, err := template.ParseFiles("./ui/templates/notifications_page.html")
 		if err != nil {
 			h.logError(w, r, err, http.StatusInternalServerError)
 			return
@@ -22,9 +23,13 @@ func (h *Handler) notify(w http.ResponseWriter, r *http.Request) {
 		cookie, err := r.Cookie("Token")
 
 		user, err := h.Service.Authorization.GetUserByToken(cookie.Value)
+		fmt.Println("UserID", user.Id)
+		posts, err := h.Service.Notification.AllUserNotifications(user.Id)
+		if err != nil {
+			h.logError(w, r, err, http.StatusInternalServerError)
+			return
+		}
 
-		h.Service.Notification.AllUserNotifications(user.Id)
-
-		tmp.Execute(w, nil)
+		tmp.Execute(w, posts)
 	}
 }

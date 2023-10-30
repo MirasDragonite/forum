@@ -1,21 +1,18 @@
 package service
 
-import "forum/internal/repository"
+import (
+	"forum/internal/repository"
+	"forum/structs"
+)
 
 type Notify struct {
-	repoPostRect repository.PostReaction
-	repoPost     repository.PostRedact
+	repo repository.NotificationPost
 }
 
-func NewNotify(repoPostRect repository.PostReaction, repoPost repository.PostRedact) *Notify {
-	return &Notify{repoPost: repoPost, repoPostRect: repoPostRect}
+func NewNotify(repo repository.NotificationPost) *Notify {
+	return &Notify{repo: repo}
 }
 
-func (s *Notify) AllUserNotifications(userID int64) error {
-	// userPosts, err := s.repoPost.GetAllUserPosts(userID)
-	// if err != nil {
-	// 	return err
-	// }
-
-	return nil
+func (s *Notify) AllUserNotifications(author_id int64) ([]structs.Notify, error) {
+	return s.repo.GetPostNotification(author_id)
 }

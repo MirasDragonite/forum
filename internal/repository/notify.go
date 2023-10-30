@@ -2,6 +2,9 @@ package repository
 
 import (
 	"database/sql"
+	"fmt"
+
+	"forum/structs"
 )
 
 type NotifyDB struct {
@@ -12,10 +15,10 @@ func NewNotifyDB(db *sql.DB) *PostReactionDB {
 	return &PostReactionDB{db: db}
 }
 
-func (r *PostReactionDB) NotifyLikePost(post_id, user_id, value int64) error {
-	query := `UPDATE post_reactions SET reaction=$1  WHERE post_id=$2 AND user_id=$3`
+func (r *PostReactionDB) NotifyLikePost(post_id, user_id, author_id, value int64) error {
+	query := `UPDATE post_notification  SET reaction=$1  WHERE post_id=$2 AND user_id=$3 AND author_id=$4`
 
-	_, err := r.db.Exec(query, &value, &post_id, &user_id)
+	_, err := r.db.Exec(query, &value, &post_id, &user_id, &author_id)
 	if err != nil {
 		return err
 	}
@@ -23,71 +26,47 @@ func (r *PostReactionDB) NotifyLikePost(post_id, user_id, value int64) error {
 	return nil
 }
 
-// func (r *PostReactionDB) AllReactions(post_id int64) (int64, int64, error) {
-// 	query := `SELECT COUNT(*) FROM post_reactions WHERE post_id=$1 AND reaction=1 `
+func (r *PostReactionDB) CreateNotifyReaction(post_id, user_id, author_id, value int64, username string) error {
+	query := `INSERT INTO post_notification(user_id,author_id,post_id,reaction,username) VALUES($1,$2,$3,$4,$5)`
+	fmt.Println("Here in repo")
+	_, err := r.db.Exec(query, &user_id, &author_id, &post_id, &value, &username)
+	if err != nil {
+		fmt.Println(err.Error())
+		return err
+	}
 
-// 	row := r.db.QueryRow(query, &post_id)
-// 	var likes int64
-// 	err := row.Scan(&likes)
-// 	if err != nil {
-// 		return 0, 0, err
-// 	}
+	return nil
+}
 
-// 	query = `SELECT COUNT(*) FROM post_reactions WHERE post_id=$1 AND reaction=-1 `
+func (r *PostReactionDB) DeletenNotifyReaction(post_id, user_id, author_id int64) error {
+	query := `DELETE FROM post_notification WHERE post_id=$1 AND user_id=$2 AND author_id=$3`
 
-// 	row = r.db.QueryRow(query, &post_id)
-// 	var dislikes int64
-// 	err = row.Scan(&dislikes)
-// 	if err != nil {
-// 		return 0, 0, err
-// 	}
-
-// 	return likes, dislikes, nil
-// }
-
-// func (r *PostReactionDB) FindReation(post_id, user_id, value int64) (*structs.PostReaction, error) {
-// 	query := `SELECT * FROM post_reactions WHERE post_id=$1 AND user_id=$2`
-
-// 	row := r.db.QueryRow(query, post_id, user_id)
-// 	var postReaction structs.PostReaction
-// 	err := row.Scan(&postReaction.ID, &postReaction.PostID, &postReaction.UserID, &postReaction.Value)
-// 	if err != nil {
-// 		return nil, err
-// 	}
-
-// 	return &postReaction, nil
-// }
-
-// func (r *PostReactionDB) CreateReaction(post_id, user_id, value int64) error {
-// 	query := `INSERT INTO post_reactions(post_id,user_id,reaction) VALUES($1,$2,$3)`
-
-// 	_, err := r.db.Exec(query, &post_id, &user_id, &value)
-// 	if err != nil {
-// 		fmt.Println(err.Error())
-// 		return err
-// 	}
-
-// 	return nil
-// }
-
-func (r *PostReactionDB) DeletenNotifyReaction(post_id, user_id int64) error {
-	query := `DELETE FROM post_reactions WHERE post_id=$1 AND user_id=$2`
-
-	_, err := r.db.Exec(query, post_id, user_id)
+	_, err := r.db.Exec(query, post_id, user_id, author_id)
 	if err != nil {
 		return err
 	}
 	return nil
 }
 
-// func (r *PostReactionDB) GetPostReaction(user_id, post_id int64) (int64, error) {
-// 	query := `SELECT id,reaction FROM post_reactions WHERE post_id=$1 AND user_ID=$2`
+func (r *PostReactionDB) GetPostNotification(author_id int64) ([]structs.Notify, error) {
+	query := `SELECT * FROM post_notification WHERE author_id=$1 ORDER BY id DESC`
 
-// 	var id, reaction int64
-// 	row := r.db.QueryRow(query, post_id, user_id)
-// 	err := row.Scan(&id, &reaction)
-// 	if err != nil {
-// 		return 0, err
-// 	}
-// 	return reaction, nil
-// }
+	var postNotifications []structs.Notify
+	row, err := r.db.Query(query, author_id)
+	if err != nil {
+		return nil, err
+	}
+	defer row.Close()
+	for row.Next() {
+		var postNotification structs.Notify
+
+		err = row.Scan(&postNotification.ID, &postNotification.UserID, &postNotification.AuthorID, &postNotification.PostID, &postNotification.Reaction, &postNotification.Username)
+		if err != nil {
+			return nil, err
+		}
+		postNotifications = append(postNotifications, postNotification)
+	}
+
+	fmt.Println("Notifications:", postNotifications)
+	return postNotifications, nil
+}

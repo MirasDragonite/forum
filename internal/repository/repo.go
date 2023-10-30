@@ -57,20 +57,29 @@ type CommentReaction interface {
 	GetCommentReaction(user_id, commentId int64) (int64, error)
 }
 
+type NotificationPost interface {
+	NotifyLikePost(post_id, user_id, author_id, value int64) error
+	CreateNotifyReaction(post_id, user_id, author_id, value int64, username string) error
+	DeletenNotifyReaction(post_id, user_id, author_id int64) error
+	GetPostNotification(author_id int64) ([]structs.Notify, error)
+}
+
 type Repository struct {
 	Authorization
 	PostRedact
 	CommentRedact
 	PostReaction
 	CommentReaction
+	NotificationPost
 }
 
 func NewRepository(db *sql.DB) *Repository {
 	return &Repository{
-		Authorization:   NewAuth(db),
-		PostRedact:      NewPostRedactDB(db),
-		CommentRedact:   NewCommentRedactDB(db),
-		PostReaction:    NewReactionDB(db),
-		CommentReaction: NewCommentReactionDB(db),
+		Authorization:    NewAuth(db),
+		PostRedact:       NewPostRedactDB(db),
+		CommentRedact:    NewCommentRedactDB(db),
+		PostReaction:     NewReactionDB(db),
+		CommentReaction:  NewCommentReactionDB(db),
+		NotificationPost: NewNotifyDB(db),
 	}
 }
