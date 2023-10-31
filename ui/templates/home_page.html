@@ -20,7 +20,8 @@
            {{if .Logged}}
            <img id="logoutImg"src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSNKLd_50v-5_W2gtKHNz1cjjLivUIO2KQ_cA&usqp=CAU"  onclick="window.location.href='/logout';"></img>
            {{else}}
-          <!-- Иконка для авторизаций  -->
+           <a id="sign-up-icon" href="/register">Sign up</a>
+
            {{end}}
             
           </div>
@@ -82,27 +83,19 @@
       </div>
 
   {{if .Posts}}
-  
   {{range .Posts}}
 <div class="post-card">
     <a href="/post/{{.Id}}" class="post-title">{{.Title}}</a>
     <p class="post-author">Author: {{.PostAuthorName}}</p>
-    <p class="post-topics">Topics: </p>
+<ol class="topics-list">
     {{range .Topic}}
-            <ol>
-                {{ if . }} 
-                <p class="post-topics">{{.}}</p>
-                {{else }}
-
-                {{end}}
-                
-            </ol>
-            
-        {{end}}
+        {{ if . }}
+            <li class="topic-item">{{.}}</li>
+        {{ end }}
+    {{end}}
+</ol>
 </div>
-
   {{end}}
-
   {{end}}
 </div>
 </span>

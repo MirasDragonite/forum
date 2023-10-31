@@ -3,14 +3,99 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@100&family=Oswald:wght@700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="../static/css/created_post_style.css">
     <title>FORUM</title>
 </head>
 <body>
+  <nav class="navbar navbar-inverse">
+    <div class="container-fluid">
+      <div class="navbar-header">
+        <div id="title-container">
+          <p class="line-1 anim-typewriter">&lt;/forum&gt;</p>
+          <div class="imgContainer">
+            <img id="notificationImg" src="https://gagaru.club/uploads/posts/2023-06/1686068744_gagaru-club-p-kolokolchik-malenkii-vkontakte-1.png"></img>
+           {{if .Logged}}
+           <img id="logoutImg"src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSNKLd_50v-5_W2gtKHNz1cjjLivUIO2KQ_cA&usqp=CAU"  onclick="window.location.href='/logout';"></img>
+           {{else}}
+           <a id="sign-up-icon" href="/register">Sign up</a>
+           {{end}}
+            
+          </div>
 
- 
-  {{range .Post}}
-<li><p>Name:<a href="/post/{{.Id}}"> {{.Title}} </a></p> <p>Author: {{.PostAuthorName}}</p>  <p> Topics: {{.Topic}}</p>  </li>
-  {{end}}
+        </div>
+      </div>
+      <div class="top-bar">
+        <span><a href="/"> Home</a></span>
+        <span><a href="/submit-post"> Create Post</a></span>
+        <span><a href="/liked-posts"> Liked Posts</a></span>
+        <span><a href="/created-posts">Created Posts</a></span>
+      </div>
+    </div>
+  </nav>
   
+  
+  <div class="container">
+    <span>
+      <div class="profile-info">
+        <img id="profilePhoto" src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png" alt="Profile Photo" style="max-width: 100px; max-height: 100px;">
+        {{if .User}}
+        <p id="userName">Name:  {{.User.Username}}</p>
+        {{else}}
+        <p id="userName">Name:  </p>
+        {{end}}
+      </div>
+    </span>
+    <div class="container-content">
+      <div class="actions">
+      
+        <!-- <div class="search">
+          <input type="search" name="q" placeholder="Search..." />
+          <button type="submit">Search</button>
+        </div> -->
+        <form id="create-post-form" method="POST" > 
+        <div class="filters">
+          <span class="filters">
+  
+            <a class="filters-title" >Filters:</a>
+  
+            <input type="checkbox" name="postTopicJava" class="round-checkbox" id="javaCheckbox"  value="Java" >
+            <label class="checkbox-label" for="javaCheckbox"></label>
+            <label for="javaCheckbox">Java</label>
+            
+            <input type="checkbox" name="postTopicKotlin" class="round-checkbox" id="kotlinCheckbox" value="Kotlin">
+            <label class="checkbox-label" for="kotlinCheckbox"></label>
+            <label for="kotlinCheckbox">Kotlin</label>
+            
+            <input type="checkbox" name="postTopicPython" class="round-checkbox" id="pythonCheckbox" value="Python">
+            <label class="checkbox-label" for="pythonCheckbox"></label>
+            <label for="pythonCheckbox">Python</label>
+  
+          </span>
+          <input type="text" id="postTopicInput" name="postTopicInput" class="postTopicInput" placeholder="Topic" style="width: 250px;">
+
+          <button type="submit" class="postSubmit" >Submit</button>
+        </div>
+        </form>
+      </div>
+      {{range .Post}}
+      <div class="post-card">
+      
+<li>
+    <p href="/post/{{.Id}}" class="post-title"> {{.Title}}</>
+    <p class="post-author">Author: {{.PostAuthorName}}</p>
+    <ol class="topics-list">
+      {{range .Topic}}
+          {{ if . }}
+              <li class="topic-item">{{.}}</li>
+          {{ end }}
+      {{end}}
+  </ol>
+      </div>
+      {{end}}
+    
+
 </body>
 </html>

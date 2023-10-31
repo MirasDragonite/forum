@@ -21,7 +21,6 @@
            <img id="logoutImg"src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSNKLd_50v-5_W2gtKHNz1cjjLivUIO2KQ_cA&usqp=CAU"  onclick="window.location.href='/logout';"></img>
            {{else}}
            <img id="logoutImg"src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSNKLd_50v-5_W2gtKHNz1cjjLivUIO2KQ_cA&usqp=CAU"  onclick="window.location.href='/logout';"></img>
-
            {{end}}
               </div>
     
@@ -36,9 +35,7 @@
           </div>
         </div>
       </nav>
-
     {{if .Post}}
-
     <div class="post">
         <p> <b>Author:</b>  {{ .Post.PostAuthorName }} </p>
         <h2> <b>Title:</b>  {{ .Post.Title }}</h2>
@@ -49,7 +46,6 @@
                 {{ if . }} 
                 <li>{{.}}</li>
                 {{else }}
-
                 {{end}}
                 
             </ol>
@@ -71,18 +67,14 @@
                     </form>
         
     </div>
-
-
     <h3 id="comm_title">Comments</h3>
     <ul>
-
         {{ range .Post.Comments}}
         <li>
             <p> {{ .CommentAuthorName }}</p>
             <p>{{ .Content }}</p>
             <form action="/like-comment/{{.CommentID}}" method="POST">
                 <br>
-
               {{if .Liked}}
               <button class="commButtonLike" type="submit" name="commButton" value="like" data-comment-id="{{.CommentID}}" style="background-color:green ;">like</button>
               {{else}}
@@ -99,12 +91,8 @@
         </li>
        
         
-
-
 {{ end }}
-
     </ul>
-
     <!-- Comment Form -->
     {{if .Empty}}
     <p style="color: red;"> Can't be empty</p>
@@ -114,37 +102,24 @@
         <input type="text" name="commentContent"  class="commentContent" placeholder="Add a comment">
         <button class="submitComment" type="submit">Submit Comment</button>
     </form>
-
-
     {{ else }}
     <p>Post not found.</p>
     {{ end }}
-
-
-
     <script>
         document.addEventListener("DOMContentLoaded", function () {
            
-
-
     
             
-
-
 const likeButtonsComment = document.querySelectorAll(".commButtonLike");
     const dislikeButtonsComment = document.querySelectorAll(".commButtonDislike");
-
     likeButtonsComment.forEach(likeButtonComment => {
         likeButtonComment.addEventListener("click", function (event) {
             event.preventDefault();
-
             const commentID = likeButtonComment.getAttribute("data-comment-id");
-
             // Select the like and dislike counts for the specific comment
             const likesElement = likeButtonComment.nextElementSibling;
            const dislikeButtonComment = likeButtonComment.nextElementSibling.nextElementSibling;
             const dislikesElement = likeButtonComment.nextElementSibling.nextElementSibling.nextElementSibling;
-
             // Send an AJAX request to update the reaction for the specific comment
             fetch(`/like-comment/${commentID}`, {
                 method: "POST",
@@ -156,7 +131,6 @@ const likeButtonsComment = document.querySelectorAll(".commButtonLike");
             .then(response => response.json())
             .then(data => {
                 console.log(data);
-
                 // Update the like and dislike counts for the specific comment
                 likesElement.textContent = data.likes;
                 dislikesElement.textContent = data.dislikes;
@@ -173,18 +147,14 @@ const likeButtonsComment = document.querySelectorAll(".commButtonLike");
             });
         });
     });
-
     dislikeButtonsComment.forEach(dislikeButtonComment => {
         dislikeButtonComment.addEventListener("click", function (event) {
             event.preventDefault();
-
             const commentID = dislikeButtonComment.getAttribute("data-comment-id");
-
             // Select the like and dislike counts for the specific comment
          const   likeButtonComment = dislikeButtonComment.previousElementSibling.previousElementSibling;
             const likesElement = dislikeButtonComment.previousElementSibling
             const dislikesElement = dislikeButtonComment.nextElementSibling;
-
             // Send an AJAX request to update the reaction for the specific comment
             fetch(`/like-comment/${commentID}`, {
                 method: "POST",
@@ -196,7 +166,6 @@ const likeButtonsComment = document.querySelectorAll(".commButtonLike");
             .then(response => response.json())
             .then(data => {
                 console.log(data);
-
                 // Update the like and dislike counts for the specific comment
                 likesElement.textContent = data.likes;
                 dislikesElement.textContent = data.dislikes;
@@ -213,13 +182,10 @@ const likeButtonsComment = document.querySelectorAll(".commButtonLike");
             });
         });
     });
-
         });
-
         
     </script>
     
    
-
 </body>
 </html>

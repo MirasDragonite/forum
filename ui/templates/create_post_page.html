@@ -86,50 +86,28 @@
   </span>
   </div>
     
-<!-- 
-    <script>
-      document.addEventListener("DOMContentLoaded", function () {
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
 
-        const postSubmit = document.querySelector(".postSubmit");
-            
-            if (postSubmit) {
-              postSubmit.addEventListener("click", function (event) {
-                    event.preventDefault();
-            
-                    const postContent = document.querySelector(".postContent").value;
-            const postTitle = document.querySelector(".postTitle").value;
-            const selectedCheckboxes = document.querySelectorAll('input[name="postTopic"]:checked');
-            const postTopicInput =document.querySelector(".postTopicInput").value
-            const selectedTopics = Array.from(selectedCheckboxes).map(checkbox => checkbox.value);
-          selectedTopics.push(postTopicInput)
-                    fetch("/submit-post", {
-                        method: "POST",
-                        body: JSON.stringify({
-                          Topic: selectedTopics,
-                          Title: postTitle,
-                          Content: postContent
-                        }),
-                        headers: {
-                            "Content-Type": "application/json",
-                        },
-                    })
-                    .then(response => response.json())
-                    .then(data => {
-            
-                        console.log(data)
-                      window.location.href = `/post/${data.status}`;
-                  
-                    })
-                    .catch(error => {
-                        console.error(error);
-                    });
-                });
-            }
+      const postSubmit = document.querySelector(".postSubmit");
+          
+      if (postSubmit) {
 
-      });
 
+  const postContent = document.querySelector(".postContent").value;
+  const postTitle = document.querySelector(".postTitle").value;
+
+  if (postContent.length < 80 && postTitle.length <= 2) {
  
+    alert("The content should have at least 80 characters. Title should have at least 2 characters");
+  }
 
-  </script> -->
+}
+
+    });
+
+
+
+</script>
 </body>
 </html>
