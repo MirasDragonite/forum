@@ -88,26 +88,18 @@
     
   <script>
     document.addEventListener("DOMContentLoaded", function () {
-
-      const postSubmit = document.querySelector(".postSubmit");
-          
-      if (postSubmit) {
-
-
-  const postContent = document.querySelector(".postContent").value;
-  const postTitle = document.querySelector(".postTitle").value;
-
-  if (postContent.length < 80 && postTitle.length <= 2) {
- 
-    alert("The content should have at least 80 characters. Title should have at least 2 characters");
-  }
-
-}
-
+        const postSubmit = document.querySelector(".postSubmit");
+        if (postSubmit) {
+            postSubmit.addEventListener("click", function (event) {
+                const postContent = document.querySelector(".postContent").value;
+                const postTitle = document.querySelector(".postTitle").value;
+                if (postContent.length < 15 || postTitle.length < 2) {
+                    event.preventDefault(); // Prevent form submission
+                    alert("Title should have at least 2 characters, and content should have at least 15 characters.");
+                }
+            });
+        }
     });
-
-
-
 </script>
 </body>
 </html>

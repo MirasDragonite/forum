@@ -177,7 +177,7 @@ func (pr *PostRedactDB) DeletePost(post *structs.Post) error {
 }
 
 func (pr *PostRedactDB) GetAllPosts() ([]structs.Post, error) {
-	query := `SELECT * FROM posts;`
+	query := `SELECT * FROM posts ORDER BY id DESC;`
 
 	var posts []structs.Post
 
@@ -199,7 +199,7 @@ func (pr *PostRedactDB) GetAllPosts() ([]structs.Post, error) {
 }
 
 func (pr *PostRedactDB) GetAllLikedPosts(user_id int64) ([]structs.PostReaction, error) {
-	query := `SELECT * FROM post_reactions WHERE user_id=$1 AND reaction=1`
+	query := `SELECT * FROM post_reactions WHERE user_id=$1 AND reaction=1 ORDER BY id DESC`
 
 	var posts []structs.PostReaction
 
@@ -221,7 +221,7 @@ func (pr *PostRedactDB) GetAllLikedPosts(user_id int64) ([]structs.PostReaction,
 }
 
 func (pr *PostRedactDB) GetAllUserPosts(user_id int64) ([]structs.Post, error) {
-	query := `SELECT * FROM posts WHERE postAuthorID=$1 `
+	query := `SELECT * FROM posts WHERE postAuthorID=$1 ORDER BY id DESC`
 
 	var posts []structs.Post
 
@@ -244,7 +244,7 @@ func (pr *PostRedactDB) GetAllUserPosts(user_id int64) ([]structs.Post, error) {
 }
 
 func (pr *PostRedactDB) GetFilteredPosts(java, kotlin, python, topic string) ([]structs.Post, error) {
-	query := `SELECT * FROM posts  WHERE topic LIKE ? AND topic LIKE ? AND topic LIKE ? AND topic LIKE ?`
+	query := `SELECT * FROM posts  WHERE topic LIKE ? AND topic LIKE ? AND topic LIKE ? AND topic LIKE ? ORDER BY id DESC`
 
 	var posts []structs.Post
 	var rows *sql.Rows
