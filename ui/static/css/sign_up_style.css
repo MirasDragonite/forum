@@ -2,6 +2,9 @@ body {
     background-color: lightgray;
 }
 
+
+
+
 .line-1{
     color: #000080;
     font-family: 'Oswald', sans-serif;
@@ -112,3 +115,18 @@ body {
     justify-content: center; 
     align-items: center; 
 }
+
+
+@media (max-width: 600px) {
+    body {
+      font-size: 13px;
+    }
+
+    .form-control {
+        width: 10em;
+    }
+    .line-1{
+        width: 6em;
+        font-size: 1.5em;
+    }
+  }
