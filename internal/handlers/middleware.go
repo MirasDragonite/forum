@@ -12,7 +12,7 @@ func (h *Handler) authorized(next http.HandlerFunc) http.Handler {
 		cookie, err := r.Cookie("Token")
 		if err != nil {
 			h.errorLog("Don't have any Token")
-			http.Redirect(w, r, "/register", http.StatusSeeOther)
+			http.Redirect(w, r, "/signin", http.StatusSeeOther)
 			return
 
 		}
@@ -25,14 +25,14 @@ func (h *Handler) authorized(next http.HandlerFunc) http.Handler {
 			cookie.MaxAge = -1
 			cookie.HttpOnly = false
 			http.SetCookie(w, cookie)
-			http.Redirect(w, r, "/register", http.StatusSeeOther)
+			http.Redirect(w, r, "/signin", http.StatusSeeOther)
 			return
 		}
 
 		if !cookie.Expires.Before(time.Now()) {
 			h.infoLog("Token time expired")
 			err := h.Service.Authorization.DeleteToken(cookie)
-			http.Redirect(w, r, "/register", http.StatusSeeOther)
+			http.Redirect(w, r, "/signin", http.StatusSeeOther)
 			if err != nil {
 				h.errorLog(err.Error())
 				return
@@ -57,7 +57,7 @@ func (h *Handler) isNotauthorized(next http.HandlerFunc) http.Handler {
 				return
 
 			} else {
-				http.Redirect(w, r, "/register", http.StatusSeeOther)
+				http.Redirect(w, r, "/signin", http.StatusSeeOther)
 				return
 			}
 
