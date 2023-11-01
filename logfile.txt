@@ -1,24 +1,2 @@
-[ERROR]: 2023/11/01 11:04:39 log.go:29: Wrong Method
-able
+[INFO]: 2023/11/01 11:39:35 log.go:17: Token is available
  not present
-red
- present
-xpected end; found {{else}}
-.Unique>: can't evaluate field Unique in type string
-=======
-[INFO]: 2023/10/29 15:06:34 log.go:17: Token is available
- not present
-or beginning of value
-}
-at <.Unique>: can't evaluate field Unique in type string
->>>>>>> miras
-0/14 20:31:04 log.go:17: Token is available
- not present
-expected EOF
- 
-
-tax
-e
-tory
-irectory
->>>>>>> miras
