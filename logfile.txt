@@ -1,4 +1,4 @@
-[INFO]: 2023/10/31 10:14:10 log.go:17: Token is available
+[INFO]: 2023/11/01 10:25:58 log.go:17: Token is available
  not present
 red
  present
