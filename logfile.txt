@@ -1,5 +1,6 @@
-[INFO]: 2023/11/02 20:15:56 log.go:17: Token is available
- not present
+[INFO]: 2023/11/02 20:32:50 log.go:17: Token is available
+red
+ present
 ge: no such file or directory
 mment()
 nation not a pointer

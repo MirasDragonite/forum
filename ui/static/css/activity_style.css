@@ -187,12 +187,26 @@ body {
     font-size: 20px;
 }
 
+.main-block{
+display: flex;
+flex-direction: column;
+width: 90%;
+}
+.row-elements{
+    display: flex;
+   
+}
+
 .container-content  {
     display: block;
-    margin-bottom: 20px;
+    margin-bottom: 5px;
+    margin-right: 10px;
     flex: 1;
 }
 
+.comments{
+    display: block;
+}
 .container{
     box-sizing: border-box;
     display: flex;
