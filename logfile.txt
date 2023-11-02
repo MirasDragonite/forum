@@ -1,2 +1,1 @@
-[INFO]: 2023/11/01 11:41:34 log.go:17: Token is available
- not present
+[ERROR]: 2023/11/02 14:46:55 log.go:29: http: named cookie not present
