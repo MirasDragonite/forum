@@ -7,6 +7,8 @@ import (
 	"time"
 )
 
+// https://stackoverflow.com/questions/39946583/how-to-pass-context-in-golang-request-to-middleware
+
 func (h *Handler) authorized(next http.HandlerFunc) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		cookie, err := r.Cookie("Token")
