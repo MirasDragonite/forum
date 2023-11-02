@@ -2,10 +2,9 @@ package handlers
 
 import (
 	"errors"
-	"net/http"
-	"text/template"
-
 	"forum/structs"
+	"html/template"
+	"net/http"
 )
 
 func (h *Handler) signup(w http.ResponseWriter, r *http.Request) {

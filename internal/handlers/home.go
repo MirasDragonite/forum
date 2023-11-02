@@ -1,10 +1,9 @@
 package handlers
 
 import (
-	"net/http"
-	"text/template"
-
 	"forum/structs"
+	"html/template"
+	"net/http"
 )
 
 func (h *Handler) home(w http.ResponseWriter, r *http.Request) {

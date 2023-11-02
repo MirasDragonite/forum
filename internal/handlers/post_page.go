@@ -3,11 +3,10 @@ package handlers
 import (
 	"errors"
 	"fmt"
+	"forum/structs"
+	"html/template"
 	"net/http"
 	"strings"
-	"text/template"
-
-	"forum/structs"
 )
 
 func (h *Handler) PostPage(w http.ResponseWriter, r *http.Request) {
