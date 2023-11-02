@@ -3,11 +3,10 @@ package handlers
 import (
 	"errors"
 	"fmt"
+	"forum/structs"
+	"html/template"
 	"net/http"
 	"strings"
-	"text/template"
-
-	"forum/structs"
 )
 
 func (h *Handler) PostPageCreate(w http.ResponseWriter, r *http.Request) {
@@ -71,13 +70,13 @@ func (h *Handler) PostPageCreate(w http.ResponseWriter, r *http.Request) {
 		}
 		post.Content = strings.TrimSpace(r.Form.Get("postContent"))
 
-		if len(post.Title) == 0 {
+		if len(post.Title) < 5 || len(post.Title) > 50 {
 			w.WriteHeader(http.StatusBadRequest)
 			result["EmptyTitle"] = true
 			tmp.Execute(w, result)
 			return
 		}
-		if len(post.Content) == 0 {
+		if len(post.Content) < 15 || len(post.Content) < 250 {
 			w.WriteHeader(http.StatusBadRequest)
 			result["EmptyContent"] = true
 			tmp.Execute(w, result)

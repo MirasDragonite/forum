@@ -3,10 +3,9 @@ package handlers
 import (
 	"database/sql"
 	"errors"
-	"net/http"
-	"text/template"
-
 	"forum/structs"
+	"html/template"
+	"net/http"
 )
 
 // logger

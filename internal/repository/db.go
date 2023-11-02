@@ -7,6 +7,7 @@ import (
 	_ "github.com/mattn/go-sqlite3"
 )
 
+// Transaction Roolback
 func NewDB() (*sql.DB, error) {
 	db, err := sql.Open("sqlite3", "db.db")
 	if err != nil {

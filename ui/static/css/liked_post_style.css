@@ -34,11 +34,11 @@ body {
     border-radius: 10px;
 }
 
-.top-bar a[href="/"] {
+.top-bar a[href="/liked-posts"] {
     border: 2px solid#0000df; 
     border-radius: 10px; 
 }
-.top-bar a:not([href="/"]):hover {
+.top-bar a:not([href="/liked-posts"]):hover {
     box-shadow: 0 0 20px #0000df;
 }
 .actions {
@@ -96,7 +96,6 @@ body {
     transform: scale(0);
     transition: transform 0.2s;
 }
-
 
 .checkbox-label + label {
     cursor: pointer;
@@ -266,9 +265,8 @@ blinkTextCursor 700ms steps(8) infinite normal;
     height:10px; 
     width: 100%; 
 }
-
 #sign-up-icon{
-    background: #0000df;
+    background: #000080;
     color: white;
     font-family:'Oswald', sans-serif;
     padding: 10px 20px;

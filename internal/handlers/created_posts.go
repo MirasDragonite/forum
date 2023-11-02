@@ -3,8 +3,8 @@ package handlers
 import (
 	"errors"
 	"fmt"
+	"html/template"
 	"net/http"
-	"text/template"
 )
 
 func (h *Handler) createdPosts(w http.ResponseWriter, r *http.Request) {
