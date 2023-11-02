@@ -16,8 +16,9 @@
         <div id="title-container">
           <p class="line-1 anim-typewriter">&lt;/forum&gt;</p>
           <div class="imgContainer">
-            <!-- <img id="notificationImg" src="https://gagaru.club/uploads/posts/2023-06/1686068744_gagaru-club-p-kolokolchik-malenkii-vkontakte-1.png"></img> -->
+           
            {{if .Logged}}
+            <img id="notificationImg" src="https://gagaru.club/uploads/posts/2023-06/1686068744_gagaru-club-p-kolokolchik-malenkii-vkontakte-1.png" onclick="window.location.href='/notify';"></img>
            <img id="logoutImg"src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSNKLd_50v-5_W2gtKHNz1cjjLivUIO2KQ_cA&usqp=CAU"  onclick="window.location.href='/logout';"></img>
            {{else}}
            <img id="logoutImg"src="https://cdn4.iconfinder.com/data/icons/ui-marketplace-1-0-flat/19/4_login-256.png"  onclick="window.location.href='/signin';"></img>
@@ -33,6 +34,7 @@
         <span><a href="/submit-post"> Create Post</a></span>
         <span><a href="/liked-posts"> Liked Posts</a></span>
         <span><a href="/created-posts">Created Posts</a></span>
+        <span><a href="/activities">Activites</a></span>
       </div>
     </div>
   </nav>
@@ -50,37 +52,7 @@
       </div>
     </span>
     <div class="container-content">
-      <!-- <div class="actions"> -->
-      
-        <!-- <div class="search">
-          <input type="search" name="q" placeholder="Search..." />
-          <button type="submit">Search</button>
-        </div> -->
-        <!-- <form id="create-post-form" method="POST" > 
-        <div class="filters">
-          <span class="filters">
-  
-            <a class="filters-title" >Filters:</a>
-  
-            <input type="checkbox" name="postTopicJava" class="round-checkbox" id="javaCheckbox"  value="Java" >
-            <label class="checkbox-label" for="javaCheckbox"></label>
-            <label for="javaCheckbox">Java</label>
-            
-            <input type="checkbox" name="postTopicKotlin" class="round-checkbox" id="kotlinCheckbox" value="Kotlin">
-            <label class="checkbox-label" for="kotlinCheckbox"></label>
-            <label for="kotlinCheckbox">Kotlin</label>
-            
-            <input type="checkbox" name="postTopicPython" class="round-checkbox" id="pythonCheckbox" value="Python">
-            <label class="checkbox-label" for="pythonCheckbox"></label>
-            <label for="pythonCheckbox">Python</label>
-  
-          </span>
-          <input type="text" id="postTopicInput" name="postTopicInput" class="postTopicInput" placeholder="Topic" style="width: 250px;">
-
-          <button type="submit" class="postSubmit" >Submit</button>
-        </div>
-        </form> -->
-      <!-- </div> -->
+    
       {{range .Post}}
       <div class="post-card">
       

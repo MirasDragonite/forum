@@ -19,6 +19,7 @@
 
      
     {{if .Logged}}
+    <img id="notificationImg" src="https://gagaru.club/uploads/posts/2023-06/1686068744_gagaru-club-p-kolokolchik-malenkii-vkontakte-1.png" onclick="window.location.href='/notify';"></img>
     <img id="logoutImg"src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSNKLd_50v-5_W2gtKHNz1cjjLivUIO2KQ_cA&usqp=CAU"  onclick="window.location.href='/logout';"></img>
     {{else}}
     <img id="logoutImg"src="https://cdn4.iconfinder.com/data/icons/ui-marketplace-1-0-flat/19/4_login-256.png"  onclick="window.location.href='/signin';"></img>
@@ -33,7 +34,7 @@
         <span><a href="/submit-post"> Create Post</a></span>
         <span><a href="/liked-posts"> Liked Posts</a></span>
         <span><a href="/created-posts">Created Posts</a></span>
-       
+        <span><a href="/activities">Activites</a></span>
       </div>
     </div>
   </nav>
@@ -51,7 +52,7 @@
               <p id="title">Title</p>  
               <input type="text"  minlength="1" id="postTitle" name="postTitle" class="postTitle" placeholder="Title" style="width: 250px;">
               {{if .EmptyTitle}}
-              <p style="color: red;"> Can't be empty</p>
+              <p style="color: red;"> Length of title is not by standard</p>
               {{end}}
               </span>
   
@@ -77,7 +78,7 @@
           <span class="text-container">
               <p id = "your-message">Your message</p>
               {{if .EmptyContent}}
-              <p style="color: red;"> Can't be empty</p>
+              <p style="color: red;"> Length of content is not by standard</p>
               {{end}}
               <textarea  name="postContent" class="postContent" id="text-area" placeholder="Message" ></textarea>
           </span>

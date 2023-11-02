@@ -1,7 +1,7 @@
-[INFO]: 2023/10/30 19:54:36 log.go:17: Token is available
+[INFO]: 2023/11/02 20:15:56 log.go:17: Token is available
  not present
- not present
-t, Check CreateComment()
+ge: no such file or directory
+mment()
 nation not a pointer
 aluate field Unique in type string
 0/14 20:31:04 log.go:17: Token is available

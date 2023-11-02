@@ -29,6 +29,7 @@ type PostRedact interface {
 	DeletePost(post *structs.Post) error
 	GetAllPosts() ([]structs.Post, error)
 	GetAllLikedPosts(user_id int64) ([]structs.PostReaction, error)
+	GetAllDislikedPosts(user_id int64) ([]structs.PostReaction, error)
 	GetAllUserPosts(user_id int64) ([]structs.Post, error)
 	GetFilteredPosts(java, kotlin, python, topic string) ([]structs.Post, error)
 }
@@ -37,6 +38,7 @@ type CommentRedact interface {
 	CreateComment(comm *structs.Comment) error
 	GetAllComments(postID, userID int64) ([]structs.Comment, error)
 	GetCommentByID(commentID int64) (structs.Comment, error)
+	GetAllUserComments(userID int64) ([]structs.Comment, error)
 }
 
 type PostReaction interface {

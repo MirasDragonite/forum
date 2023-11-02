@@ -2,8 +2,8 @@ package handlers
 
 import (
 	"fmt"
+	"html/template"
 	"net/http"
-	"text/template"
 )
 
 func (h *Handler) notify(w http.ResponseWriter, r *http.Request) {
@@ -30,6 +30,11 @@ func (h *Handler) notify(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
-		tmp.Execute(w, posts)
+		result := map[string]interface{}{
+			"Logged":        nil,
+			"User":          user,
+			"Notifications": posts,
+		}
+		tmp.Execute(w, result)
 	}
 }

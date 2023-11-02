@@ -81,6 +81,23 @@ func (repo *PostRed) GetAllLikedPosts(user_id int64) ([]structs.Post, error) {
 	return posts, nil
 }
 
+func (repo *PostRed) GetAllDislikedPosts(user_id int64) ([]structs.Post, error) {
+	reactions, err := repo.repo.GetAllDislikedPosts(user_id)
+	if err != nil {
+		return nil, err
+	}
+	var posts []structs.Post
+	for _, ch := range reactions {
+		ch_str := strconv.Itoa(int(ch.PostID))
+		post, err := repo.repo.GetPostBy("id", ch_str, user_id)
+		if err != nil {
+			return nil, err
+		}
+		posts = append(posts, *post)
+	}
+	return posts, nil
+}
+
 func (repo *PostRed) GetAllUserPosts(user_id int64) ([]structs.Post, error) {
 	return repo.repo.GetAllUserPosts(user_id)
 }

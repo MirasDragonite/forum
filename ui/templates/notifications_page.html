@@ -1,53 +1,72 @@
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Profile-FORUM</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@100&family=Oswald:wght@700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="../static/css/created_post_style.css">
+    <title>FORUM</title>
 </head>
 <body>
   <nav class="navbar navbar-inverse">
     <div class="container-fluid">
       <div class="navbar-header">
-        <a class="navbar-brand" href="/">FORUM</a>
-        <div class="imgContainer">
-          <!-- <img id="notificationImg" src="https://gagaru.club/uploads/posts/2023-06/1686068744_gagaru-club-p-kolokolchik-malenkii-vkontakte-1.png"></img> -->
-         {{if .Logged}}
-         <img id="logoutImg"src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSNKLd_50v-5_W2gtKHNz1cjjLivUIO2KQ_cA&usqp=CAU"  onclick="window.location.href='/logout';"></img>
-         {{else}}
-         <img id="logoutImg"src="https://cdn4.iconfinder.com/data/icons/ui-marketplace-1-0-flat/19/4_login-256.png"  onclick="window.location.href='/signin';"></img>
+        <div id="title-container">
+          <a href="/" style="text-decoration: none;"><p class="line-1 anim-typewriter">&lt;/forum&gt;</p></a>
+          <div class="imgContainer">
+           
+           {{if .Logged}}
+           <img id="logoutImg"src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSNKLd_50v-5_W2gtKHNz1cjjLivUIO2KQ_cA&usqp=CAU"  onclick="window.location.href='/logout';"></img>
+           {{else}}
+           <img id="logoutImg"src="https://cdn4.iconfinder.com/data/icons/ui-marketplace-1-0-flat/19/4_login-256.png"  onclick="window.location.href='/signin';"></img>
 
-         {{end}}
-          
+           {{end}}
+            
+          </div>
+
         </div>
       </div>
-      <span><a href="/">Home</a></span>
+     
     </div>
-    <span class="user-info">
-        <image></image>
-        <p>Name: </p>
-        <p>Email: </p>
-    </span>
   </nav>
-  <div class="panel notification">
-    <h1>NOTIFICATIONS HERE</h1>
+  
+  
+  <div class="container">
+    <span>
+      <div class="profile-info">
+        <img id="profilePhoto" src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png" alt="Profile Photo" style="max-width: 100px; max-height: 100px;">
+        {{if .User}}
+        <p id="userName">Name:  {{.User.Username}}</p>
+        {{else}}
+        <p id="userName">Name:  </p>
+        {{end}}
+      </div>
+    </span>
+    <div class="container-content">
+     
+      {{range .Notifications}}
 
-  </div>
+      <div class="post-card">
+        <p class="post-author">User by name {{.Username}}  {{if eq .Reaction 1}}
+        
+          liked
+          {{else if eq .Reaction -1}}
+          disliked
+          {{else if eq .Reaction 3}}
+          commented
+          {{end}}
+           your that <a href="/post/{{.PostID}}" > post </a>
+        </p> 
+       
 
-  {{range .}}
-  <li>{{.Username}}
-   
+          </div>
 
-    {{if eq .Reaction 1}}
-    liked
-    {{else if eq .Reaction -1}}
-    disliked
-    {{else if eq .Reaction 3}}
-    commented
-    {{end}}
-    your <a href="/post/{{.PostID}}">post</a>  
-  </li>
-    {{end}}
-    
+{{end}}
+
+      </div>
 </body>
 </html>

@@ -31,4 +31,5 @@ func (h *Handler) Router() {
 	h.Mux.Handle("/liked-posts", h.authorized(h.likedPosts))
 	h.Mux.Handle("/created-posts", h.authorized(h.createdPosts))
 	h.Mux.Handle("/notify", h.authorized(h.notify))
+	h.Mux.Handle("/activities", h.authorized(h.activities))
 }

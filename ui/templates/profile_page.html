@@ -3,125 +3,70 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Profile-FORUM</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@100&family=Oswald:wght@700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="../static/css/created_post_style.css">
+    <title>FORUM</title>
 </head>
 <body>
   <nav class="navbar navbar-inverse">
     <div class="container-fluid">
       <div class="navbar-header">
-        <a class="navbar-brand" href="/">FORUM</a>
+        <div id="title-container">
+          <p class="line-1 anim-typewriter">&lt;/forum&gt;</p>
+          <div class="imgContainer">
+            <!-- <img id="notificationImg" src="https://gagaru.club/uploads/posts/2023-06/1686068744_gagaru-club-p-kolokolchik-malenkii-vkontakte-1.png"></img> -->
+           {{if .Logged}}
+           <img id="logoutImg"src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSNKLd_50v-5_W2gtKHNz1cjjLivUIO2KQ_cA&usqp=CAU"  onclick="window.location.href='/logout';"></img>
+           {{else}}
+           <img id="logoutImg"src="https://cdn4.iconfinder.com/data/icons/ui-marketplace-1-0-flat/19/4_login-256.png"  onclick="window.location.href='/signin';"></img>
+
+           {{end}}
+            
+          </div>
+
+        </div>
       </div>
-      <span><a href="/logout">Logout</a></span>
-    </div>
-
-    <span class="user-info">
-        <image></image>
-        <p>Name: </p>
-        <p>Email: </p>
-        <button><a href="/settings">Settings</a></button>
-        <button><a href="/notitfications">Edit profile</a></button>
-    </span>
-    
-    <div class="actions">
-        <button>
-            <a href="/create-post">Create Post</a>
-        </button>
-        <form id="search-form" >
-            <input type="text" id="search" placeholder="Search" style="width: 250px;">
-            <button type="submit">Search</button>
-        </form>
-        <span class="filters">
-                <input type="checkbox" class="round-checkbox" id="likedCheckbox" checked>
-                <label class="checkbox-label" for="likedCheckbox"></label>
-                <label for="likedCheckbox">Liked posts</label>
-
-                <input type="checkbox" class="round-checkbox" id="myCheckbox" checked>
-                <label class="checkbox-label" for="myCheckbox"></label>
-                <label for="myCheckbox">My posts</label>
-
-                <input type="checkbox" class="round-checkbox" id="commentedCheckbox" checked>
-                <label class="checkbox-label" for="commentedCheckbox"></label>
-                <label for="commentedCheckbox">Commented posts</label>
-
-                <input type="checkbox" class="round-checkbox" id="javaCheckbox" checked>
-                <label class="checkbox-label" for="javaCheckbox"></label>
-                <label for="javaCheckbox">Commented Posts</label>
-                
-                <input type="checkbox" class="round-checkbox" id="kotlinCheckbox" checked>
-                <label class="checkbox-label" for="kotlinCheckbox"></label>
-                <label for="kotlinCheckbox">Kotlin</label>
-                
-                <input type="checkbox" class="round-checkbox" id="pythonCheckbox" checked>
-                <label class="checkbox-label" for="pythonCheckbox"></label>
-                <label for="pythonCheckbox">Python</label>
-                
-                <input type="checkbox" class="round-checkbox" id="golangCheckbox" checked>
-                <label class="checkbox-label" for="golangCheckbox"></label>
-                <label for="golangCheckbox">Golang</label>
-                
-                <input type="checkbox" class="round-checkbox" id="phpCheckbox" checked>
-                <label class="checkbox-label" for="phpCheckbox"></label>
-                <label for="phpCheckbox">PHP</label>
-                
-                <input type="checkbox" class="round-checkbox" id="javascriptCheckbox" checked>
-                <label class="checkbox-label" for="javascriptCheckbox"></label>
-                <label for="javascriptCheckbox">JavaScript</label>
-                
-                <input type="checkbox" class="round-checkbox" id="sqlCheckbox" checked>
-                <label class="checkbox-label" for="sqlCheckbox"></label>
-                <label for="sqlCheckbox">SQL</label>
-                
-        </span>
+      <div class="top-bar">
+        <span><a href="/"> Home</a></span>
+        <span><a href="/submit-post"> Create Post</a></span>
+        <span><a href="/liked-posts"> Liked Posts</a></span>
+        <span><a href="/created-posts">Created Posts</a></span>
+      </div>
     </div>
   </nav>
-  <div class="panel posts">
-    <h1>POSTS HERE</h1>
-  </div>
+  
+  
+  <div class="container">
+    <span>
+      <div class="profile-info">
+        <img id="profilePhoto" src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png" alt="Profile Photo" style="max-width: 100px; max-height: 100px;">
+        {{if .User}}
+        <p id="userName">Name:  {{.User.Username}}</p>
+        {{else}}
+        <p id="userName">Name:  </p>
+        {{end}}
+      </div>
+    </span>
+    <div class="container-content">
+     
+      {{range .Post}}
+      <div class="post-card">
+      
 
-  <script>
-    document.getElementById('search-form').addEventListener('submit', function (e) {
-        e.preventDefault();
-        const searchInput = document.getElementById('search').value;
-        const likedCheckbox = document.getElementById('likedCheckbox').checked;
-        const myCheckbox = document.getElementById('myCheckbox').checked;
-        const commentedCheckbox = document.getElementById('commentedCheckbox').checked;
-        const javaCheckbox = document.getElementById('javaCheckbox').checked;
-        const kotlinCheckbox = document.getElementById('kotlinCheckbox').checked;
-        const pythonCheckbox = document.getElementById('pythonCheckbox').checked;
-        const golangCheckbox = document.getElementById('golangCheckbox').checked;
-        const phpCheckbox = document.getElementById('phpCheckbox').checked;
-        const javascriptCheckbox = document.getElementById('javascriptCheckbox').checked;
-        const sqlCheckbox = document.getElementById('sqlCheckbox').checked;
-
-        fetch('/api/search', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                search: searchInput,
-                liked: likedCheckbox,
-                myposts: myCheckbox,
-                commented: commentedCheckbox,
-                java: javaCheckbox,
-                kotlin: kotlinCheckbox,
-                python: pythonCheckbox,
-                golang: golangCheckbox,
-                php: phpCheckbox,
-                javascript: javascriptCheckbox, 
-                sql: sqlCheckbox,
-            }),
-        })
-        .then(response => response.json())
-        .then(data => {
-            
-            console.log(data);
-        })
-        .catch(error => {
-            console.error('Error:', error);
-        });
-    });
-  </script>
+    <a href="/post/{{.Id}}" class="post-title"> {{.Title}} </a>
+    <p class="post-author">Author: {{.PostAuthorName}}</p>
+    <ol class="topics-list">
+      {{range .Topic}}
+          {{ if . }}
+              <li class="topic-item">{{.}}</li>
+          {{ end }}
+      {{end}}
+  </ol>
+      </div>
+      {{end}}
+    
 
 </body>
 </html>

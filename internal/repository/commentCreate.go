@@ -84,3 +84,25 @@ func (comm *CommentRedactDB) GetCommentByID(commentID int64) (structs.Comment, e
 	}
 	return comment, nil
 }
+
+func (comm *CommentRedactDB) GetAllUserComments(userID int64) ([]structs.Comment, error) {
+	var comments []structs.Comment
+	query := `SELECT * from comments WHERE comment_author_id = $1 ORDER BY id DESC`
+	rows, err := comm.db.Query(query, userID)
+	if err != nil {
+		return nil, err
+	}
+
+	defer rows.Close()
+	for rows.Next() {
+		var comment structs.Comment
+		err := rows.Scan(&comment.CommentID, &comment.CommentAuthorID, &comment.CommentAuthorName, &comment.PostID, &comment.Content, &comment.Like, &comment.Dislike)
+		if err != nil {
+			return nil, err
+		}
+
+		comments = append(comments, comment)
+	}
+
+	return comments, nil
+}

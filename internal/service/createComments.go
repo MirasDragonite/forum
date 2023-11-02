@@ -64,3 +64,7 @@ func (repo *CommentRed) GetAllComments(postID, userID int64) ([]structs.Comment,
 	}
 	return comments, nil
 }
+
+func (repo *CommentRed) GetAllUserComments(userID int64) ([]structs.Comment, error) {
+	return repo.repo.GetAllUserComments(userID)
+}

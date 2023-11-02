@@ -24,12 +24,14 @@ type PostRedact interface {
 	DeletePost(post *structs.Post) error
 	GetAllLikedPosts(user_id int64) ([]structs.Post, error)
 	GetAllUserPosts(user_id int64) ([]structs.Post, error)
+	GetAllDislikedPosts(user_id int64) ([]structs.Post, error)
 }
 
 type CommentRedact interface {
 	CreateComment(comm *structs.Comment, user_id int64) error
 	GetAllComments(postID, userID int64) ([]structs.Comment, error)
 	GetCommentByID(commentID int64) (structs.Comment, error)
+	GetAllUserComments(userID int64) ([]structs.Comment, error)
 }
 
 type Reaction interface {

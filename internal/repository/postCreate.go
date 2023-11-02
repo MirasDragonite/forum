@@ -279,3 +279,26 @@ func (pr *PostRedactDB) GetFilteredPosts(java, kotlin, python, topic string) ([]
 
 	return posts, nil
 }
+
+func (pr *PostRedactDB) GetAllDislikedPosts(user_id int64) ([]structs.PostReaction, error) {
+	query := `SELECT * FROM post_reactions WHERE user_id=$1 AND reaction=-1 ORDER BY id DESC`
+
+	var posts []structs.PostReaction
+
+	rows, err := pr.db.Query(query, &user_id)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	for rows.Next() {
+		var post structs.PostReaction
+		err := rows.Scan(&post.ID, &post.PostID, &post.UserID, &post.Value)
+		if err != nil {
+			return nil, err
+		}
+
+		posts = append(posts, post)
+	}
+
+	return posts, nil
+}

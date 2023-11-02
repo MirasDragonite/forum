@@ -3,10 +3,11 @@ package handlers
 import (
 	"errors"
 	"fmt"
-	"forum/structs"
 	"html/template"
 	"net/http"
 	"strings"
+
+	"forum/structs"
 )
 
 func (h *Handler) PostPageCreate(w http.ResponseWriter, r *http.Request) {
@@ -76,7 +77,7 @@ func (h *Handler) PostPageCreate(w http.ResponseWriter, r *http.Request) {
 			tmp.Execute(w, result)
 			return
 		}
-		if len(post.Content) < 15 || len(post.Content) < 250 {
+		if len(post.Content) < 15 || len(post.Content) > 250 {
 			w.WriteHeader(http.StatusBadRequest)
 			result["EmptyContent"] = true
 			tmp.Execute(w, result)

@@ -3,10 +3,11 @@ package handlers
 import (
 	"errors"
 	"fmt"
-	"forum/structs"
 	"html/template"
 	"net/http"
 	"strings"
+
+	"forum/structs"
 )
 
 func (h *Handler) PostPage(w http.ResponseWriter, r *http.Request) {
@@ -68,7 +69,7 @@ func (h *Handler) PostPage(w http.ResponseWriter, r *http.Request) {
 		result["Post"] = post
 		result["Likes"] = likes
 		result["Dislikes"] = dislikes
-		if comment.Content == "" {
+		if len(comment.Content) < 2 || len(comment.Content) > 100 {
 			w.WriteHeader(http.StatusBadRequest)
 			result["Empty"] = true
 			tmp.Execute(w, result)
