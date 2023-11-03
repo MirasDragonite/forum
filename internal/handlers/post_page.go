@@ -34,6 +34,7 @@ func (h *Handler) PostPage(w http.ResponseWriter, r *http.Request) {
 		"Dislikes": nil,
 		"Empty":    nil,
 		"Logged":   nil,
+		"Users":    false,
 	}
 	if r.Method == http.MethodPost {
 		cookie, err := r.Cookie("Token")
@@ -63,12 +64,16 @@ func (h *Handler) PostPage(w http.ResponseWriter, r *http.Request) {
 		if user_id != 0 {
 			result["Logged"] = true
 		}
+		if user_id == post.PostAuthorID {
+			result["Users"] = true
+		}
 		comment := &structs.Comment{}
 
 		comment.Content = strings.TrimSpace(r.Form.Get("commentContent"))
 		result["Post"] = post
 		result["Likes"] = likes
 		result["Dislikes"] = dislikes
+
 		if len(comment.Content) < 2 || len(comment.Content) > 100 {
 			w.WriteHeader(http.StatusBadRequest)
 			result["Empty"] = true
@@ -130,6 +135,9 @@ func (h *Handler) PostPage(w http.ResponseWriter, r *http.Request) {
 		}
 		if user_id != 0 {
 			result["Logged"] = true
+		}
+		if user_id == post.PostAuthorID {
+			result["Users"] = true
 		}
 		post.Comments = comments
 		result["Post"] = post

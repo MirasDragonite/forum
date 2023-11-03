@@ -14,11 +14,6 @@ func NewDB() (*sql.DB, error) {
 		return nil, err
 	}
 
-	// _, err = db.Exec("PRAGMA foreign_keys = ON;")
-	// if err != nil {
-	// 	return nil, err
-	// }
-
 	query := `CREATE TABLE IF NOT  EXISTS users(id INTEGER PRIMARY KEY, username TEXT NOT NULL, email TEXT NOT NULL UNIQUE,hash_password TEXT NOT NULL,createdDate TEXT NOT NULL);
 	
 	CREATE TABLE IF NOT  EXISTS tokens(id INTEGER PRIMARY KEY, user_id INTEGER,token TEXT NOT NULL,expaired_data TEXT NOT NULL, FOREIGN KEY(user_id) REFERENCES users(id) ON DELETE CASCADE);
@@ -31,7 +26,7 @@ func NewDB() (*sql.DB, error) {
 	
 	CREATE TABLE IF NOT  EXISTS comment_reactions (id INTEGER PRIMARY KEY NOT NULL, comment_id INTEGER, user_ID INTEGER, reaction INTEGER,FOREIGN KEY(user_id) REFERENCES users(id) ON DELETE CASCADE, FOREIGN KEY(comment_id) REFERENCES comments(id) ON DELETE CASCADE);
 	
-	CREATE TABLE IF NOT  EXISTS post_notification(id INTEGER PRIMARY KEY NOT NULL, user_id INTEGER, author_id INTEGER,post_id INTEGER , reaction INTEGER,username TEXT, FOREIGN KEY(user_id) REFERENCES users(id),FOREIGN KEY(author_id) REFERENCES users(id),FOREIGN KEY(post_id) REFERENCES posts(id));
+	CREATE TABLE IF NOT  EXISTS post_notification(id INTEGER PRIMARY KEY NOT NULL, user_id INTEGER, author_id INTEGER,post_id INTEGER , reaction INTEGER,username TEXT, FOREIGN KEY(user_id) REFERENCES users(id) ON DELETE CASCADE,FOREIGN KEY(author_id) REFERENCES users(id) ON DELETE CASCADE, FOREIGN KEY(post_id) REFERENCES posts(id) ON DELETE CASCADE);
 	`
 
 	_, err = db.Exec(query)
