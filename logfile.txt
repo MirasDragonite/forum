@@ -1,4 +1,4 @@
-[INFO]: 2023/11/03 15:16:47 log.go:17: Token is available
+[INFO]: 2023/11/03 15:51:46 log.go:17: Token is available
  not present
 valid syntax
 

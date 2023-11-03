@@ -4,10 +4,9 @@ import (
 	"database/sql"
 	"errors"
 	"fmt"
+	"forum/structs"
 	"strconv"
 	"strings"
-
-	"forum/structs"
 )
 
 type PostRedactDB struct {
@@ -170,23 +169,12 @@ func (pr *PostRedactDB) RedactContentPost(post *structs.Post) error {
 }
 
 func (pr *PostRedactDB) DeletePost(post *structs.Post) error {
-	tx, err := pr.db.Begin()
-	if err != nil {
-		return err
-	}
-	_, err = tx.Exec("PRAGMA foreign_keys = ON;")
-	if err != nil {
-		return err
-	}
-
 	deletePostQuery := "DELETE FROM posts WHERE id = $1;"
-	_, err = tx.Exec(deletePostQuery, post.Id)
+	_, err := pr.db.Exec(deletePostQuery, post.Id)
 	if err != nil {
-		tx.Rollback()
 		return err
 	}
 
-	tx.Commit()
 	return nil
 }
 
