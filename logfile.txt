@@ -1,4 +1,5 @@
-[ERROR]: 2023/11/03 19:18:11 log.go:29: template: post_page.html:108: unexpected <template> in parenthesized pipeline
+[ERROR]: 2023/11/03 19:58:42 log.go:29: http: named cookie not present
+nexpected <template> in parenthesized pipeline
 t a pointer
 aluate field Unique in type string
 0/14 20:31:04 log.go:17: Token is available
