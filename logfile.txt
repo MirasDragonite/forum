@@ -1,11 +1,5 @@
-[INFO]: 2023/11/03 15:51:46 log.go:17: Token is available
- not present
-valid syntax
-
-se}}
- directory
-mment()
-nation not a pointer
+[ERROR]: 2023/11/03 19:18:11 log.go:29: template: post_page.html:108: unexpected <template> in parenthesized pipeline
+t a pointer
 aluate field Unique in type string
 0/14 20:31:04 log.go:17: Token is available
  not present

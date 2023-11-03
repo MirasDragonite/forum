@@ -3,11 +3,10 @@ package handlers
 import (
 	"errors"
 	"fmt"
+	"forum/structs"
 	"html/template"
 	"net/http"
 	"strings"
-
-	"forum/structs"
 )
 
 func (h *Handler) PostPage(w http.ResponseWriter, r *http.Request) {
@@ -35,6 +34,7 @@ func (h *Handler) PostPage(w http.ResponseWriter, r *http.Request) {
 		"Empty":    nil,
 		"Logged":   nil,
 		"Users":    false,
+		"UserID":   0,
 	}
 	if r.Method == http.MethodPost {
 		cookie, err := r.Cookie("Token")
@@ -73,7 +73,9 @@ func (h *Handler) PostPage(w http.ResponseWriter, r *http.Request) {
 		result["Post"] = post
 		result["Likes"] = likes
 		result["Dislikes"] = dislikes
-
+		if user_id > 0 {
+			result["User"] = user_id
+		}
 		if len(comment.Content) < 2 || len(comment.Content) > 100 {
 			w.WriteHeader(http.StatusBadRequest)
 			result["Empty"] = true
@@ -138,6 +140,9 @@ func (h *Handler) PostPage(w http.ResponseWriter, r *http.Request) {
 		}
 		if user_id == post.PostAuthorID {
 			result["Users"] = true
+		}
+		if user_id > 0 {
+			result["User"] = user_id
 		}
 		post.Comments = comments
 		result["Post"] = post
