@@ -1,10 +1,9 @@
 package service
 
 import (
-	"net/http"
-
 	"forum/internal/repository"
 	"forum/structs"
+	"net/http"
 )
 
 type Authorization interface {
@@ -32,6 +31,7 @@ type CommentRedact interface {
 	GetAllComments(postID, userID int64) ([]structs.Comment, error)
 	GetCommentByID(commentID int64) (structs.Comment, error)
 	GetAllUserComments(userID int64) ([]structs.Comment, error)
+	DeleteComment(comment *structs.Comment) error
 }
 
 type Reaction interface {
@@ -42,6 +42,7 @@ type Reaction interface {
 	GetPostReaction(user_id, post_id int64) (int64, error)
 	GetCommentReaction(user_id, commentId int64) (int64, error)
 }
+
 type Filter interface {
 	Filter(java, kotlin, python, topic string) ([]structs.Post, error)
 }

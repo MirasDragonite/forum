@@ -3,7 +3,6 @@ package repository
 import (
 	"database/sql"
 	"errors"
-
 	"forum/structs"
 )
 
@@ -105,4 +104,14 @@ func (comm *CommentRedactDB) GetAllUserComments(userID int64) ([]structs.Comment
 	}
 
 	return comments, nil
+}
+
+func (comm *CommentRedactDB) DeleteComment(comment *structs.Comment) error {
+	deletePostQuery := "DELETE FROM comments WHERE id = $1;"
+	_, err := comm.db.Exec(deletePostQuery, comment.CommentID)
+	if err != nil {
+		return err
+	}
+
+	return nil
 }

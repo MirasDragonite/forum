@@ -1,5 +1,6 @@
-[ERROR]: 2023/11/03 19:58:42 log.go:29: http: named cookie not present
-nexpected <template> in parenthesized pipeline
+[INFO]: 2023/11/03 20:06:06 log.go:17: Token is available
+ing "t/10": invalid syntax
+plate> in parenthesized pipeline
 t a pointer
 aluate field Unique in type string
 0/14 20:31:04 log.go:17: Token is available
