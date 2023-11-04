@@ -34,4 +34,6 @@ func (h *Handler) Router() {
 	h.Mux.Handle("/delete-post/", h.authorized(h.deletePost))
 	h.Mux.HandleFunc("/github/auth", h.githubLogin)
 	h.Mux.HandleFunc("/github/callback", h.githubLoginCallBack)
+	h.Mux.HandleFunc("/google/auth", h.googleLogin)
+	h.Mux.HandleFunc("/google/callback", h.googleLoginCallBack)
 }
