@@ -1,9 +1,8 @@
 package handlers
 
 import (
-	"net/http"
-
 	"forum/internal/service"
+	"net/http"
 )
 
 type Handler struct {
@@ -33,4 +32,6 @@ func (h *Handler) Router() {
 	h.Mux.Handle("/notify", h.authorized(h.notify))
 	h.Mux.Handle("/activities", h.authorized(h.activities))
 	h.Mux.Handle("/delete-post/", h.authorized(h.deletePost))
+	h.Mux.HandleFunc("/github/auth", h.githubLogin)
+	h.Mux.HandleFunc("/github/callback", h.githubLoginCallBack)
 }

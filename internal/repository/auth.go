@@ -3,7 +3,6 @@ package repository
 import (
 	"database/sql"
 	"fmt"
-
 	"forum/structs"
 )
 
@@ -107,6 +106,37 @@ func (r *Auth) DeleteToken(token string) error {
 	query := `DELETE FROM tokens WHERE token=$1`
 
 	_, err := r.db.Exec(query, &token)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func (r *Auth) GetUserByName(name string) (bool, error) {
+	var user structs.User
+	query := `SELECT * FROM users WHERE username=$1`
+	row := r.db.QueryRow(query, name)
+	err := row.Scan(&user.Id, &user.Username, &user.Email, &user.HashedPassword, &user.CreatedDate)
+	if err != nil {
+		if err.Error() == sql.ErrNoRows.Error() {
+			return false, nil
+		} else {
+			return false, err
+		}
+	}
+
+	return true, nil
+}
+
+func (r *Auth) CreateUserOauth(name string) error {
+	query := `INSERT INTO users(username,email,hash_password,createdDate) VALUES($1,$2,$3,$4) `
+
+	_, err := r.db.Exec(query, name, "", "", "")
+	if err != nil {
+		return err
+	}
+	//
+	// id, err := result.LastInsertId()
 	if err != nil {
 		return err
 	}

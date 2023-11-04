@@ -3,11 +3,10 @@ package service
 import (
 	"database/sql"
 	"errors"
-	"net/http"
-	"time"
-
 	"forum/internal/repository"
 	"forum/structs"
+	"net/http"
+	"time"
 
 	uuid "github.com/satori/go.uuid"
 	"golang.org/x/crypto/bcrypt"
@@ -83,6 +82,91 @@ func (s *Auth) GetUser(email, password string) (*http.Cookie, error) {
 	cookie := http.Cookie{Name: "Token"}
 	expiration := giveExpirationData()
 	hashedToken := createToken()
+	expirationInStringFormat := expiration.Format(timeFormat)
+
+	if err == sql.ErrNoRows {
+		session.ExpairedData = expirationInStringFormat
+		s.repo.CreateToken(user, hashedToken, session.ExpairedData)
+		cookie.Value = hashedToken
+		cookie.Expires = expiration
+		return &cookie, nil
+
+	} else {
+
+		// if session.ExpairedData < time.Now().Format(timeFormat) {
+		s.repo.UpdateToken(user, hashedToken, expirationInStringFormat)
+		cookie.Value = hashedToken
+		cookie.Expires = expiration
+		return &cookie, nil
+		// }
+
+		// parsedTime, err := time.Parse(timeFormat, session.ExpairedData)
+		// if err != nil {
+		// 	return nil, err
+		// }
+		// cookie.Value = session.Token
+		// cookie.Expires = parsedTime
+
+	}
+}
+
+func (s *Auth) GetUserByName(name string) (bool, error) {
+	return s.repo.GetUserByName(name)
+}
+
+func (s *Auth) CreateUserOauth(name string) (*http.Cookie, error) {
+	err := s.repo.CreateUserOauth(name)
+	if err != nil {
+		return nil, err
+	}
+	user, err := s.repo.GetUserBy(name, userNameDataBaseName)
+	if err != nil {
+		return nil, err
+	}
+	session, err := s.repo.GetSession(user.Id)
+
+	cookie := http.Cookie{Name: "Token"}
+	expiration := giveExpirationData()
+	hashedToken := createToken()
+	expirationInStringFormat := expiration.Format(timeFormat)
+
+	if err == sql.ErrNoRows {
+		session.ExpairedData = expirationInStringFormat
+		s.repo.CreateToken(user, hashedToken, session.ExpairedData)
+		cookie.Value = hashedToken
+		cookie.Expires = expiration
+		return &cookie, nil
+
+	} else {
+
+		// if session.ExpairedData < time.Now().Format(timeFormat) {
+		s.repo.UpdateToken(user, hashedToken, expirationInStringFormat)
+		cookie.Value = hashedToken
+		cookie.Expires = expiration
+		return &cookie, nil
+		// }
+
+		// parsedTime, err := time.Parse(timeFormat, session.ExpairedData)
+		// if err != nil {
+		// 	return nil, err
+		// }
+		// cookie.Value = session.Token
+		// cookie.Expires = parsedTime
+
+	}
+}
+
+func (s *Auth) UpdateSession(name string) (*http.Cookie, error) {
+	user, err := s.repo.GetUserBy(name, userNameDataBaseName)
+	if err != nil {
+		return nil, err
+	}
+	session, err := s.repo.GetSession(user.Id)
+
+	cookie := http.Cookie{Name: "Token", Path: "/"}
+	expiration := giveExpirationData()
+	hashedToken := createToken()
+
 	expirationInStringFormat := expiration.Format(timeFormat)
 
 	if err == sql.ErrNoRows {

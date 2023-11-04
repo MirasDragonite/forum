@@ -1,4 +1,8 @@
-[ERROR]: 2023/11/03 19:18:11 log.go:29: template: post_page.html:108: unexpected <template> in parenthesized pipeline
+[INFO]: 2023/11/04 19:42:12 log.go:17: Token is available
+ not present
+issing value for if
+e
+n parenthesized pipeline
 t a pointer
 aluate field Unique in type string
 0/14 20:31:04 log.go:17: Token is available

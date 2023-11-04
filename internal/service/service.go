@@ -1,10 +1,9 @@
 package service
 
 import (
-	"net/http"
-
 	"forum/internal/repository"
 	"forum/structs"
+	"net/http"
 )
 
 type Authorization interface {
@@ -12,6 +11,9 @@ type Authorization interface {
 	GetUser(email, password string) (*http.Cookie, error)
 	DeleteToken(cookie *http.Cookie) error
 	GetUserByToken(token string) (*structs.User, error)
+	GetUserByName(name string) (bool, error)
+	CreateUserOauth(name string) (*http.Cookie, error)
+	UpdateSession(name string) (*http.Cookie, error)
 }
 
 type PostRedact interface {
@@ -42,6 +44,7 @@ type Reaction interface {
 	GetPostReaction(user_id, post_id int64) (int64, error)
 	GetCommentReaction(user_id, commentId int64) (int64, error)
 }
+
 type Filter interface {
 	Filter(java, kotlin, python, topic string) ([]structs.Post, error)
 }

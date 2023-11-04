@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"fmt"
 	"forum/structs"
 	"html/template"
 	"net/http"
@@ -21,9 +22,11 @@ func (h *Handler) home(w http.ResponseWriter, r *http.Request) {
 
 	var user *structs.User
 	cookie, err := r.Cookie("Token")
+	fmt.Println("cookie in home", cookie)
 	if err != nil {
+		fmt.Println("Cant find token")
 	} else {
-
+		fmt.Println("here ")
 		user, err = h.Service.Authorization.GetUserByToken(cookie.Value)
 		if err != nil {
 			user = nil

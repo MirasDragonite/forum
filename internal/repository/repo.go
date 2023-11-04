@@ -2,7 +2,6 @@ package repository
 
 import (
 	"database/sql"
-
 	"forum/structs"
 )
 
@@ -15,6 +14,8 @@ type Authorization interface {
 	DeleteToken(token string) error
 	GetSessionByToken(token string) (structs.Session, error)
 	GetUserById(id int64) (structs.User, error)
+	GetUserByName(name string) (bool, error)
+	CreateUserOauth(name string) error
 }
 
 // Post actions

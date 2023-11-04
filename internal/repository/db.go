@@ -18,7 +18,7 @@ func NewDB() (*sql.DB, error) {
 		return nil, err
 	}
 
-	query := `CREATE TABLE IF NOT  EXISTS users(id INTEGER PRIMARY KEY, username TEXT NOT NULL, email TEXT NOT NULL UNIQUE,hash_password TEXT NOT NULL,createdDate TEXT NOT NULL);
+	query := `CREATE TABLE IF NOT  EXISTS users(id INTEGER PRIMARY KEY, username TEXT NOT NULL UNIQUE, email TEXT NOT NULL UNIQUE,hash_password TEXT NOT NULL,createdDate TEXT NOT NULL);
 	
 	CREATE TABLE IF NOT  EXISTS tokens(id INTEGER PRIMARY KEY, user_id INTEGER,token TEXT NOT NULL,expaired_data TEXT NOT NULL, FOREIGN KEY(user_id) REFERENCES users(id) ON DELETE CASCADE);
 	
