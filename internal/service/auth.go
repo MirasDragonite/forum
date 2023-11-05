@@ -3,10 +3,11 @@ package service
 import (
 	"database/sql"
 	"errors"
-	"forum/internal/repository"
-	"forum/structs"
 	"net/http"
 	"time"
+
+	"forum/internal/repository"
+	"forum/structs"
 
 	uuid "github.com/satori/go.uuid"
 	"golang.org/x/crypto/bcrypt"
@@ -125,7 +126,7 @@ func (s *Auth) CreateUserOauth(name string) (*http.Cookie, error) {
 	}
 	session, err := s.repo.GetSession(user.Id)
 
-	cookie := http.Cookie{Name: "Token"}
+	cookie := http.Cookie{Name: "Token", Path: "/"}
 	expiration := giveExpirationData()
 	hashedToken := createToken()
 	expirationInStringFormat := expiration.Format(timeFormat)

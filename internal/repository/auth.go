@@ -3,6 +3,7 @@ package repository
 import (
 	"database/sql"
 	"fmt"
+
 	"forum/structs"
 )
 
@@ -131,7 +132,7 @@ func (r *Auth) GetUserByName(name string) (bool, error) {
 func (r *Auth) CreateUserOauth(name string) error {
 	query := `INSERT INTO users(username,email,hash_password,createdDate) VALUES($1,$2,$3,$4) `
 
-	_, err := r.db.Exec(query, name, "", "", "")
+	_, err := r.db.Exec(query, name, name, "", "")
 	if err != nil {
 		return err
 	}

@@ -1,6 +1,6 @@
-[INFO]: 2023/11/04 19:42:12 log.go:17: Token is available
- not present
-issing value for if
+[ERROR]: 2023/11/05 19:55:04 log.go:29: http: named cookie not present
+.email
+value for if
 e
 n parenthesized pipeline
 t a pointer

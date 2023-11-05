@@ -16,9 +16,9 @@ type AcceptToken struct {
 }
 
 const (
-	clientID     = "8d4b1ea8b6f092ffe262"
-	clientSecret = "1166c105718802c643c6e9c237478321af1b9381"
-	redirectURI  = "http://localhost:8000/github/callback"
+	clientID          = "8d4b1ea8b6f092ffe262"
+	clientSecret      = "1166c105718802c643c6e9c237478321af1b9381"
+	gitHubredirectURI = "http://localhost:8000/github/callback"
 )
 
 type githubInfo struct {
@@ -30,7 +30,7 @@ func (h *Handler) githubLogin(w http.ResponseWriter, r *http.Request) {
 	authUrl := "https://github.com/login/oauth/authorize"
 	params := url.Values{}
 	params.Add("client_id", clientID)
-	params.Add("redirect_uri", redirectURI)
+	params.Add("redirect_uri", gitHubredirectURI)
 	params.Add("scope", "user")
 	params.Add("response_type", "code")
 	redirectURL := fmt.Sprintf("%s?%s", authUrl, params.Encode())
@@ -47,7 +47,7 @@ func (h *Handler) githubLoginCallBack(w http.ResponseWriter, r *http.Request) {
 	data.Add("code", code)
 	data.Add("client_id", clientID)
 	data.Add("client_secret", clientSecret)
-	data.Add("redirect_uri", redirectURI)
+	data.Add("redirect_uri", gitHubredirectURI)
 
 	accessUrl := fmt.Sprintf("%s?%s", tokenURL, data.Encode())
 	fmt.Println("url", accessUrl)

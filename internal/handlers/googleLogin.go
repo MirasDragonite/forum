@@ -6,7 +6,6 @@ import (
 	"io/ioutil"
 	"net/http"
 	"net/url"
-	"strings"
 )
 
 const (
@@ -15,12 +14,19 @@ const (
 	redirectURIGoogle  = "http://localhost:8000/google/callback"
 )
 
+type googleRespBody struct {
+	Acces_token string `json:"access_token"`
+}
+type googleUsers struct {
+	Username string `json:"name"`
+}
+
 func (h *Handler) googleLogin(w http.ResponseWriter, r *http.Request) {
 	authUrl := "https://accounts.google.com/o/oauth2/v2/auth"
 	params := url.Values{}
 	params.Add("client_id", clientIDGoogle)
 	params.Add("redirect_uri", redirectURIGoogle)
-	params.Add("scope", "https://www.googleapis.com/auth/userinfo.email")
+	params.Add("scope", "https://www.googleapis.com/auth/userinfo.profile")
 	params.Add("response_type", "code")
 	redirectURL := fmt.Sprintf("%s?%s", authUrl, params.Encode())
 
@@ -48,18 +54,12 @@ func (h *Handler) googleLoginCallBack(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	defer resp.Body.Close()
-	body, err := ioutil.ReadAll(resp.Body)
-	if err != nil {
-		fmt.Printf("Error reading response body: %v\n", err)
-		return
-	}
+	var body googleRespBody
+	err = json.NewDecoder(resp.Body).Decode(&body)
 
-	elements := strings.Split(string(body), "&")
+	fmt.Println("TOKEN:", body.Acces_token)
 
-	fmt.Println("token", elements[0][13:])
-
-	// Use the access token to make a request to the GitHub user API
-	apiURL := "https://api.github.com/user"
+	apiURL := "https://www.googleapis.com/oauth2/v3/userinfo"
 	req, err := http.NewRequest("GET", apiURL, nil)
 	if err != nil {
 		fmt.Printf("Error creating request: %v\n", err)
@@ -67,7 +67,7 @@ func (h *Handler) googleLoginCallBack(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Set the Authorization header with the access token
-	req.Header.Set("Authorization", "Bearer "+elements[0][13:])
+	req.Header.Set("Authorization", "Bearer "+body.Acces_token)
 
 	client := &http.Client{}
 	response, err := client.Do(req)
@@ -81,15 +81,14 @@ func (h *Handler) googleLoginCallBack(w http.ResponseWriter, r *http.Request) {
 		fmt.Println("Reading response ", err)
 		return
 	}
-	var githubUser githubInfo
-	err = json.Unmarshal(info, &githubUser)
+	var googleUser googleUsers
+	err = json.Unmarshal(info, &googleUser)
 	if err != nil {
 		fmt.Println("Unmarshal error ", err)
 		return
 	}
-	fmt.Println("USER", githubUser)
 
-	exsits, err := h.Service.Authorization.GetUserByName(githubUser.Username)
+	exsits, err := h.Service.Authorization.GetUserByName(googleUser.Username)
 	if err != nil {
 		h.logError(w, r, err, http.StatusBadRequest)
 		return
@@ -97,7 +96,7 @@ func (h *Handler) googleLoginCallBack(w http.ResponseWriter, r *http.Request) {
 
 	if !exsits {
 		fmt.Println("HERE")
-		cookie, err := h.Service.Authorization.CreateUserOauth(githubUser.Username)
+		cookie, err := h.Service.Authorization.CreateUserOauth(googleUser.Username)
 		if err != nil {
 			h.logError(w, r, err, http.StatusBadRequest)
 			return
@@ -109,7 +108,7 @@ func (h *Handler) googleLoginCallBack(w http.ResponseWriter, r *http.Request) {
 
 		return
 	} else {
-		cookie, err := h.Service.Authorization.UpdateSession(githubUser.Username)
+		cookie, err := h.Service.Authorization.UpdateSession(googleUser.Username)
 		if err != nil {
 			h.logError(w, r, err, http.StatusBadRequest)
 			return
