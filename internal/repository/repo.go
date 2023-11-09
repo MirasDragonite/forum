@@ -40,6 +40,7 @@ type CommentRedact interface {
 	GetAllComments(postID, userID int64) ([]structs.Comment, error)
 	GetCommentByID(commentID int64) (structs.Comment, error)
 	GetAllUserComments(userID int64) ([]structs.Comment, error)
+	DeleteComment(comment structs.Comment) error
 }
 
 type PostReaction interface {
