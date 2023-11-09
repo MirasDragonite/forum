@@ -48,39 +48,15 @@
         <div class="create-post">
 
           <form id="create-post-form" method="POST" > 
-              <span class="title-container">
-              <p id="title">Title</p>  
-              <input type="text"  minlength="1" id="postTitle" name="postTitle" class="postTitle" placeholder="Title" style="width: 250px;" value="{{.Post.Title}}">
-              {{if .EmptyTitle}}
-              <p style="color: red;"> Length of title is not by standard</p>
-              {{end}}
-              </span>
+        
   
-              <!-- <span class="filters">
-  
-                <a class="filters-title" >Filters:</a>
-      
-    <input type="checkbox" name="postTopicJava" class="round-checkbox" id="javaCheckbox"  value="Java" >
-                <label class="checkbox-label" for="javaCheckbox"></label>
-                <label for="javaCheckbox">Java</label>
-                
-                <input type="checkbox" name="postTopicKotlin" class="round-checkbox" id="kotlinCheckbox" value="Kotlin">
-                <label class="checkbox-label" for="kotlinCheckbox"></label>
-                <label for="kotlinCheckbox">Kotlin</label>
-                
-                <input type="checkbox" name="postTopicPython" class="round-checkbox" id="pythonCheckbox" value="Python">
-                <label class="checkbox-label" for="pythonCheckbox"></label>
-                <label for="pythonCheckbox">Python</label>
-      
-              </span>
-              <input type="text" id="postTopicInput" name="postTopicInput" class="postTopicInput" placeholder="Topic" style="width: 250px;">
-   -->
+             
           <span class="text-container">
-              <p id = "your-message">Your message</p>
+              <p id = "your-message">Update your comment</p>
               {{if .EmptyContent}}
               <p style="color: red;"> Length of content is not by standard</p>
               {{end}}
-              <textarea  name="postContent" class="postContent" id="text-area" placeholder="Message">{{.Post.Content}}</textarea>
+              <textarea  name="commentContent" class="postContent" id="text-area" placeholder="Message">{{.Comment.Content}}</textarea>
           </span>
           <button type="submit" class="postSubmit" >Update</button>
       </form>

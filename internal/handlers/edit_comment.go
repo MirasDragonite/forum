@@ -5,10 +5,11 @@ import (
 	"fmt"
 	"html/template"
 	"net/http"
+	"strconv"
 	"strings"
 )
 
-func (h *Handler) editPost(w http.ResponseWriter, r *http.Request) {
+func (h *Handler) editComment(w http.ResponseWriter, r *http.Request) {
 	id := r.URL.Query().Get("id")
 
 	cookie, err := r.Cookie("Token")
@@ -22,25 +23,29 @@ func (h *Handler) editPost(w http.ResponseWriter, r *http.Request) {
 		h.logError(w, r, err, http.StatusBadRequest)
 		return
 	}
-
-	post, err := h.Service.PostRedact.GetPostBy("id", id, user.Id)
+	intID, err := strconv.Atoi(id)
 	if err != nil {
 		h.logError(w, r, err, http.StatusBadRequest)
 		return
 	}
-	if user.Id != post.PostAuthorID {
-		h.logError(w, r, errors.New("Not your post"), http.StatusBadRequest)
+	comment, err := h.Service.CommentRedact.GetCommentByID(int64(intID))
+	if err != nil {
+		h.logError(w, r, err, http.StatusBadRequest)
+		return
+	}
+
+	if user.Id != comment.CommentAuthorID {
+		h.logError(w, r, errors.New("Not your comment"), http.StatusBadRequest)
 		return
 	}
 
 	result := map[string]interface{}{
-		"Post":         post,
-		"EmptyTitle":   false,
+		"Comment":      comment,
 		"EmptyContent": false,
 		"User":         user,
 	}
 
-	tmp, err := template.ParseFiles("./ui/templates/edit_post_page.html")
+	tmp, err := template.ParseFiles("./ui/templates/edit_comment_page.html")
 	if err != nil {
 		h.logError(w, r, err, http.StatusInternalServerError)
 		return
@@ -54,30 +59,22 @@ func (h *Handler) editPost(w http.ResponseWriter, r *http.Request) {
 	if r.Method == http.MethodGet {
 		tmp.Execute(w, result)
 	} else if r.Method == http.MethodPost {
-		post.Title = strings.TrimSpace(r.Form.Get("postTitle"))
-		post.Content = strings.TrimSpace(r.Form.Get("postContent"))
 
-		if len(post.Title) < 5 || len(post.Title) > 50 {
-			w.WriteHeader(http.StatusBadRequest)
-			result["EmptyTitle"] = true
-			tmp.Execute(w, result)
-			return
-		}
-		if len(post.Content) < 15 || len(post.Content) > 250 {
+		comment.Content = strings.TrimSpace(r.Form.Get("commentContent"))
+
+		if len(comment.Content) < 15 || len(comment.Content) > 150 {
 			w.WriteHeader(http.StatusBadRequest)
 			result["EmptyContent"] = true
 			tmp.Execute(w, result)
 			return
 		}
-		fmt.Println("Content:", post.Content)
-		fmt.Println("Title", post.Title)
-		fmt.Println("ID:", post.Id)
-		err = h.Service.PostRedact.RedactContentPost(post)
+
+		err = h.Service.CommentRedact.UpdateComment(comment)
 		if err != nil {
 			h.logError(w, r, err, http.StatusBadRequest)
 			return
 		}
-		link := fmt.Sprintf("/post/%v", id)
+		link := fmt.Sprintf("/post/%v", comment.PostID)
 		http.Redirect(w, r, link, http.StatusSeeOther)
 		return
 	} else {

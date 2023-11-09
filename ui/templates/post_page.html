@@ -74,6 +74,9 @@
                   <form action="/delete-post/{{.Post.Id}}" method="POST" onsubmit="return confirm('Are you sure you want to delete this post?');">
                     <button class="like-button liked" type="submit" name="button" value="like" style="background-color: red;">Delete</button>
                 </form>
+                
+                  <a href="/edit-post?id={{.Post.Id}}">  <button class="editButton"  style="background-color: gray;">Edit</button> </a>  
+               
                   {{end}}
                   {{end}}
         
@@ -111,6 +114,7 @@
                 <button class="like-button liked" type="submit" name="button" value="like" style="background-color: red;">Delete</button>
                 
             </form>
+            <a href="/edit-comment?id={{.CommentID}}">  <button class="editButton"  style="background-color: gray;">Edit</button> </a>  
     {{end}}
     
         

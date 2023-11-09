@@ -160,8 +160,8 @@ func (pr *PostRedactDB) DislikePost(post *structs.Post) error {
 }
 
 func (pr *PostRedactDB) RedactContentPost(post *structs.Post) error {
-	query := `UPDATE posts SET content = $1 WHERE id = $2;`
-	_, err := pr.db.Exec(query, post.Content, post.Id)
+	query := `UPDATE posts SET content = $1 , title=$2 WHERE id = $3;`
+	_, err := pr.db.Exec(query, post.Content, post.Title, post.Id)
 	if err != nil {
 		return err
 	}

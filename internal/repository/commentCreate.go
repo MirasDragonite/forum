@@ -115,3 +115,12 @@ func (comm *CommentRedactDB) DeleteComment(comment structs.Comment) error {
 
 	return nil
 }
+
+func (comm *CommentRedactDB) UpdateCommentContent(comment structs.Comment) error {
+	query := `UPDATE comments SET content = $1  WHERE id = $2;`
+	_, err := comm.db.Exec(query, comment.Content, comment.CommentID)
+	if err != nil {
+		return err
+	}
+	return nil
+}

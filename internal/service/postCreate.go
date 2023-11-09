@@ -51,8 +51,8 @@ func (repo *PostRed) GetUserName(token string) (string, error) {
 	return userName, nil
 }
 
-func (repo *PostRed) RedactContentPost(post *structs.Post, newContent string) error {
-	post.Content = newContent
+func (repo *PostRed) RedactContentPost(post *structs.Post) error {
+	
 	return repo.repo.RedactContentPost(post)
 }
 

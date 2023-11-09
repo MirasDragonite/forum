@@ -71,3 +71,7 @@ func (repo *CommentRed) GetAllUserComments(userID int64) ([]structs.Comment, err
 func (repo *CommentRed) DeleteComment(comment structs.Comment) error {
 	return repo.repo.DeleteComment(comment)
 }
+
+func (repo *CommentRed) UpdateComment(comment structs.Comment) error {
+	return repo.repo.UpdateCommentContent(comment)
+}

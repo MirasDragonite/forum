@@ -22,7 +22,7 @@ type PostRedact interface {
 	GetUserName(token string) (string, error)
 	GetPostBy(from, value string, userID int64) (*structs.Post, error)
 	GetAllPosts() ([]structs.Post, error)
-	RedactContentPost(post *structs.Post, newContent string) error
+	RedactContentPost(post *structs.Post) error
 	DeletePost(post *structs.Post) error
 	GetAllLikedPosts(user_id int64) ([]structs.Post, error)
 	GetAllUserPosts(user_id int64) ([]structs.Post, error)
@@ -35,6 +35,7 @@ type CommentRedact interface {
 	GetCommentByID(commentID int64) (structs.Comment, error)
 	GetAllUserComments(userID int64) ([]structs.Comment, error)
 	DeleteComment(comment structs.Comment) error
+	UpdateComment(comment structs.Comment) error
 }
 
 type Reaction interface {
