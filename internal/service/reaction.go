@@ -4,7 +4,6 @@ import (
 	"database/sql"
 	"errors"
 	"fmt"
-
 	"forum/internal/repository"
 )
 
@@ -42,12 +41,12 @@ func (s *ReactionService) ReactPost(post_id, user_id, author_id, value int64, us
 		if postReaction.Value == value {
 			err = s.repo1.DeleteReaction(post_id, user_id)
 			if author_id != user_id {
-				err = s.repo3.DeletenNotifyReaction(post_id, user_id, author_id)
+				err = s.repo3.DeletenNotifyReaction(post_id, user_id, author_id, value)
 			}
 		} else {
 			err = s.repo1.LikePost(post_id, user_id, value)
 			if author_id != user_id {
-				err = s.repo3.DeletenNotifyReaction(post_id, user_id, author_id)
+				err = s.repo3.DeletenNotifyReaction(post_id, user_id, author_id, value)
 				err = s.repo3.CreateNotifyReaction(post_id, user_id, author_id, value, username)
 			}
 		}

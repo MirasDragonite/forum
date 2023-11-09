@@ -64,7 +64,7 @@ type CommentReaction interface {
 type NotificationPost interface {
 	NotifyLikePost(post_id, user_id, author_id, value int64) error
 	CreateNotifyReaction(post_id, user_id, author_id, value int64, username string) error
-	DeletenNotifyReaction(post_id, user_id, author_id int64) error
+	DeletenNotifyReaction(post_id, user_id, author_id, value int64) error
 	GetPostNotification(author_id int64) ([]structs.Notify, error)
 }
 

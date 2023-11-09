@@ -1,5 +1,6 @@
-[INFO]: 2023/11/09 15:58:37 log.go:17: Token is available
-ing "t/10": invalid syntax
+[INFO]: 2023/11/09 16:42:05 log.go:17: Token is available
+ not present
+nvalid syntax
 or if
 e
 n parenthesized pipeline

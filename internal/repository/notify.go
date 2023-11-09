@@ -3,7 +3,6 @@ package repository
 import (
 	"database/sql"
 	"fmt"
-
 	"forum/structs"
 )
 
@@ -38,10 +37,10 @@ func (r *PostReactionDB) CreateNotifyReaction(post_id, user_id, author_id, value
 	return nil
 }
 
-func (r *PostReactionDB) DeletenNotifyReaction(post_id, user_id, author_id int64) error {
-	query := `DELETE FROM post_notification WHERE post_id=$1 AND user_id=$2 AND author_id=$3`
+func (r *PostReactionDB) DeletenNotifyReaction(post_id, user_id, author_id, value int64) error {
+	query := `DELETE FROM post_notification WHERE post_id=$1 AND user_id=$2 AND author_id=$3 AND reaction=$4`
 
-	_, err := r.db.Exec(query, post_id, user_id, author_id)
+	_, err := r.db.Exec(query, post_id, user_id, author_id, value)
 	if err != nil {
 		return err
 	}
