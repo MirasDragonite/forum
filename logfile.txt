@@ -1,2 +1,1 @@
-[INFO]: 2023/11/03 16:33:03 log.go:17: Token time not expired
- present
+[ERROR]: 2023/11/12 20:07:55 log.go:29: http: named cookie not present
