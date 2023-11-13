@@ -13,6 +13,7 @@ type Post struct {
 	Liked          bool
 	Disliked       bool
 	Comments       []Comment
+	
 }
 
 type Notify struct {
