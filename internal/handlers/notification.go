@@ -19,10 +19,20 @@ func (h *Handler) notify(w http.ResponseWriter, r *http.Request) {
 			h.logError(w, r, err, http.StatusInternalServerError)
 			return
 		}
-
+		logged := false
 		cookie, err := r.Cookie("Token")
-
+		if err != nil {
+			h.logError(w, r, err, http.StatusUnauthorized)
+			return
+		}
 		user, err := h.Service.Authorization.GetUserByToken(cookie.Value)
+		if err != nil {
+			h.logError(w, r, err, http.StatusInternalServerError)
+			return
+		}
+		if user.Id > 0 {
+			logged = true
+		}
 		fmt.Println("UserID", user.Id)
 		posts, err := h.Service.Notification.AllUserNotifications(user.Id)
 		if err != nil {
@@ -31,7 +41,7 @@ func (h *Handler) notify(w http.ResponseWriter, r *http.Request) {
 		}
 
 		result := map[string]interface{}{
-			"Logged":        nil,
+			"Logged":        logged,
 			"User":          user,
 			"Notifications": posts,
 		}

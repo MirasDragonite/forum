@@ -11,7 +11,7 @@ import (
 const (
 	clientIDGoogle     = "861003596694-oiq644rrdk1bnts64a55k9t48ljffnuf.apps.googleusercontent.com"
 	clientSecretGoogle = "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"
-	redirectURIGoogle  = "http://localhost:8000/google/callback"
+	redirectURIGoogle  = "https://127.0.0.1:8000/google/callback"
 )
 
 type googleRespBody struct {
