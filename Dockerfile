@@ -14,4 +14,6 @@ WORKDIR /app
 
 COPY --from=builder /app/main /app/
 COPY --from=builder /app/ui /app/ui
+
+COPY --from=builder /app/tls /app/tls
 CMD ["./main"]

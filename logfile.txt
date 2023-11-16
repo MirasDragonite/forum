@@ -1,6 +1,5 @@
-[INFO]: 2023/11/14 16:50:44 log.go:17: Token is available
-red
- present
+[INFO]: 2023/11/14 17:17:00 log.go:17: Token is available
+ not present
 ss/error_style.css": invalid syntax
 d pipeline
 t a pointer

@@ -18,7 +18,7 @@ type AcceptToken struct {
 const (
 	clientID          = "8d4b1ea8b6f092ffe262"
 	clientSecret      = "1166c105718802c643c6e9c237478321af1b9381"
-	gitHubredirectURI = "http://localhost:8000/github/callback"
+	gitHubredirectURI = "https://127.0.0.1:8000/github/callback"
 )
 
 type githubInfo struct {

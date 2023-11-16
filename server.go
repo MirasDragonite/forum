@@ -22,7 +22,7 @@ func (s *Server) Run(port string, handler http.Handler, tlsConfig *tls.Config) e
 	}
 
 	fmt.Println(s.httpServer.Addr)
-	fmt.Printf("Server running on https://127.0.0.1%s\n", port)
+	fmt.Printf("Server running on https://127.0.0.1:%s\n", port)
 
-	return s.httpServer.ListenAndServeTLS("/home/student/adil/forum/tls/cert.pem", "/home/student/adil/forum/tls/key.pem")
+	return s.httpServer.ListenAndServeTLS("tls/cert.pem", "tls/key.pem")
 }
