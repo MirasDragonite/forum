@@ -21,7 +21,7 @@ func main() {
 	db, err := repository.NewDB()
 	defer db.Close()
 	if err != nil {
-		log.Fatal(err)
+		panic(err)
 	}
 	repo := repository.NewRepository(db)
 	service := service.NewService(repo)
@@ -36,6 +36,6 @@ func main() {
 
 	srv := new(server.Server)
 	if err := srv.Run(port, handler.Mux, tlsConfig); err != nil {
-		log.Fatal(err)
+		panic(err)
 	}
 }
